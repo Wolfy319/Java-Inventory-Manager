@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Button?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #e96f00, #cf8800, #ab9f00, #79b100, #06c00d);" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CS3250.dbController">
+   <children>
+      <AnchorPane layoutX="9.0" layoutY="8.0" prefHeight="508.0" prefWidth="878.0" style="-fx-background-color: white; -fx-opacity: .6; -fx-background-radius: 1em;" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="8.0">
+         <children>
+            <AnchorPane layoutX="15.0" layoutY="14.0" prefHeight="38.0" prefWidth="849.0">
+               <children>
+                  <Label layoutX="361.0" layoutY="2.0" text="Welcome To IMS" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="361.0" AnchorPane.rightAnchor="360.0" AnchorPane.topAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Separator layoutX="-1.0" layoutY="43.0" prefHeight="17.0" prefWidth="877.0" style="-fx-background-color: orange; -fx-opacity: .80;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" />
+            <Separator layoutX="119.0" layoutY="59.0" orientation="VERTICAL" prefHeight="447.0" prefWidth="20.0" style="-fx-background-color: orange; -fx-opacity: .8;" AnchorPane.bottomAnchor="-1.0" AnchorPane.topAnchor="59.0" />
+            <TableView layoutX="139.0" layoutY="59.0" prefHeight="461.0" prefWidth="757.0" style="-fx-background-radius: 1em;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="139.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
+              <columns>
+                <TableColumn fx:id="col_id" prefWidth="141.0" text="Product_ID" />
+                <TableColumn fx:id="col_quantity" prefWidth="148.0" text="Stock_Quantity" />
+                  <TableColumn fx:id="col_cost" prefWidth="153.0" text="WholeSale_Cost" />
+                  <TableColumn fx:id="col_price" prefWidth="150.0" text="Sale_Price" />
+                  <TableColumn fx:id="col_sid" prefWidth="147.0" text="Supplier_ID" />
+              </columns>
+            </TableView>
+            <AnchorPane layoutY="60.0" prefHeight="154.0" prefWidth="121.0">
+               <children>
+                  <JFXTextField focusColor="#ffa600" layoutX="2.0" layoutY="14.0" prefHeight="25.0" prefWidth="117.0" promptText="Search" unFocusColor="BLACK" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="14.0" />
+               </children>
+            </AnchorPane>
+            <Button layoutX="11.0" layoutY="207.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Add Entry" />
+            <Button layoutX="11.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Update Entry" />
+            <Button layoutX="11.0" layoutY="291.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Delete Entry" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
