@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Button?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #e96f00, #cf8800, #ab9f00, #79b100, #06c00d);" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CS3250.dbController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #e96f00, #cf8800, #ab9f00, #79b100, #06c00d);" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.dbController">
    <children>
       <AnchorPane layoutX="9.0" layoutY="8.0" prefHeight="508.0" prefWidth="878.0" style="-fx-background-color: white; -fx-opacity: .6; -fx-background-radius: 1em;" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="8.0">
          <children>

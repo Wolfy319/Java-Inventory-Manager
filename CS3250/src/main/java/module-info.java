@@ -1,7 +1,8 @@
-module CS3250{
+module UI{
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires com.jfoenix;
-    exports CS3250;
-    opens CS3250 to javafx.graphics;
+    exports UI;
+    opens UI to javafx.graphics;
 } 
