@@ -3,9 +3,13 @@ package CS3250;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
+
+import javafx.collections.ObservableList;
 
 public class SQLData implements DataInterface {
 
@@ -77,8 +81,39 @@ public class SQLData implements DataInterface {
             e.printStackTrace();
         }
         return null;
+    }
+    public ArrayList<Entry> getEntries(){
+        String statement = "SELECT * FROM DataEntries;";
+        String s = "";
+        ArrayList<Entry> al = new ArrayList<Entry>();       
+        try {
+            rs = st.executeQuery(statement);
+            
+            while(rs.next()){
+            s += rs.getString(1);
+            s += "_" +  rs.getString(2);
+            s += "_" +  rs.getString(3);
+            s += "_" +  rs.getString(4);
+            s +=  "_" + rs.getString(5);
+            al.add(parseEntry(s));
+            s = "";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return al;
+       
 
-
+    }
+    private Entry parseEntry(String s){
+        Entry e = new Entry();
+        var ar = s.split("_");
+        e.setProductID(ar[0]);
+        e.setSupplierID(ar[1]);
+        e.setStockQuantity(Integer.parseInt(ar[2]));
+        e.setWholesaleCost(Double.parseDouble(ar[3]));
+        e.setSalePrice(Double.parseDouble(ar[4]));
+        return e;
     }
 
     @Override
