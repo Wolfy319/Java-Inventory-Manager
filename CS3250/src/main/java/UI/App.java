@@ -1,5 +1,4 @@
-package CS3250;
-
+package UI;
 import java.net.URL;
 
 import javafx.application.Application;

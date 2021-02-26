@@ -1,4 +1,4 @@
-package CS3250;
+package UI;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

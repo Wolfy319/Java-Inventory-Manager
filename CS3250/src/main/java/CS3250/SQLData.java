@@ -1,113 +1,150 @@
-// package MySql;
-// import java.sql.Connection;
-// import java.sql.DriverManager;
-// import java.sql.ResultSet;
-// import java.sql.SQLException;
+package CS3250;
 
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-// public class SQLData implements DataInterface {
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.Statement;
 
-//     String connectionString = "";
-//     String username = "";
-//     String password = "";
-//     Connection con;
-//     java.sql.Statement st;
-//     ResultSet rs;
+import javafx.collections.ObservableList;
 
-//     @Override
-//     public void initializeDatabase(String filename) {
-//         parseString(filename);
-//         try {
-//             con = DriverManager.getConnection(connectionString,username, password);
-//             st =  con.createStatement();
-//             rs = st.executeQuery("SELECT VERSION()");
-//             if(rs.next()){
-//                 System.out.println("Connected to..." + rs.getString(1));
-//             }
-//         } catch (SQLException e) {
-//             e.printStackTrace();
-//         }
+public class SQLData implements DataInterface {
+
+    String connectionString = "";
+    String username = "";
+    String password = "";
+    Connection con;
+    Statement st;
+    ResultSet rs;
+
+    @Override
+    public void initializeDatabase(String filename) {
+        parseString(filename);
+        try {
+            con = (Connection) DriverManager.getConnection(connectionString, username, password);
+            st =  (Statement) con.createStatement();
+            rs = st.executeQuery("SELECT VERSION()");
+            if(rs.next()){
+                System.out.println("Connected to..." + rs.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         
-//     }
+    }
 
 
-//     private void parseString(String s){
-//         s+=" ";
-//         String buffer = "";
-//         String[] information = new String[3];
-//         int place = 0;
-//         for (int i = 0; i < s.length(); i++) {
-//             if (s.charAt(i) == ' '){
-//                 information[place] = buffer;
-//                 buffer = "";
-//                 place++;
-//             }
-//             else{
-//                 buffer+= s.charAt(i);
-//             }
-//         }
-//         connectionString = information[0];
-//         username = information[1];
-//         password = information[2];
-//     }
+    private void parseString(String s){
+        s+=" ";
+        String buffer = "";
+        String[] information = new String[3];
+        int place = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' '){
+                information[place] = buffer;
+                buffer = "";
+                place++;
+            }
+            else{
+                buffer+= s.charAt(i);
+            }
+        }
+        connectionString = information[0];
+        username = information[1];
+        password = information[2];
+    }
 
-//     @Override
-//     public void createEntry(String ID, Entry e) {
-//         String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + e.getProductID() + "', '" + e.getSupplierID() + "' , '"+ e.getStockQuantity() + "' , '" + e.getWholesaleCost() + "' , '" + e.getSalePrice() + "');" ;
-//         try {
-//             st.execute(statement);
+    @Override
+    public void createEntry(String ID, Entry e) {
+        String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + e.getProductID() + "', '" + e.getSupplierID() + "' , '"+ e.getStockQuantity() + "' , '" + e.getWholesaleCost() + "' , '" + e.getSalePrice() + "');" ;
+        try {
+            st.execute(statement);
             
-//         } catch (SQLException e1) {
-//             e1.printStackTrace();
-//         }
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
         
         
-//     }
+    }
 
-//     @Override
-//     public Entry readEntry(String ID) {
-//         String statement = "SELECT * FROM DataEntries HAVING productID ='"+ ID + "';";
-//         try {
-//             rs = st.executeQuery(statement);
-//             rs.next();
-//             System.out.println(rs.getString("productID"));
-//         } catch (SQLException e) {
-//             e.printStackTrace();
-//         }
-//         return null;
-
-
-//     }
-
-//     @Override
-//     public void updateEntry(String ID, Entry e) {
-//         deleteEntry(ID);
-//         createEntry(ID,e);
+    @Override
+    public Entry readEntry(String ID) {
+        String statement = "SELECT * FROM DataEntries HAVING productID ='"+ ID + "';";
+        try {
+            rs = st.executeQuery(statement);
+            rs.next();
+            System.out.println(rs.getString("productID"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public ArrayList<Entry> getEntries(){
+        String statement = "SELECT * FROM DataEntries;";
+        String s = "";
+        ArrayList<Entry> al = new ArrayList<Entry>();       
+        try {
+            rs = st.executeQuery(statement);
+            
+            while(rs.next()){
+            s += rs.getString(1);
+            s += "_" +  rs.getString(2);
+            s += "_" +  rs.getString(3);
+            s += "_" +  rs.getString(4);
+            s +=  "_" + rs.getString(5);
+            al.add(parseEntry(s));
+            s = "";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return al;
        
 
-//     }
+    }
+    private Entry parseEntry(String s){
+        Entry e = new Entry();
+        var ar = s.split("_");
+        e.setProductID(ar[0]);
+        e.setSupplierID(ar[1]);
+        e.setStockQuantity(Integer.parseInt(ar[2]));
+        e.setWholesaleCost(Double.parseDouble(ar[3]));
+        e.setSalePrice(Double.parseDouble(ar[4]));
+        return e;
+    }
 
-//     @Override
-//     public void deleteEntry(String ID) {
-//         String statement = "DELETE FROM DataEntries WHERE productID ='"+ ID + "';";
-//         try {
-//             st.execute(statement);
-//         } catch (SQLException e) {
-//             e.printStackTrace();
-//         }
-//     }
+    @Override
+    public void updateEntry(String ID, Entry e) {
+        deleteEntry(ID);
+        createEntry(ID,e);
+       
 
-//     @Override
-//     public void saveEntry(Entry e) {
-//         createEntry(e.getProductID(), e);
+    }
 
-//     }
+    @Override
+    public void deleteEntry(String ID) {
+        String statement = "DELETE FROM DataEntries WHERE productID ='"+ ID + "';";
+        try {
+            st.execute(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-//     @Override
-//     public int retSize() {
-//         // TODO Auto-generated method stub
-//         return 0;
-//     }
+    @Override
+    public void saveEntry(Entry e) {
+        createEntry(e.getProductID(), e);
+
+    }
+
+    @Override
+    public int retSize() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 
-// }
+}
