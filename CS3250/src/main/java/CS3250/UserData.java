@@ -21,9 +21,23 @@ public class UserData {
     ResultSet rs;
     
     
-    public ArrayList<Entry> getEntries() {
-        // TODO Auto-generated method stub
-        return null;
+    public ArrayList<User> getUsers() {
+        String statement = "SELECT * FROM Users;";
+        String s = "";
+        ArrayList<User> arr = new ArrayList<User>();
+        try {
+
+            rs = st.executeQuery(statement);
+            while(rs.next()){
+                    s += rs.getString(1);
+                    s += "_" +  rs.getBytes(2);
+                    s += "_" +  rs.getBytes(3);
+                    arr.add((parseEntry(s)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return arr;
     }
 
     
