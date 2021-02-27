@@ -10,65 +10,63 @@ import javafx.beans.property.StringProperty;
 public class dataBaseItems {
 
 
-    public SimpleStringProperty id = new SimpleStringProperty();
-    public SimpleIntegerProperty quantity = new SimpleIntegerProperty();
-    public SimpleFloatProperty cost = new SimpleFloatProperty();
-    public SimpleFloatProperty sale = new SimpleFloatProperty();
-    public SimpleStringProperty sid = new SimpleStringProperty();
+    public final SimpleStringProperty productID = new SimpleStringProperty();
+    public final SimpleStringProperty stockQuantity = new SimpleStringProperty();
+    public final SimpleStringProperty wholesaleCost = new SimpleStringProperty();
+    public final SimpleStringProperty salePrice = new SimpleStringProperty();
+    public final SimpleStringProperty supplierID = new SimpleStringProperty();
 
-   // StringProperty id;
-    //IntegerProperty quantity;
-    //FloatProperty cost,sale;
-    //StringProperty sid;
+   // StringProperty productID;
+    //IntegerProperty stockQuantity;
+    //FloatProperty wholesaleCost,salePrice;
+    //StringProperty supplierID;
 
 
-    public dataBaseItems(String id, int quantity, Float cost, Float sale, String sid) {
-        this.id.set(id);
-        this.quantity.set(quantity);
-        this.cost.set(cost);
-        this.sale.set(sale);
-        this.sid.set(sid);
-
+    public dataBaseItems(String productID, String stockQuantity, String wholesaleCost, String salePrice, String supplierID) {
+        this.productID.set(productID);
+        this.stockQuantity.set(stockQuantity);
+        this.wholesaleCost.set(wholesaleCost);
+        this.salePrice.set(salePrice);
+        this.supplierID.set(supplierID);
+    }
   
-    public String getId() {
-        return this.id.get();
+    public final String getProductID() {
+        return this.productID.get();
     }
 
-    public int getQuantity() {
-        return this.quantity.get();
+    public final String getStockQuantity() {
+        return String.valueOf(this.stockQuantity.get()); 
     }
 
-    public float getCost() {
-        return this.cost.get();
+    public final String getWholesaleCost() {
+        return String.valueOf(wholesaleCost.get());
     }
 
-    public float getSale() {
-        return this.sale.get();
+    public final String getSalePrice() {
+        return this.salePrice.get();
     }
 
-    public String getSid() {
-        return this.sid.get();
+
+    public final String getSupplierID(){
+        return this.supplierID.get();
     }
 
-    public void setId(String id) {
-        this.id.set(id);
+    public final void setProductID(String productID) {
+        this.productID.set(productID);
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity.set(quantity);
+    public final void setQuantity(String stockQuantity) {
+        this.stockQuantity.set(stockQuantity);
     }
 
-    public void setCost(float cost) {
-        this.cost.set(cost);
+    public final void setCost(String wholesaleCost) {
+        this.wholesaleCost.set(wholesaleCost);
     }
 
-    public void setSale(float sale) {
-        this.sale.set(sale);
+    public final void setSale(String salePrice) {
+        this.salePrice.set(salePrice);
     }
 
-    public void setSid(String sid) {
-        this.sid.set(sid);
-    }
-
+    
 
 }

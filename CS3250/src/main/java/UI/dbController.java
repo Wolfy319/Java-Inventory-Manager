@@ -11,11 +11,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 
 public class dbController {
 
+    @FXML
+    public Button try_it;
+
+    
     @FXML
     public TableView<UI.dataBaseItems> table; 
 
@@ -23,44 +30,55 @@ public class dbController {
     public TableColumn<UI.dataBaseItems, String> col_id;
 
     @FXML
-    public TableColumn<UI.dataBaseItems,Integer> col_quantity;
+    public TableColumn<UI.dataBaseItems,Integer> col_quantityid;
 
     @FXML
-    public TableColumn<UI.dataBaseItems, Float> col_cost;
+    public TableColumn<UI.dataBaseItems, Float> col_costid;
 
     @FXML
-    public TableColumn<UI.dataBaseItems, Float> col_price;
+    public TableColumn<UI.dataBaseItems, Float> col_priceid;
 
     @FXML
     public TableColumn<UI.dataBaseItems, String> col_sid;
 
-    ObservableList<UI.dataBaseItems> oblist = FXCollections.observableArrayList();
+    ObservableList oblist =  FXCollections.observableArrayList(); 
 
-
-public void initialize(URL location, ResourceBundle resources) throws SQLException{
+@FXML
+public void initialize() throws SQLException{
     try{
     Connection con = UIDBConnector.getConnection();
 
     ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
-     
-    while (rs.next()){//"should be column names"
+     int counter =0;
+    while (rs.next()&& counter < 10){//"should be column names"
 
-        oblist.add(new dataBaseItems(rs.getString("id"), rs.getInt("quantity"), rs.getFloat("cost"), rs.getFloat("sale"), rs.getString("sid")));
-        
+        oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"), rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
+        counter +=1; 
     }
 
     }catch (SQLException ex){
         
     }
-    col_quantity.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
-    col_cost.setCellValueFactory(new PropertyValueFactory<>("WholesaleCost"));
-    col_price.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
+    col_quantityid.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
+    col_costid.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
+    col_priceid.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
     col_sid.setCellValueFactory(new PropertyValueFactory<>("supplierID"));
-    col_id.setCellValueFactory(new PropertyValueFactory<>("ProductID"));
+    col_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
     
     table.setItems(oblist);
 }
 
-
+public void ibutton(ActionEvent event){
+    try_it.setOnAction(new EventHandler<ActionEvent>() {
+        @Override public void handle(ActionEvent e) {
+            try {
+                initialize();
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    });
+}
 
 }

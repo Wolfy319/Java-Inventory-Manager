@@ -56,6 +56,7 @@ public class Controller {
         Stage dbsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         dbsStage.setScene(DbsScene);
         dbsStage.show();
+        
     }
 
 }
