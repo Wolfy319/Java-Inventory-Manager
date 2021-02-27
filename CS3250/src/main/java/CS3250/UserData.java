@@ -32,7 +32,9 @@ public class UserData {
                     s += rs.getString(1);
                     s += "_" +  rs.getBytes(2);
                     s += "_" +  rs.getBytes(3);
-                    arr.add((parseEntry(s)));
+                    var e = parseEntry(s);
+                    e.setID(rs.getInt("ID"));
+                    arr.add(e);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,8 +135,12 @@ public class UserData {
 
   
     public void deleteUser(int id) {
-        // TODO Auto-generated method stub
-
+        String statement = "DELETE FROM DataEntries WHERE ID ='"+ id + "';";
+        try {
+            st.execute(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
    
@@ -144,8 +150,17 @@ public class UserData {
     }
 
     public int retSize() {
-        // TODO Auto-generated method stub
-        return 0;
+        String statement = "SELECT COUNT(*) FROM Users;";
+        try {
+            rs = st.executeQuery(statement);
+            rs.next();
+            return rs.getInt(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        
+
     }
     
 }
