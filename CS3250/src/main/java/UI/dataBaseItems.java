@@ -21,12 +21,12 @@ public class dataBaseItems {
     //FloatProperty cost,sale;
     //StringProperty sid;
 
-    public dataBaseItems(String string, int i, float f, float g, String string2) {
-        this.id.set(string);
-        this.quantity = i;
-        this.cost = f;
-        this.sale = g;
-        this.sid = string2;
+    public dataBaseItems(SimpleStringProperty id, SimpleIntegerProperty quantity, SimpleFloatProperty cost, SimpleFloatProperty sale, SimpleStringProperty sid) {
+        this.id = id;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.sale = sale;
+        this.sid = sid;
     }
 
     public String getId() {
