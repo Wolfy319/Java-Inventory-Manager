@@ -22,6 +22,16 @@ public class UserAuthenticator {
 		data.createEntry("CREATE_USER", newUser);
 		return;
 	}
+	
+	public static User createUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		User newUser = new User();
+		
+		newUser.setUsername(getEncryptedUsername(username));
+		newUser.setSalt(generateSalt());
+		newUser.setPassword(getEncryptedPassword(password, newUser.getSalt()));
+	
+		return newUser;
+	}
  
 	public static boolean authenticate(String username, String password, UserData data)
 	   throws NoSuchAlgorithmException, InvalidKeySpecException {

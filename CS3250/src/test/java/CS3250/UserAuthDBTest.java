@@ -14,12 +14,16 @@ class UserAuthDBTest {
         data.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
     	
         /*
-            UserAuthenticator.createUser("pineapple", "onpizza", data);
-    		UserAuthenticator.createUser("owner", "password1234", data);
-    		UserAuthenticator.createUser("employee", "cs3250", data);
-    		UserAuthenticator.createUser("admin", "team3", data);
-    		UserAuthenticator.createUser("customer", "password", data);
+         	Authorized Users:
+            Username 	Password
+            --------    --------  
+            "pineapple" "onpizza"
+    		"owner"     "password1234"
+    		"employee"  "cs3250"
+    		"admin"     "team3"
+    		"customer"  "password"
          */
+        
         assertEquals(UserAuthenticator.authenticate("pineapple", "onpizza", data), true);
         assertNotEquals(UserAuthenticator.authenticate("pineapple", "fakepassword", data), true);
         assertNotEquals(UserAuthenticator.authenticate("notarealuser", "onpizza", data), true);

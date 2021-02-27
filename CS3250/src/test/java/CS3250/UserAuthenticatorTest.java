@@ -42,7 +42,7 @@ class UserAuthenticatorTest {
 		
 		// Make sure that create user makes the same user everytime
 		for(int i = 0; i < 30; i++) {
-			testUser = UserAuthenticator.createUser("test", "admin",);
+			testUser = UserAuthenticator.createUser("test", "admin");
 			assertNotEquals(testUser.getPassword().toString(), "admin");
 			assertNotEquals(testUser.getUsername().toString(), "test");
 			
