@@ -41,10 +41,10 @@ public void initialize(URL location, ResourceBundle resources) throws SQLExcepti
     try{
     Connection con = UIDBConnector.getConnection();
 
-    ResultSet rs = con.createStatement().executeQuery("SELECT * FROM testDB.DataEntries");
+    ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
      
     while (rs.next()){//"should be column names"
-        oblist.add(new UI.dataBaseItems(rs.getString("id"), rs.getInt("quantity"), rs.getFloat("cost"), rs.getFloat("sale"), rs.getString("sid")));
+        oblist.add(new dataBaseItems(rs.getString("id"), rs.getInt("quantity"), rs.getFloat("cost"), rs.getFloat("sale"), rs.getString("sid")));
     }
 
     }catch (SQLException ex){
