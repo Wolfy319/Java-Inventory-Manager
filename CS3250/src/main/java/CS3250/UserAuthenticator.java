@@ -4,31 +4,46 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
 import java.util.Arrays;
- 
+import java.util.Base64;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
  
 public class UserAuthenticator {
-	public User createUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	static UserData data = new UserData();
+	public static void createUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		User newUser = new User();
 		
 		newUser.setUsername(getEncryptedUsername(username));
 		newUser.setSalt(generateSalt());
 		newUser.setPassword(getEncryptedPassword(password, newUser.getSalt()));
-		return newUser;
+		
+		data.createEntry("CREATE_USER", newUser);
+		return;
 	}
  
-	public boolean authenticate(String attemptedPassword, byte[] encryptedPassword, byte[] salt)
+	public static boolean authenticate(String username, String password)
 	   throws NoSuchAlgorithmException, InvalidKeySpecException {
-	  // Hash the clear-text password using the same salt that was used for the original hash
-	  byte[] encryptedAttemptedPassword = getEncryptedPassword(attemptedPassword, salt);
-	 
-	  // Authentication succeeds if encrypted password that the user entered is equal to the stored hash
-	  return Arrays.equals(encryptedPassword, encryptedAttemptedPassword);
+		
+		byte[] encryptedUser = getEncryptedUsername(username);
+		String encryptedUserString = Base64.getEncoder().encodeToString(encryptedUser);
+		ArrayList<User> users = data.getUser(encryptedUserString);
+		User currentUser;
+		
+		for(int i = 0; i < users.size(); i++) {
+			currentUser = users.get(i);
+			byte[] encryptedAttemptedPassword = getEncryptedPassword(password, currentUser.getSalt());
+			if(Arrays.equals(encryptedAttemptedPassword, currentUser.getPassword())) {
+				return true;
+			}
+		}
+		
+		return false;
 	 }
  
-	public byte[] getEncryptedUsername(String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	public static byte[] getEncryptedUsername(String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		String algorithm = "PBKDF2WithHmacSHA1"; // PBKDF2 with SHA-1 as the hashing algorithm
 		byte[] pepper = {0,0,0,0,0,0,0,0}; // Use the same salt for every username for easy lookup
 		
@@ -42,7 +57,7 @@ public class UserAuthenticator {
 		return f.generateSecret(spec).getEncoded();
 	}
 	
-	public byte[] getEncryptedPassword(String password, byte[] salt)
+	public static byte[] getEncryptedPassword(String password, byte[] salt)
 	throws NoSuchAlgorithmException, InvalidKeySpecException {
 	  
 		String algorithm = "PBKDF2WithHmacSHA1"; // PBKDF2 with SHA-1 as the hashing algorithm
@@ -59,7 +74,7 @@ public class UserAuthenticator {
 		return f.generateSecret(spec).getEncoded();
 	}
  
-	public byte[] generateSalt() throws NoSuchAlgorithmException {
+	public static byte[] generateSalt() throws NoSuchAlgorithmException {
 		// Apparently important to use SecureRandom instead of just Random
 		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
  
