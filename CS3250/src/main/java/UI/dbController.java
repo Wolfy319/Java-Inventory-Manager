@@ -1,4 +1,4 @@
-package CS3250;
+package UI;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
