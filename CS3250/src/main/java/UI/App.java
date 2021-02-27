@@ -1,6 +1,7 @@
 package UI;
 import java.net.URL;
 
+import CS3250.UserAuthenticator;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;

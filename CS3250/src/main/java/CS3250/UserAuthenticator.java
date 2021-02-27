@@ -12,8 +12,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
  
 public class UserAuthenticator {
-	static UserData data = new UserData();
-	public static void createUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static void createUser(String username, String password, UserData data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		User newUser = new User();
 		
 		newUser.setUsername(getEncryptedUsername(username));
@@ -24,12 +23,11 @@ public class UserAuthenticator {
 		return;
 	}
  
-	public static boolean authenticate(String username, String password)
+	public static boolean authenticate(String username, String password, UserData data)
 	   throws NoSuchAlgorithmException, InvalidKeySpecException {
-		
 		byte[] encryptedUser = getEncryptedUsername(username);
 		String encryptedUserString = Base64.getEncoder().encodeToString(encryptedUser);
-		ArrayList<User> users = data.getUser(encryptedUserString);
+		ArrayList<User> users = data.getUser(encryptedUser);
 		User currentUser;
 		
 		for(int i = 0; i < users.size(); i++) {

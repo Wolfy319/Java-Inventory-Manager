@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 
 class UserAuthenticatorTest {
-	UserAuthenticator auth = new UserAuthenticator();
 	byte[] salt;
 	byte[] hashedUser1;
 	byte[] hashedUser2;
@@ -20,11 +19,11 @@ class UserAuthenticatorTest {
 	public void GetEncryptedWorks() throws InvalidKeySpecException, NoSuchAlgorithmException {
 		// Make a bunch of hashes to make sure that the hashing works
 		for(int i = 0; i < 30; i++) {
-			salt = auth.generateSalt();
-			hashedUser1 = auth.getEncryptedUsername("username");
-			hashedUser2 = auth.getEncryptedUsername("username");
-			hashedPass1 = auth.getEncryptedPassword("password", salt);
-			hashedPass2 = auth.getEncryptedPassword("password", salt);
+			salt = UserAuthenticator.generateSalt();
+			hashedUser1 = UserAuthenticator.getEncryptedUsername("username");
+			hashedUser2 = UserAuthenticator.getEncryptedUsername("username");
+			hashedPass1 = UserAuthenticator.getEncryptedPassword("password", salt);
+			hashedPass2 = UserAuthenticator.getEncryptedPassword("password", salt);
 			
 			// It doesn't matter what the hashed password is as long as it's different
 			// from the original and is repeatable
@@ -43,12 +42,12 @@ class UserAuthenticatorTest {
 		
 		// Make sure that create user makes the same user everytime
 		for(int i = 0; i < 30; i++) {
-			testUser = auth.createUser("test", "admin");
+			testUser = UserAuthenticator.createUser("test", "admin",);
 			assertNotEquals(testUser.getPassword().toString(), "admin");
 			assertNotEquals(testUser.getUsername().toString(), "test");
 			
-			hashedUsername = auth.getEncryptedUsername("test");
-			hashedPassword = auth.getEncryptedPassword("admin", testUser.getSalt());
+			hashedUsername = UserAuthenticator.getEncryptedUsername("test");
+			hashedPassword = UserAuthenticator.getEncryptedPassword("admin", testUser.getSalt());
 			
 			assertEquals(Arrays.equals(testUser.getUsername(), hashedUsername), true);
 			assertEquals(Arrays.equals(testUser.getPassword(), hashedPassword), true);
@@ -63,8 +62,8 @@ class UserAuthenticatorTest {
 		
 		// Make sure that the salts are actually random
 		for(int i = 0; i < 1000; i++) {
-			salt1 = auth.generateSalt();
-			salt2 = auth.generateSalt();
+			salt1 = UserAuthenticator.generateSalt();
+			salt2 = UserAuthenticator.generateSalt();
 			
 			assertNotEquals(Arrays.equals(salt1, salt2), true);
 		}

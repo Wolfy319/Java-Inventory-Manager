@@ -78,37 +78,30 @@ public class UserData {
         }
     }
     // sends username and returns list of passwords.
-    public ArrayList<User> getUser(String username) {
-        var b = username.getBytes();
+    public ArrayList<User> getUser(byte[] username) {
+//        var b = username.getBytes();
         String statement = "SELECT * FROM Users;";
         String s = "";
         ArrayList<User> arr = new ArrayList<User>();
         try {
-
+        	User currUser = new User();
             rs = st.executeQuery(statement);
             while(rs.next()){
                 byte[] c = rs.getBytes("Username");
-                byte[] tc = username.getBytes();
+                byte[] tc = username;
+                
                 if (Arrays.equals(c, tc)) {
-                    s += rs.getString(1);
-                    s += "_" +  rs.getBytes(2);
-                    s += "_" +  rs.getBytes(3);
-                    arr.add((parseEntry(s)));
+                	currUser.setUsername(username);
+                	currUser.setPassword(rs.getBytes(2));
+                	currUser.setSalt(rs.getBytes(3));
+            
+                    arr.add(currUser);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return arr;
-    }
-
-    private User parseEntry(String s){
-        User e = new User();
-        var ar = s.split("_");
-        e.setUsername(ar[0].getBytes());
-        e.setPassword(ar[1].getBytes());
-        e.setSalt(ar[2].getBytes());
-        return e;
     }
    
     public void updateEntry(String ID, Entry e) {
