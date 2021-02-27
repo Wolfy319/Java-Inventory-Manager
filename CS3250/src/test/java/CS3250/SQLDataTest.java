@@ -14,7 +14,11 @@ public class SQLDataTest {
     @Test
     void ConnectionWorks(){
         init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+        CSVParser cv = new CSVParser();
+        System.out.println("...done");
         assertNotEquals(init.getEntries(), null);
     }
     
+
+
 }
