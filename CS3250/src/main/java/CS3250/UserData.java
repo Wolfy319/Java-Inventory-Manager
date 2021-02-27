@@ -123,13 +123,14 @@ public class UserData {
         return e;
     }
    
-    public void updateEntry(String ID, Entry e) {
-        // TODO Auto-generated method stub
+    public void updateUser(String ID, User e) {
+        deleteUser(e.getUsername());
+        createEntry("holder",e);
 
     }
 
   
-    public void deleteEntry(String id) {
+    public void deleteUser(byte[] id) {
         // TODO Auto-generated method stub
 
     }
