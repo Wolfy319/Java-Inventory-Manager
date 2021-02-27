@@ -2,6 +2,7 @@ package UI;
 import java.net.URL;
 
 import CS3250.UserAuthenticator;
+import CS3250.UserData;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class App extends Application {
+
     // Double vars for dragging window
     private double Xoff = 0;
     private double Yoff = 0;

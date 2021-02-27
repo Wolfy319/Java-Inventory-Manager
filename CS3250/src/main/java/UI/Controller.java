@@ -12,6 +12,11 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+import CS3250.UserAuthenticator;
+import CS3250.UserData;
 
 public class Controller {
 
@@ -36,19 +41,26 @@ public class Controller {
     //Retrieves inputted user name
     @FXML
     public String get_User(){
-        userName = exitBtn.getText();
+        userName = user_IN.getText();
         return userName;
     }
 
     //Retrieves inputted password
     @FXML
     public String get_Pass(){
-        passWord = signBtn.getText();
+        passWord = pass_IN.getText();
         return passWord;
     }
 
-    public boolean authenticated(String attemptedUser, String attemptedPass) {
-    	return false;
+    public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    	UserData data = new UserData();
+    	try{
+    		data.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    	} catch(Exception e) {
+    		System.out.print("Unable to connect to database");  	
+    	}
+    	
+    	return UserAuthenticator.authenticate(attemptedUser, attemptedPass, data);
     }
 
     // Allows the window to be exited
@@ -59,7 +71,7 @@ public class Controller {
     }
 
     @FXML
-    public void signIn_button(ActionEvent event) throws IOException {
+    public void signIn_button(ActionEvent event) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
     	String username = get_User();
     	String password = get_Pass();
     	if(authenticated(username,password)) {
