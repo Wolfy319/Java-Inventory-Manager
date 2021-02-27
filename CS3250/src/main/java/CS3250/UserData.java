@@ -77,30 +77,29 @@ public class UserData {
         } catch (SQLException ex) {
         }
     }
-
-    public User readEntry(String username, String pass) {
+    // sends username and returns list of passwords.
+    public ArrayList<User> getUser(String username) {
         var b = username.getBytes();
         String statement = "SELECT * FROM Users;";
         String s = "";
+        ArrayList<User> arr = new ArrayList<User>();
         try {
 
             rs = st.executeQuery(statement);
             while(rs.next()){
                 byte[] c = rs.getBytes("Username");
-                byte[] p = rs.getBytes("password");
                 byte[] tc = username.getBytes();
-                byte[] tp = pass.getBytes();
-                if (Arrays.equals(c, tc)  && Arrays.equals(p, tp)) {
+                if (Arrays.equals(c, tc)) {
                     s += rs.getString(1);
                     s += "_" +  rs.getBytes(2);
                     s += "_" +  rs.getBytes(3);
-                    return (parseEntry(s));
+                    arr.add((parseEntry(s)));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return arr;
     }
 
     private User parseEntry(String s){

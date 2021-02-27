@@ -11,7 +11,7 @@ public class UserDataTest {
         init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
         
 
-        assertNotEquals(init.readEntry("testin the username today", "passwords are for chumps wo hopp"), null);
+        assertNotEquals(init.getUser("testin the username today"), null);
     }
     
 }
