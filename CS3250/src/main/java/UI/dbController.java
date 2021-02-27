@@ -44,7 +44,9 @@ public void initialize(URL location, ResourceBundle resources) throws SQLExcepti
     ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
      
     while (rs.next()){//"should be column names"
+
         oblist.add(new dataBaseItems(rs.getString("id"), rs.getInt("quantity"), rs.getFloat("cost"), rs.getFloat("sale"), rs.getString("sid")));
+        
     }
 
     }catch (SQLException ex){
