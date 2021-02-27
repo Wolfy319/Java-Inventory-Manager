@@ -93,23 +93,22 @@ public class UserData {
         }
     }
     // sends username and returns list of passwords.
-    public ArrayList<User> getUser(String username) {
+    public ArrayList<User> getUser(byte[] username) {
         String statement = "SELECT * FROM Users;";
         String s = "";
         ArrayList<User> arr = new ArrayList<User>();
         try {
-
+                User currUser = new User();
             rs = st.executeQuery(statement);
             while(rs.next()){
                 byte[] c = rs.getBytes("Username");
-                byte[] tc = username.getBytes();
+                byte[] tc = username;
                 if (Arrays.equals(c, tc)) {
-                    s += rs.getString(1);
-                    s += "_" +  rs.getBytes(2);
-                    s += "_" +  rs.getBytes(3);
-                    var e = parseEntry(s);
-                    e.setID(rs.getInt("ID"));
-                    arr.add(e);
+                    currUser.setUsername(username);
+                    currUser.setPassword(rs.getBytes(2));
+                    currUser.setSalt(rs.getBytes(3));
+                    currUser.setID(rs.getInt("ID"));
+                    arr.add(currUser);
                 }
             }
         } catch (SQLException e) {
