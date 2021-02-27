@@ -20,7 +20,7 @@ public class UserDataTest {
     }
 
     @Test
-    void deleteUserWorks(){
+    void deleteAndGetUserWorks(){
         init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
         User e = new User();
         e.setID(200);
@@ -37,5 +37,7 @@ public class UserDataTest {
 
     }
     
+
+
 }
 
