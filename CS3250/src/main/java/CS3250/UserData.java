@@ -105,7 +105,9 @@ public class UserData {
                     s += rs.getString(1);
                     s += "_" +  rs.getBytes(2);
                     s += "_" +  rs.getBytes(3);
-                    arr.add((parseEntry(s)));
+                    var e = parseEntry(s);
+                    e.setID(rs.getInt("ID"));
+                    arr.add(e);
                 }
             }
         } catch (SQLException e) {
@@ -123,14 +125,14 @@ public class UserData {
         return e;
     }
    
-    public void updateUser(String ID, User e) {
-        deleteUser(e.getUsername());
+    public void updateUser(int ID, User e) {
+        deleteUser(e.getID());
         createEntry("holder",e);
 
     }
 
   
-    public void deleteUser(byte[] id) {
+    public void deleteUser(int id) {
         // TODO Auto-generated method stub
 
     }

@@ -4,6 +4,7 @@ public class User {
 	private byte[] username;
 	private byte[] password;
 	private byte[] salt;
+	private int ID = 0;
 	
 	public byte[] getUsername() {
 		return username;
@@ -16,7 +17,13 @@ public class User {
 	public byte[] getPassword() {
 		return password;
 	}
+	public int getID() {
+		return ID;
+	}
 	
+	public void setID(int id){
+		ID = id;
+	}
 	public void setPassword(byte[] password) {
 		this.password = password;
 	}
