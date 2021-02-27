@@ -1,6 +1,5 @@
 package CS3250;
 
-import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,9 +21,25 @@ public class UserData {
     ResultSet rs;
     
     
-    public ArrayList<Entry> getEntries() {
-        // TODO Auto-generated method stub
-        return null;
+    public ArrayList<User> getUsers() {
+        String statement = "SELECT * FROM Users;";
+        String s = "";
+        ArrayList<User> arr = new ArrayList<User>();
+        try {
+
+            rs = st.executeQuery(statement);
+            while(rs.next()){
+                    s += rs.getString(1);
+                    s += "_" +  rs.getBytes(2);
+                    s += "_" +  rs.getBytes(3);
+                    var e = parseEntry(s);
+                    e.setID(rs.getInt("ID"));
+                    arr.add(e);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return arr;
     }
 
     
@@ -102,15 +117,20 @@ public class UserData {
         return arr;
     }
    
-    public void updateEntry(String ID, Entry e) {
-        // TODO Auto-generated method stub
+    public void updateUser(int ID, User e) {
+        deleteUser(e.getID());
+        createEntry("holder",e);
 
     }
 
   
-    public void deleteEntry(String id) {
-        // TODO Auto-generated method stub
-
+    public void deleteUser(int id) {
+        String statement = "DELETE FROM Users WHERE ID ='"+ id + "';";
+        try {
+            st.execute(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
    
@@ -120,8 +140,17 @@ public class UserData {
     }
 
     public int retSize() {
-        // TODO Auto-generated method stub
-        return 0;
+        String statement = "SELECT COUNT(*) FROM Users;";
+        try {
+            rs = st.executeQuery(statement);
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        
+
     }
     
 }
