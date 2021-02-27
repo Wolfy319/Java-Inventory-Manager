@@ -21,16 +21,6 @@ public class dataBaseItems {
     //FloatProperty cost,sale;
     //StringProperty sid;
 
-<<<<<<< HEAD
-=======
-    public dataBaseItems(SimpleStringProperty id, SimpleIntegerProperty quantity, SimpleFloatProperty cost, SimpleFloatProperty sale, SimpleStringProperty sid) {
-        this.id = id;
-        this.quantity = quantity;
-        this.cost = cost;
-        this.sale = sale;
-        this.sid = sid;
-    }
->>>>>>> 47f72fd26f0177c34346d81c1049a59f9ea6cbc4
 
     public dataBaseItems(String id, int quantity, Float cost, Float sale, String sid) {
         this.id.set(id);
