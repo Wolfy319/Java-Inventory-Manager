@@ -8,10 +8,11 @@ public class UserDataTest {
     UserData init = new UserData();
     @Test
     void ConnectionWorks(){
-        init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
-        
+        init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+        String s = "testin the username today";
+        byte[] user = s.getBytes();
 
-        assertNotEquals(init.getUser("testin the username today"), null);
+        assertNotEquals(user, null);
     }
     
 }
