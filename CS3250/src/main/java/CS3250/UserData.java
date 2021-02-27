@@ -135,7 +135,7 @@ public class UserData {
 
   
     public void deleteUser(int id) {
-        String statement = "DELETE FROM DataEntries WHERE ID ='"+ id + "';";
+        String statement = "DELETE FROM Users WHERE ID ='"+ id + "';";
         try {
             st.execute(statement);
         } catch (SQLException e) {
@@ -154,7 +154,7 @@ public class UserData {
         try {
             rs = st.executeQuery(statement);
             rs.next();
-            return rs.getInt(0);
+            return rs.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;

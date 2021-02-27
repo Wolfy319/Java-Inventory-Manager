@@ -7,18 +7,18 @@ public class dbController {
 
 
     @FXML
-    public TableColumn<CS3250.dataBaseItems, String> col_id;
+    public TableColumn<UI.dataBaseItems, String> col_id;
 
     @FXML
-    public TableColumn<CS3250.dataBaseItems,Integer> col_quantity;
+    public TableColumn<UI.dataBaseItems,Integer> col_quantity;
 
     @FXML
-    public TableColumn<CS3250.dataBaseItems, Float> col_cost;
+    public TableColumn<UI.dataBaseItems, Float> col_cost;
 
     @FXML
-    public TableColumn<CS3250.dataBaseItems, Float> col_price;
+    public TableColumn<UI.dataBaseItems, Float> col_price;
 
     @FXML
-    public TableColumn<CS3250.dataBaseItems, String> col_sid;
+    public TableColumn<UI.dataBaseItems, String> col_sid;
 
 }
