@@ -1,12 +1,16 @@
 package CS3250;
 
+import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
+
 
 public class UserData {
 
@@ -60,21 +64,53 @@ public class UserData {
     }
 
    
-    public void createEntry(String ID, User e) {
-        String statement="INSERT INTO Users(username,password,salt) VALUES('" + e.getUsername() + "', '" + e.getPassword() + "' , '"+ e.getSalt() + "');" ;
-        try {
-            st.execute(statement);
-            
-        } catch (SQLException e1) {
-            e1.printStackTrace();
+    public void createEntry(String ID, User e) {        
+        byte[] ubytes = e.getUsername();
+        byte[] pbytes = e.getPassword();
+        byte[] sbytes = e.getSalt();
+        String sql = "INSERT INTO Users(Username,Password,salt) VALUES(?,?,?)";
+        try (PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql)) {
+                pst.setBytes(1, ubytes);
+                pst.setBytes(2, pbytes);
+                pst.setBytes(3, sbytes);
+                pst.executeUpdate();
+        } catch (SQLException ex) {
         }
     }
 
-    public Entry readEntry(String ID) {
-        // TODO Auto-generated method stub
+    public User readEntry(String username, String pass) {
+        var b = username.getBytes();
+        String statement = "SELECT * FROM Users;";
+        String s = "";
+        try {
+
+            rs = st.executeQuery(statement);
+            while(rs.next()){
+                byte[] c = rs.getBytes("Username");
+                byte[] p = rs.getBytes("password");
+                byte[] tc = username.getBytes();
+                byte[] tp = pass.getBytes();
+                if (Arrays.equals(c, tc)  && Arrays.equals(p, tp)) {
+                    s += rs.getString(1);
+                    s += "_" +  rs.getBytes(2);
+                    s += "_" +  rs.getBytes(3);
+                    return (parseEntry(s));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
+    private User parseEntry(String s){
+        User e = new User();
+        var ar = s.split("_");
+        e.setUsername(ar[0].getBytes());
+        e.setPassword(ar[1].getBytes());
+        e.setSalt(ar[2].getBytes());
+        return e;
+    }
    
     public void updateEntry(String ID, Entry e) {
         // TODO Auto-generated method stub
