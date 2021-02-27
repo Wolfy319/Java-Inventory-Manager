@@ -4,6 +4,7 @@ public class User {
 	private byte[] username;
 	private byte[] password;
 	private byte[] salt;
+	private int ID = 0;
 	
 	public byte[] getUsername() {
 		return username;
