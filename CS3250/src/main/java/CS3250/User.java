@@ -32,6 +32,14 @@ public class User {
 		return salt;
 	}
 	
+		public int getID() {
+		return ID;
+	}
+	
+	public void setID(int id){
+		ID = id;
+	}
+	
 	public void setSalt(byte[] salt) {
 		this.salt = salt;
 	}
