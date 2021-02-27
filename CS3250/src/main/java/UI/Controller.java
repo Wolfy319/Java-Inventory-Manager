@@ -75,6 +75,7 @@ public class Controller {
     	String username = get_User();
     	String password = get_Pass();
     	if(authenticated(username,password)) {
+    		// TODO - FXMLLoader can't find DBScreen for some reason
     		Parent DbsScreen = FXMLLoader.load(getClass().getResource("DBScreen.fxml"));
             Scene DbsScene = new Scene(DbsScreen);
             Stage dbsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
