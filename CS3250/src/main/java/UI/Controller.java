@@ -33,10 +33,10 @@ public class Controller {
     public PasswordField pass_IN;
 
     @FXML
-    private String userName;
+    public String userName;
 
     @FXML
-    private String passWord;
+    public String passWord;
 
     //Retrieves inputted user name
     @FXML
