@@ -1,6 +1,5 @@
 package CS3250;
 
-import java.io.IOException;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -79,7 +78,6 @@ public class UserData {
     }
     // sends username and returns list of passwords.
     public ArrayList<User> getUser(String username) {
-        var b = username.getBytes();
         String statement = "SELECT * FROM Users;";
         String s = "";
         ArrayList<User> arr = new ArrayList<User>();
