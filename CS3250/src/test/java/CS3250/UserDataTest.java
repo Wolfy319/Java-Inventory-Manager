@@ -30,7 +30,7 @@ public class UserDataTest {
         e.setSalt("salt".getBytes());
         init.createEntry("ID", e);
         int initial = init.retSize();
-        var li = init.getUser("Username");
+        var li = init.getUser("Username".getBytes());
         int delvalue = li.get(0).getID();
         init.deleteUser(delvalue);
         int after = init.retSize();

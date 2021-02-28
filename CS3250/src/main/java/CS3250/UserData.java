@@ -27,15 +27,17 @@ public class UserData {
         ArrayList<User> arr = new ArrayList<User>();
         try {
 
+            User currUser = new User();
             rs = st.executeQuery(statement);
             while(rs.next()){
-                    s += rs.getString(1);
-                    s += "_" +  rs.getBytes(2);
-                    s += "_" +  rs.getBytes(3);
-                    var e = parseEntry(s);
-                    e.setID(rs.getInt("ID"));
-                    arr.add(e);
-            }
+                byte[] c = rs.getBytes("Username");
+                    currUser.setUsername(c);
+                    currUser.setPassword(rs.getBytes(2));
+                    currUser.setSalt(rs.getBytes(3));
+                    currUser.setID(rs.getInt("ID"));
+                    arr.add(currUser);
+                }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }

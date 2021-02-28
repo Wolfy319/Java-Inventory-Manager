@@ -17,13 +17,7 @@ public class User {
 	public byte[] getPassword() {
 		return password;
 	}
-	public int getID() {
-		return ID;
-	}
 	
-	public void setID(int id){
-		ID = id;
-	}
 	public void setPassword(byte[] password) {
 		this.password = password;
 	}
