@@ -24,7 +24,7 @@
                      </font>
                   </Label>
                   <JFXButton fx:id="try_it" layoutX="130.0" layoutY="2.0" text="huh" textFill="WHITE" />
-                  <Button fx:id="exitBtn2" layoutX="783.0" layoutY="-10.0" mnemonicParsing="false" onAction="#exit_Button2" prefHeight="25.0" prefWidth="75.0" text="Exit" />
+                  <Button fx:id="exitBtn2" layoutX="783.0" layoutY="-10.0" mnemonicParsing="false" onAction="#exit_Button2" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Exit" />
                </children>
             </AnchorPane>
             <Separator layoutX="-1.0" layoutY="43.0" prefHeight="17.0" prefWidth="877.0" style="-fx-background-color: orange; -fx-opacity: .80;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" />
@@ -43,10 +43,9 @@
                   <JFXTextField focusColor="#ffa600" layoutX="2.0" layoutY="14.0" prefHeight="25.0" prefWidth="117.0" promptText="Search" unFocusColor="BLACK" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
-<<<<<<< HEAD
-            <Button fx:id="btnAdd" layoutX="24.0" layoutY="415.0" mnemonicParsing="false" onAction="#handle" prefHeight="15.0" prefWidth="75.0" text="Add" />
-            <Button fx:id="btnUpdate" layoutX="24.0" layoutY="445.0" mnemonicParsing="false" onAction="#handle" prefHeight="15.0" prefWidth="75.0" text="Update" />
-            <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" onAction="#handle" prefHeight="15.0" prefWidth="75.0" text="Delete" />
+            <Button fx:id="btnAdd" layoutX="24.0" layoutY="415.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Add" />
+            <Button fx:id="btnUpdate" layoutX="24.0" layoutY="445.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Update" />
+            <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Delete" />
             <VBox layoutX="11.0" layoutY="107.0" prefHeight="303.0" prefWidth="100.0" spacing="10.0">
                <children>
                   <Label text="Id" />
@@ -61,11 +60,6 @@
                   <TextField fx:id="textSid" prefHeight="17.0" prefWidth="100.0" />
                </children>
             </VBox>
-=======
-            <Button layoutX="11.0" layoutY="207.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: orange;" text="Add Entry" />
-            <Button layoutX="11.0" layoutY="250.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: orange;" text="Update Entry" />
-            <Button layoutX="11.0" layoutY="291.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: orange;" text="Delete Entry" />
->>>>>>> d87e14621c352fafef6379eb0f7a36a5999a89a1
          </children>
       </AnchorPane>
    </children>

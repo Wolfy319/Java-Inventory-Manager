@@ -86,15 +86,9 @@ public class dbController {
                 counter += 1;
             }
 
-<<<<<<< HEAD
-        } catch (SQLException ex) {
-=======
-    ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
-     int counter =0;
-    while (rs.next()&& counter < 100){//"should be column names"
->>>>>>> d87e14621c352fafef6379eb0f7a36a5999a89a1
 
-        }
+
+        }finally{}
         col_quantityid.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         col_costid.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
         col_priceid.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
@@ -105,19 +99,19 @@ public class dbController {
     }
 
 @FXML
-public void handle(ActionEvent event) {
+public void handle(ActionEvent event) throws SQLException {
     if (event.getSource() == btnAdd) {
         insertItem();
     }
 }
 
-private void insertItem() {
+private void insertItem() throws SQLException {
     String query = "INSERT INTO DataEntries VALUES (" + textId.getText() + "," + textQuantity.getText() + "," + textCost.getText() + "," + textPrice.getText() + "," + textSid.getText() + ")";
     executeQuery(query);
     initialize();
 }
 
-public void executeQuery(String query) {
+public void executeQuery(String query) throws SQLException {
     Connection conn;
     conn = UIDBConnector.getConnection();
     Statement st;
