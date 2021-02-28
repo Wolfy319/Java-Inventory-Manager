@@ -55,7 +55,7 @@ public class Controller {
         Scene DbsScene = new Scene(DbsScreen);
         Stage dbsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         dbsStage.setScene(DbsScene);
-        dbsStage.setMaximized(true);
+        //dbsStage.setMaximized(true);
         dbsStage.show();
         
     }
