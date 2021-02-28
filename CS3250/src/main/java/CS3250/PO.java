@@ -8,6 +8,7 @@ public class PO {
     int userID = 0;
     List<Integer> itemPOs = new ArrayList<Integer>();
     String Username = "";
+    double total = 0.0;
 
     public int getUserID() {
         return userID;
@@ -30,7 +31,4 @@ public class PO {
     public int getID() {
         return ID;
     }
-
-
-    
 }
