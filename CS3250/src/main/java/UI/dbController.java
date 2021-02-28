@@ -86,7 +86,13 @@ public class dbController {
                 counter += 1;
             }
 
+<<<<<<< HEAD
         } catch (SQLException ex) {
+=======
+    ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
+     int counter =0;
+    while (rs.next()&& counter < 100){//"should be column names"
+>>>>>>> d87e14621c352fafef6379eb0f7a36a5999a89a1
 
         }
         col_quantityid.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
