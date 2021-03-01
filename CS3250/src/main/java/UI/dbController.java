@@ -20,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 
+import CS3250.SQLData;
+
 public class dbController {
 
     @FXML
@@ -38,19 +40,19 @@ public class dbController {
     public Button btnDelete;
 
     @FXML
-    public TextField textId;
+    public TextField textId = new TextField();
 
     @FXML
-    public TextField textQuantity;
+    public TextField textQuantity = new TextField();
 
     @FXML
-    public TextField textCost;
+    public TextField textCost = new TextField();
 
     @FXML
-    public TextField textPrice;
+    public TextField textPrice = new TextField();
 
     @FXML
-    public TextField textSid;
+    public TextField textSid = new TextField();
 
     @FXML
     public TableView<UI.dataBaseItems> table;
@@ -98,31 +100,48 @@ public class dbController {
         table.setItems(oblist);
     }
 
+
 @FXML
-public void handle(ActionEvent event) throws SQLException {
+public void handleCrud(ActionEvent event) throws SQLException {
     if (event.getSource() == btnAdd) {
         insertItem();
+    } else if (event.getSource() == btnUpdate) {
+        updateItem();
+    } else if (event.getSource() == btnDelete) {
+        deleteItem();
     }
 }
 
 private void insertItem() throws SQLException {
-    String query = "INSERT INTO DataEntries VALUES (" + textId.getText() + "," + textQuantity.getText() + "," + textCost.getText() + "," + textPrice.getText() + "," + textSid.getText() + ")";
-    executeQuery(query);
+    Connection con = UIDBConnector.getConnection();
+    st =  (Statement) con.createStatement();
+    String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + textId.getText() + "', '" + textSid.getText() + "' , '"+ textQuantity.getText() + "' , '" + textCost.getText() + "' , '" + textPrice.getText() + "');" ;
+    st.execute(statement);
+}
+
+private void updateItem() throws SQLException {
+    Connection con = UIDBConnector.getConnection();
+    st =  (Statement) con.createStatement();
+    String statement = "UPDATE DataEntries SET supplierID = '" + textSid.getText() + "', stockQuantity = " + textQuantity.getText() + ", wholesaleCost = " + textCost.getText() + ", salePrice = " + textPrice.getText() + "WHERE productID = '" + textId.getText() + "'";
+    st.execute(statement);
+    oblist.clear();
     initialize();
-}
-
-public void executeQuery(String query) throws SQLException {
-    Connection conn;
-    conn = UIDBConnector.getConnection();
-    Statement st;
-    try{
-        st = conn.createStatement();
-        st.executeUpdate(query);
-    }catch(Exception ex) {
-        ex.printStackTrace();
-    }
 
 }
+
+Statement st;
+
+private void deleteItem() throws SQLException{
+    Connection con = UIDBConnector.getConnection();
+    st =  (Statement) con.createStatement();
+    String toBeDeleted = textId.getText();
+    String statement = "DELETE FROM DataEntries WHERE productID ='"+ toBeDeleted + "';";
+    st.execute(statement);
+    oblist.clear();
+    initialize();
+    
+}
+
 
 public void ibutton(ActionEvent event){
     try_it.setOnAction(new EventHandler<ActionEvent>() {
