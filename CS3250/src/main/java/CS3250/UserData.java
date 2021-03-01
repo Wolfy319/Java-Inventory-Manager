@@ -136,10 +136,12 @@ public class UserData {
     }
 
    
-    public void saveEntry(Entry e) {
-        // TODO Auto-generated method stub
 
-    }
+        public void saveEntry(User e) {
+            String newEntry = String.valueOf(e.getID());
+            createEntry(newEntry, e);
+        }
+    
 
     public int retSize() {
         String statement = "SELECT COUNT(*) FROM Users;";
