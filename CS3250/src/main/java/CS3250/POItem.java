@@ -10,8 +10,10 @@ public class POItem {
     String ProductName = "";
 
     public void SaveItem(){
-
-
+        SQLPoItem init = new SQLPoItem();
+        init.InitializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+        POItem t = this;
+        init.createEntry(1, t);
     }
 
     public String getBuyerName() {

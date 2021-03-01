@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 public class SQLPoItem {
@@ -64,4 +65,17 @@ public class SQLPoItem {
         }
         return arr;
     }
+
+    public void createEntry(int ID, POItem item){
+        String sql = "INSERT INTO POItems(POID,ItemID,BuyerID, Quantity) VALUES(?,?,?,?)";
+        try (PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql)) {
+                pst.setInt(1, item.getPOID());
+                pst.setInt(2, item.getItemID());
+                pst.setInt(3, item.getBuyerID());
+                pst.setInt(4, item.getQuantity());
+                pst.executeUpdate();
+        } catch (SQLException ex) {
+        }
+    }
+
 }

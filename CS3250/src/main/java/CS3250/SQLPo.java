@@ -46,16 +46,16 @@ public class SQLPo{
 
     
 // need to create table for PO's and swap this string
-    public void createEntry(String ID, PO p) {
-        String statement="INSERT INTO POItems(POID,ItemID,BuyerID,Quantity) VALUES('" + p.getID() + "', '" + e.getSupplierID() + "' , '"+ e.getStockQuantity() + "' , '" + e.getWholesaleCost() + "' , '" + e.getSalePrice() + "');" ;
-        try {
-            st.execute(statement);
+    // public void createEntry(String ID, PO p) {
+    //     String statement="INSERT INTO POItems(POID,ItemID,BuyerID,Quantity) VALUES('" + p.getID() + "', '" + e.getSupplierID() + "' , '"+ e.getStockQuantity() + "' , '" + e.getWholesaleCost() + "' , '" + e.getSalePrice() + "');" ;
+    //     try {
+    //         st.execute(statement);
             
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
+    //     } catch (SQLException e1) {
+    //         e1.printStackTrace();
+    //     }
 
-    }
+    // }
 
     public Entry readEntry(String ID) {
         // TODO Auto-generated method stub
