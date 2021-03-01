@@ -33,5 +33,7 @@ public class SQLPoItem {
         }
     }
 
-    
+    public void GetAllGivenPOID(int ID){
+        //
+    }
 }
