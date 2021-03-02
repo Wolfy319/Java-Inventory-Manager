@@ -86,6 +86,7 @@ public class Controller {
     		Stage stage = (Stage) signBtn.getScene().getWindow();
             stage.close();
     	}
+
     }
 
 }
