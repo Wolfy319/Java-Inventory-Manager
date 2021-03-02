@@ -65,6 +65,22 @@ public class SQLPoItem {
         }
         return arr;
     }
+    public POItem getItem(int ID){
+        String statement = "SELECT * FROM POItems WHERE ID =" + ID+ ";";
+        try {
+        st = (Statement) con.createStatement();
+        rs = st.executeQuery(statement);
+            POItem p = new POItem();
+            rs.next();
+                p.setPOID(rs.getInt("POID"));
+                p.setItemID(rs.getInt("ItemID"));
+                p.setBuyerID(rs.getInt("BuyerID"));
+                p.setQuantity(rs.getInt("Quantity"));
+                p.setID(rs.getInt("ID"));
+                return p;
+            } catch(SQLException e){e.printStackTrace();}
+            return null;
+        }
 
     public void createEntry(int ID, POItem item){
         String sql = "INSERT INTO POItems(POID,ItemID,BuyerID, Quantity) VALUES(?,?,?,?)";
@@ -78,4 +94,12 @@ public class SQLPoItem {
         }
     }
 
+    public void deleteItem(int ID){
+        String statement = "DELETE FROM POItems WHERE ID ='"+ ID + "';";
+        try {
+            st.execute(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
