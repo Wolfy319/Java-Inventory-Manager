@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -112,11 +113,24 @@ public void handleCrud(ActionEvent event) throws SQLException {
     }
 }
 
+@FXML
+public void highlightClick(MouseEvent event) {
+    UI.dataBaseItems selectedItem = table.getSelectionModel().getSelectedItem();
+    
+    textId.setText(selectedItem.getProductID());
+    textQuantity.setText(selectedItem.getStockQuantity());
+    textCost.setText(selectedItem.getWholesaleCost());
+    textPrice.setText(selectedItem.getSalePrice());
+    textSid.setText(selectedItem.getSupplierID());
+}
+
 private void insertItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
     String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + textId.getText() + "', '" + textSid.getText() + "' , '"+ textQuantity.getText() + "' , '" + textCost.getText() + "' , '" + textPrice.getText() + "');" ;
     st.execute(statement);
+    oblist.clear();
+    initialize();
 }
 
 private void updateItem() throws SQLException {
