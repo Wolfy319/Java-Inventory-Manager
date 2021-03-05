@@ -1,5 +1,6 @@
 package UI;
 
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -62,6 +63,7 @@ public class dbController {
     public TableColumn<UI.dataBaseItems, String> col_id;
 
     @FXML
+
     public TableColumn<UI.dataBaseItems, Integer> col_quantityid;
 
     @FXML
@@ -72,6 +74,7 @@ public class dbController {
 
     @FXML
     public TableColumn<UI.dataBaseItems, String> col_sid;
+
 
     ObservableList oblist = FXCollections.observableArrayList();
 
