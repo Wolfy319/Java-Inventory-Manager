@@ -18,6 +18,12 @@ import java.security.spec.InvalidKeySpecException;
 import CS3250.UserAuthenticator;
 import CS3250.UserData;
 
+/**
+ * Controllers the login screen
+ * 
+ * @author Kyle Brown
+ * 
+ */
 public class Controller {
 
     @FXML
@@ -38,20 +44,34 @@ public class Controller {
     @FXML
     public String passWord;
 
-    //Retrieves inputted user name
+    /**
+     * Retrieves inputted user name
+     * @return - returns the entered username
+     */
     @FXML
     public String get_User(){
         userName = user_IN.getText();
         return userName;
     }
 
-    //Retrieves inputted password
+    /**
+     * Retrieves inputted password
+     * @return - returns inputed password
+     */
     @FXML
     public String get_Pass(){
         passWord = pass_IN.getText();
         return passWord;
     }
 
+    /**
+     * Attempts to authenticate the username and password entered
+     * @param attemptedUser - Holds the entered username
+     * @param attemptedPass - Holds the entered password
+     * @return - returns result of the authetication
+     * @throws NoSuchAlgorithmException - Throws if cryptograpic algorithm is requested but not available
+     * @throws InvalidKeySpecException - Throws if invalid key specification
+     */
     public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
     	UserData data = new UserData();
     	try{
@@ -63,13 +83,23 @@ public class Controller {
     	return UserAuthenticator.authenticate(attemptedUser, attemptedPass, data);
     }
 
-    // Allows the window to be exited
+    /**
+     * Allows the window to be exited
+     * @param event - clicking button event
+     */
     @FXML
     public void exit_Button(ActionEvent event) {
         Stage stage = (Stage) exitBtn.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Checks if user is authenticated, then loads db screen
+     * @param event - clicking button event
+     * @throws IOException - Throws if error with file
+     * @throws NoSuchAlgorithmException - Throws if cryptograpic algorithm is requested but not available
+     * @throws InvalidKeySpecException - Throws if invalid key specification
+     */
     @FXML
     public void signIn_button(ActionEvent event) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
     	String username = get_User();
