@@ -8,6 +8,7 @@ public class POItem {
     int Quantity = 0;
     String BuyerName = "";
     String ProductName = "";
+    
 
     public void SaveItem(){
         SQLPoItem init = new SQLPoItem();

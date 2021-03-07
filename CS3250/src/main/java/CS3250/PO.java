@@ -7,7 +7,7 @@ import java.util.List;
 public class PO {
     int ID = 0;
     int userID = 0;
-    List<Integer> itemPOs = new ArrayList<Integer>();
+    List<POItem> items = new ArrayList<POItem>();
     String Username = "";
     double total = 0.0;
     String date = "";
@@ -36,8 +36,8 @@ public class PO {
     public void setUsername(String username) {
         Username = username;
     }
-    public void setItemPOs(List<Integer> itemPOs) {
-        this.itemPOs = itemPOs;
+    public void setItems(List<POItem> itemPOs) {
+        this.items = itemPOs ;
     }
     public void setID(int iD) {
         ID = iD;
