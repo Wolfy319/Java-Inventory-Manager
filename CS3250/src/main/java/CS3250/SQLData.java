@@ -125,9 +125,18 @@ public class SQLData implements DataInterface {
 
     @Override
     public int retSize() {
-        // TODO Auto-generated method stub
-        return 0;
+        int rsCount = 0;
+        try{
+        while(rs.next())
+        {
+            rsCount = rsCount + 1;
+        }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return rsCount;
     }
+
 
 
 }
