@@ -2,8 +2,9 @@ package UI;
 
 
 import java.net.URL;
+import java.util.Observable;
 import java.util.ResourceBundle;
-
+import java.util.function.Predicate;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -55,6 +58,9 @@ public class dbController {
 
     @FXML
     public TextField textSid = new TextField();
+
+    @FXML
+    public TextField searchBox = new TextField(); 
 
     @FXML
     public TableView<UI.dataBaseItems> table;
@@ -102,6 +108,23 @@ public class dbController {
         col_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
 
         table.setItems(oblist);
+
+
+        FilteredList<dataBaseItems> filteredData = new FilteredList<>(oblist, p -> true); 
+        searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
+            filteredData.setPredicate(dataBaseItems -> { 
+                if(newVal == null || newVal.isEmpty()){
+                    return true; 
+                }
+                String lowerFilter = newVal.toLowerCase(); 
+                if(dataBaseItems.getProductID().toLowerCase().contains(lowerFilter)){
+                    return true;
+                }return false;
+            });
+        });
+        SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        table.setItems(sortedData);
     }
 
 
@@ -180,5 +203,12 @@ public void exit_Button2(ActionEvent event) {
         Stage stage = (Stage) exitBtn2.getScene().getWindow();
         stage.close();
 }
+
+
+
+
+
+
+
 
 }
