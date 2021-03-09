@@ -19,6 +19,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import CS3250.SQLData;
+
+/**
+ * Controls the db screen
+ * @author Hunter DeArment Kyle Brown
+ * 
+ */
+=======
 
 public class dbController {
 
@@ -76,7 +84,11 @@ public class dbController {
 
 
     ObservableList oblist = FXCollections.observableArrayList();
-
+    
+    /**
+     * Intializes the database into the table view
+     * @throws SQLException - throws if their is an sql related error
+     */
     @FXML
     public void initialize() throws SQLException {
         try {
@@ -120,7 +132,11 @@ public class dbController {
         table.setItems(sortedData);
     }
 
-
+/**
+ * Handles if one of the buttons is selected and executes the designated code
+ * @param event - clicking button event
+ * @throws SQLException - throws if there is an sql related error
+ */
 @FXML
 public void handleCrud(ActionEvent event) throws SQLException {
     if (event.getSource() == btnAdd) {
@@ -131,6 +147,12 @@ public void handleCrud(ActionEvent event) throws SQLException {
         deleteItem();
     }
 }
+
+
+/**
+ * Inserts an item into the database
+ * @throws SQLException - Throws if sql related error
+ */
 
 @FXML
 public void highlightClick(MouseEvent event) {
@@ -152,6 +174,10 @@ private void insertItem() throws SQLException {
     initialize();
 }
 
+/**
+ * Updates an item in the database
+ * @throws SQLException - Throws if sql related error
+ */
 private void updateItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
@@ -164,6 +190,10 @@ private void updateItem() throws SQLException {
 
 Statement st;
 
+/**
+ * Deletes an item from the database
+ * @throws SQLException - Throws if sql related error
+ */
 private void deleteItem() throws SQLException{
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
@@ -175,7 +205,10 @@ private void deleteItem() throws SQLException{
     
 }
 
-
+/**
+ * Attemps to initialize the database into the table view
+ * @param event - Loading values into the table view
+ */
 public void ibutton(ActionEvent event){
     try_it.setOnAction(new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
@@ -190,7 +223,10 @@ public void ibutton(ActionEvent event){
 }
 
 
-// Exits db screen
+/**
+ * Exits the db screen
+ * @param event - Button click event
+ */
 @FXML
 public void exit_Button2(ActionEvent event) {
         Stage stage = (Stage) exitBtn2.getScene().getWindow();

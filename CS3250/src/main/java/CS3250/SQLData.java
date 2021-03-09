@@ -22,7 +22,11 @@ public class SQLData implements DataInterface {
 
     @Override
     public void initializeDatabase(String filename) {
-        parseString(filename);
+        StringParsers s = new StringParsers();
+        var a = s.parseConnectionString(filename);
+        connectionString = a[0];
+        username = a[1];
+        password = a[2];
         try {
             con = (Connection) DriverManager.getConnection(connectionString, username, password);
             st =  (Statement) con.createStatement();
@@ -34,27 +38,6 @@ public class SQLData implements DataInterface {
             e.printStackTrace();
         }
         
-    }
-
-
-    private void parseString(String s){
-        s+=" ";
-        String buffer = "";
-        String[] information = new String[3];
-        int place = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == ' '){
-                information[place] = buffer;
-                buffer = "";
-                place++;
-            }
-            else{
-                buffer+= s.charAt(i);
-            }
-        }
-        connectionString = information[0];
-        username = information[1];
-        password = information[2];
     }
 
     @Override
