@@ -79,7 +79,6 @@ public class dbController {
     public TableColumn<UI.dataBaseItems, String> col_id;
 
     @FXML
-
     public TableColumn<UI.dataBaseItems, Integer> col_quantityid;
 
     @FXML
