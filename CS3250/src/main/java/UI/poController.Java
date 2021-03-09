@@ -83,7 +83,21 @@ public class poController {
 
     poTable.setItems(poList);
 
-
+    FilteredList<poFact> filteredData = new FilteredList<>(poList, p -> true); 
+    searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
+        filteredData.setPredicate(poFact -> { 
+            if(newVal == null || newVal.isEmpty()){
+                return true; 
+            }
+            String lowerFilter = newVal.toLowerCase(); 
+            if(poFact.getUserID().toLowerCase().contains(lowerFilter)){
+                return true;
+            }return false;
+        });
+    });
+    SortedList<poFact> sortedData = new SortedList<>(filteredData); 
+    sortedData.comparatorProperty().bind(poTable.comparatorProperty());
+    poTable.setItems(sortedData);
    
 }
 
