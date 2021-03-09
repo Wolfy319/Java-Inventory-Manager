@@ -39,7 +39,19 @@ public class poController {
     public Button btnDisp;
 
     @FXML
-    public TextField searchBox = new TextField(); 
+    public TextField searchBox = new TextField();
+    
+    @FXML
+    public TextField textUser = new TextField();
+
+    @FXML
+    public TextField textDate = new TextField();
+
+    @FXML
+    public TextField textTotal = new TextField();
+
+    @FXML
+    public TextField textPid = new TextField();
 
     @FXML
     public TableView<UI.poFact> poTable;
@@ -97,6 +109,16 @@ public void dispBtn(ActionEvent event){
             }
         }
     });
+}
+
+@FXML
+public void highlightClick(MouseEvent event) {
+    UI.poFact selectedItem = poTable.getSelectionModel().getSelectedItem();
+    
+    textUser.setText(selectedItem.getUserID());
+    textDate.setText(selectedItem.getDate());
+    textTotal.setText(selectedItem.getTotal());
+    textPid.setText(selectedItem.getID());
 }
 
 @FXML
