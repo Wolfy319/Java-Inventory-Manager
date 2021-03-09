@@ -1,5 +1,4 @@
 package UI;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+public class poController {
 
-public class poController{
     @FXML
     public Button exitBtn2;
 
@@ -39,7 +38,52 @@ public class poController{
     @FXML
     public TextField searchBox = new TextField(); 
 
+    @FXML
+    public TableView<UI.poFact> poTable;
+
+    @FXML
+    public TableColumn<UI.poFact, String> user_id;
+
+   
+    @FXML
+    public TableColumn<UI.poFact, String> date_id; 
+
+
+    @FXML
+    public TableColumn<UI.poFact, String> total_id; 
+
+    ObservableList poList = FXCollections.observableArrayList();
+
+ public void displayTable() throws SQLException{
+    try {
+        Connection con = UIDBConnector.getConnection();
+
+        ResultSet rs = con.createStatement().executeQuery("SELECT * FROM PO");
+        int counter = 0;
+        while (rs.next()) {// "should be column names"
+
+            poList.add(new poFact(rs.getString("userID"), rs.getString("date"),
+                    rs.getString("total")));
+        }
+
+
+
+    }finally{}
+    user_id.setCellValueFactory(new PropertyValueFactory<>("userID"));
+    date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
+    total_id.setCellValueFactory(new PropertyValueFactory<>("total"));
     
 
+    poTable.setItems(poList);
+
+
+   
+}
+
+
+
+
+ 
 
 }
+

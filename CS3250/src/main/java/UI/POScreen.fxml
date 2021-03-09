@@ -31,11 +31,9 @@
             <Separator layoutX="119.0" layoutY="59.0" orientation="VERTICAL" prefHeight="447.0" prefWidth="20.0" style="-fx-background-color: orange; -fx-opacity: .8;" AnchorPane.bottomAnchor="-1.0" AnchorPane.topAnchor="59.0" />
             <TableView fx:id="table" layoutX="139.0" layoutY="59.0" onMouseClicked="#highlightClick" prefHeight="461.0" prefWidth="757.0" style="-fx-background-radius: 1em;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="139.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
               <columns>
-                <TableColumn fx:id="col_id" prefWidth="141.0" text="Product_ID" />
-                <TableColumn fx:id="col_quantityid" prefWidth="148.0" text="Stock_Quantity" />
-                  <TableColumn fx:id="col_costid" prefWidth="153.0" text="WholeSale_Cost" />
-                  <TableColumn fx:id="col_priceid" prefWidth="150.0" text="Sale_Price" />
-                  <TableColumn fx:id="col_sid" prefWidth="147.0" text="Supplier_ID" />
+                <TableColumn fx:id="user_id" prefWidth="141.0" text="User_ID" />
+                  <TableColumn fx:id="date_id" prefWidth="153.0" text="Date" />
+                  <TableColumn fx:id="total_id" prefWidth="150.0" text="Total" />
               </columns>
             </TableView>
             <AnchorPane layoutY="60.0" prefHeight="154.0" prefWidth="121.0">

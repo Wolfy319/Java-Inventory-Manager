@@ -114,7 +114,7 @@ public class Controller {
     	}
     	else {
     		Stage stage = (Stage) signBtn.getScene().getWindow();
-            stage.close();
+           
     	}
 
     }
