@@ -1,5 +1,6 @@
 package UI;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class poFact {
@@ -7,12 +8,14 @@ public class poFact {
     public final SimpleStringProperty userID = new SimpleStringProperty();
     public final SimpleStringProperty total = new SimpleStringProperty();
     public final SimpleStringProperty date = new SimpleStringProperty();
+    public final SimpleStringProperty ID = new SimpleStringProperty();
 
 
-    public poFact(String userID, String total, String date){
+    public poFact(String userID, String total, String date, String ID){
         this.userID.set(userID);
         this.total.set(total);
         this.date.set(date);
+        this.ID.set(ID);
     }
 
     public final String getUserID(){
@@ -27,6 +30,10 @@ public class poFact {
         return this.date.get();
     }
 
+    public final String getID(){
+        return this.ID.get();
+    }
+
     public final void setUserID(String userID){
         this.userID.set(userID);
     }
@@ -39,6 +46,9 @@ public class poFact {
         this.total.set(date);
     }
 
+    public final void setID(String ID){
+        this.ID.set(ID);
+    }
 
 
 

@@ -34,6 +34,9 @@ public class poController {
 
     @FXML
     public Button btnDelete;
+    
+    @FXML
+    public Button btnDisp;
 
     @FXML
     public TextField searchBox = new TextField(); 
@@ -46,24 +49,28 @@ public class poController {
 
    
     @FXML
-    public TableColumn<UI.poFact, String> date_id; 
+    public TableColumn<UI.poFact, String> date_id;
 
 
     @FXML
     public TableColumn<UI.poFact, String> total_id; 
 
-    ObservableList poList = FXCollections.observableArrayList();
+    @FXML
+    public TableColumn<UI.poFact, String> ID; 
 
+    
+    ObservableList poList = FXCollections.observableArrayList();
  public void displayTable() throws SQLException{
+    
     try {
         Connection con = UIDBConnector.getConnection();
 
         ResultSet rs = con.createStatement().executeQuery("SELECT * FROM PO");
-        int counter = 0;
+    
         while (rs.next()) {// "should be column names"
 
             poList.add(new poFact(rs.getString("userID"), rs.getString("date"),
-                    rs.getString("total")));
+                    rs.getString("total"), rs.getString("ID")));
         }
 
 
@@ -72,7 +79,7 @@ public class poController {
     user_id.setCellValueFactory(new PropertyValueFactory<>("userID"));
     date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
     total_id.setCellValueFactory(new PropertyValueFactory<>("total"));
-    
+    ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 
     poTable.setItems(poList);
 
@@ -80,8 +87,23 @@ public class poController {
    
 }
 
+public void dispBtn(ActionEvent event){
+    btnDisp.setOnAction(new EventHandler<ActionEvent>() {
+        @Override public void handle(ActionEvent e) {
+            try {
+               displayTable();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    });
+}
 
-
+@FXML
+public void exit_Button2(ActionEvent event) {
+        Stage stage = (Stage) exitBtn2.getScene().getWindow();
+        stage.close();
+}
 
  
 
