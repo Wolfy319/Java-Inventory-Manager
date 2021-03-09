@@ -11,7 +11,7 @@ public class poFact {
     public final SimpleStringProperty ID = new SimpleStringProperty();
 
 
-    public poFact(String userID, String total, String date, String ID){
+    public poFact(String userID, String date, String total, String ID){
         this.userID.set(userID);
         this.total.set(total);
         this.date.set(date);
@@ -43,7 +43,7 @@ public class poFact {
     }
 
     public final void setDate(String date){
-        this.total.set(date);
+        this.date.set(date);
     }
 
     public final void setID(String ID){
