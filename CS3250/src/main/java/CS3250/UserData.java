@@ -35,6 +35,7 @@ public class UserData {
                     currUser.setPassword(rs.getBytes(2));
                     currUser.setSalt(rs.getBytes(3));
                     currUser.setID(rs.getInt("ID"));
+                    currUser.setEmail(rs.getString("email"));
                     arr.add(currUser);
                 }
             
@@ -85,11 +86,13 @@ public class UserData {
         byte[] ubytes = e.getUsername();
         byte[] pbytes = e.getPassword();
         byte[] sbytes = e.getSalt();
-        String sql = "INSERT INTO Users(Username,Password,salt) VALUES(?,?,?)";
+        String email = e.getEmail();
+        String sql = "INSERT INTO Users(Username,Password,salt,email) VALUES(?,?,?,?)";
         try (PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql)) {
                 pst.setBytes(1, ubytes);
                 pst.setBytes(2, pbytes);
                 pst.setBytes(3, sbytes);
+                pst.setString(4, email);
                 pst.executeUpdate();
         } catch (SQLException ex) {
         }
@@ -110,6 +113,7 @@ public class UserData {
                     currUser.setPassword(rs.getBytes(2));
                     currUser.setSalt(rs.getBytes(3));
                     currUser.setID(rs.getInt("ID"));
+                    currUser.setEmail(rs.getString("email"));
                     arr.add(currUser);
                 }
             }
