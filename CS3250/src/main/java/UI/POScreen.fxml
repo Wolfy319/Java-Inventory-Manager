@@ -46,7 +46,7 @@
             <Button fx:id="btnAdd" layoutX="24.0" layoutY="415.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Add" />
             <Button fx:id="btnShipped" layoutX="24.0" layoutY="445.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Shipped" />
             <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Delete" />
-            <VBox layoutX="11.0" layoutY="107.0" prefHeight="303.0" prefWidth="100.0" spacing="10.0">
+            <VBox layoutX="11.0" layoutY="107.0" prefHeight="261.0" prefWidth="100.0" spacing="10.0">
                <children>
                   <Label text="User_ID" />
                   <TextField fx:id="textUser" prefHeight="17.0" prefWidth="100.0" />
@@ -58,6 +58,7 @@
                   <TextField fx:id="textPid" prefHeight="17.0" prefWidth="100.0" />
                </children>
             </VBox>
+            <Button fx:id="rptView" layoutX="24.0" layoutY="381.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="View" />
          </children>
       </AnchorPane>
    </children>

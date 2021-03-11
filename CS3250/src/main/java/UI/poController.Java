@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 public class poController {
 
     @FXML
@@ -37,6 +38,9 @@ public class poController {
     
     @FXML
     public Button btnDisp;
+
+    @FXML
+    public Button rptView; 
 
     @FXML
     public TextField searchBox = new TextField();
