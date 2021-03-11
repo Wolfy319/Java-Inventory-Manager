@@ -148,8 +148,8 @@ private void addItem() throws SQLException {
 private void deleteItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
-    String toBeDeleted = textUser.getText();
-    String statement = "DELETE FROM PO WHERE userID ='"+ toBeDeleted + "';";
+    String toBeDeleted = textPid.getText();
+    String statement = "DELETE FROM PO WHERE ID ='"+ toBeDeleted + "';";
     st.execute(statement);
     poList.clear();
     displayTable();
