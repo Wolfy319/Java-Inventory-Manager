@@ -18,7 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 public class poController {
 
     @FXML
@@ -38,9 +37,6 @@ public class poController {
     
     @FXML
     public Button btnDisp;
-
-    @FXML
-    public Button rptView; 
 
     @FXML
     public TextField searchBox = new TextField();
@@ -120,7 +116,7 @@ public class poController {
 public void dispBtn(ActionEvent event){
     btnDisp.setOnAction(new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
-            try {
+            try { 
                displayTable();
             } catch (SQLException e1) {
                 e1.printStackTrace();
@@ -128,6 +124,37 @@ public void dispBtn(ActionEvent event){
         }
     });
 }
+
+@FXML
+public void handleCrud(ActionEvent event) throws SQLException {
+    if (event.getSource() == btnAdd) {
+        addItem();
+    } else if (event.getSource() == btnDelete) {
+        deleteItem();
+    }
+}
+
+Statement st;
+
+private void addItem() throws SQLException {
+    Connection con = UIDBConnector.getConnection();
+    st =  (Statement) con.createStatement();
+    String statement="INSERT INTO PO(userID,date,total,ID) VALUES(" + textUser.getText() + ", '" + textDate.getText() + "', "+ textTotal.getText() + ", " + textPid.getText() + ");";
+    st.execute(statement);
+    poList.clear();
+    displayTable();
+}
+
+private void deleteItem() throws SQLException {
+    Connection con = UIDBConnector.getConnection();
+    st =  (Statement) con.createStatement();
+    String toBeDeleted = textUser.getText();
+    String statement = "DELETE FROM PO WHERE userID ='"+ toBeDeleted + "';";
+    st.execute(statement);
+    poList.clear();
+    displayTable();
+}
+
 
 @FXML
 public void highlightClick(MouseEvent event) {
@@ -148,6 +175,5 @@ public void exit_Button2(ActionEvent event) {
  
 
 }
-
 
 

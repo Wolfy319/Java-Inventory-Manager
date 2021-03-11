@@ -43,9 +43,9 @@
                   <JFXTextField fx:id="searchBox" focusColor="#ffa600" layoutX="2.0" layoutY="14.0" prefHeight="25.0" prefWidth="117.0" promptText="Search" unFocusColor="BLACK" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
-            <Button fx:id="btnAdd" layoutX="24.0" layoutY="415.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Add" />
+            <Button fx:id="btnAdd" layoutX="24.0" layoutY="415.0" mnemonicParsing="false" onAction="#handleCrud" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Add" />
             <Button fx:id="btnShipped" layoutX="24.0" layoutY="445.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Shipped" />
-            <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Delete" />
+            <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleCrud" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Delete" />
             <VBox layoutX="11.0" layoutY="107.0" prefHeight="261.0" prefWidth="100.0" spacing="10.0">
                <children>
                   <Label text="User_ID" />
