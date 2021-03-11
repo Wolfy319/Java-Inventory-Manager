@@ -20,7 +20,7 @@ public class CSVParser {
 	 *  
 	 * @param filename - Path to the csv file to be parsed
 	 * @param database - Database object
-	 * @return - A HashMap full of filled in entry objects
+	 * 
 	 */
 	public void readCSV(String filename, DataInterface database){
 		String line;  	// Current row contents
