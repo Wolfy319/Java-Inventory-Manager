@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import CS3250.SQLPo;
+import CS3250.DisplayPO;
 public class poController {
 
     @FXML
@@ -37,6 +39,9 @@ public class poController {
     
     @FXML
     public Button btnDisp;
+
+    @FXML
+    public Button rptView;
 
     @FXML
     public TextField searchBox = new TextField();
@@ -124,6 +129,14 @@ public void dispBtn(ActionEvent event){
         }
     });
 }
+
+public void viewBtn(ActionEvent event){
+    Integer user = Integer.valueOf(textUser.getText());
+    DisplayPO fullpo = new DisplayPO();
+    fullPO.SQLPo.GenerateFullPO(user);
+}
+
+
 
 @FXML
 public void handleCrud(ActionEvent event) throws SQLException {
