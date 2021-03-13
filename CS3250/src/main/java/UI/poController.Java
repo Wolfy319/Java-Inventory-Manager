@@ -20,6 +20,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import CS3250.SQLPo;
 import CS3250.DisplayPO;
+
+/**
+ * Controls the PO Screen
+ * 
+ * @author Kyle Brown, Hunter DeArment
+ * 
+ */
 public class poController {
 
     @FXML
@@ -76,7 +83,13 @@ public class poController {
     public TableColumn<UI.poFact, String> ID; 
 
     
+    
     ObservableList poList = FXCollections.observableArrayList();
+    /**
+     * Displays the PO screen data
+     * 
+     * @throws SQLException - thrown if there is an error in the sql syntax
+     */
  public void displayTable() throws SQLException{
     
     try {
@@ -118,6 +131,11 @@ public class poController {
    
 }
 
+/**
+ * Displays the data
+ * 
+ * @param event - on click event
+ */
 public void dispBtn(ActionEvent event){
     btnDisp.setOnAction(new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
@@ -130,6 +148,11 @@ public void dispBtn(ActionEvent event){
     });
 }
 
+/**
+ * Shows the view screen
+ * 
+ * @param event - on click event
+ */
 public void viewBtn(ActionEvent event){
     Integer user = Integer.valueOf(textUser.getText());
     DisplayPO fullpo = new DisplayPO();
@@ -137,7 +160,13 @@ public void viewBtn(ActionEvent event){
 }
 
 
-
+/**
+ * Handles the add and delete button being clicked
+ * 
+ * @param event - on click event
+ * 
+ * @throws SQLException - throws if an error in the sql syntax
+ */
 @FXML
 public void handleCrud(ActionEvent event) throws SQLException {
     if (event.getSource() == btnAdd) {
@@ -149,6 +178,11 @@ public void handleCrud(ActionEvent event) throws SQLException {
 
 Statement st;
 
+/**
+ * Adds an item to the po database
+ * 
+ * @throws SQLException - throws if an error in the sql
+ */
 private void addItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
@@ -158,6 +192,11 @@ private void addItem() throws SQLException {
     displayTable();
 }
 
+/**
+ * Deletes an item in the po database
+ * 
+ * @throws SQLException - throws if an error in the sql
+ */
 private void deleteItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
@@ -169,6 +208,11 @@ private void deleteItem() throws SQLException {
 }
 
 
+/**
+ * Copies clicked row into the text fields
+ * 
+ * @param event - mouse click event
+ */
 @FXML
 public void highlightClick(MouseEvent event) {
     UI.poFact selectedItem = poTable.getSelectionModel().getSelectedItem();
@@ -179,6 +223,11 @@ public void highlightClick(MouseEvent event) {
     textPid.setText(selectedItem.getID());
 }
 
+/**
+ * Exits the po screen and application
+ * 
+ * @param event - on click event
+ */
 @FXML
 public void exit_Button2(ActionEvent event) {
         Stage stage = (Stage) exitBtn2.getScene().getWindow();
