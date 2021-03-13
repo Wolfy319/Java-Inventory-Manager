@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import CS3250.DisplayPO;
+import CS3250.POItem;
+import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -11,22 +14,19 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.Scene; 
-import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.scene.Parent; 
-import CS3250.SQLPo;
-import CS3250.DisplayPO;
-import CS3250.POItem;
-import javafx.scene.control.Alert; 
+import javafx.stage.Stage; 
 public class poController {
 
     @FXML
@@ -151,6 +151,12 @@ public void dispBtn(ActionEvent event){
     });
 }
 
+
+/** 
+ * Opens a detailed purchase order view
+ * 
+ * @param event - on button click
+ */
 @FXML
 public void viewBtn(ActionEvent event){
     SQLPo sp = new SQLPo();
@@ -168,6 +174,7 @@ public void viewBtn(ActionEvent event){
     "Purchase ID: " + pos.getPOID() + "\n" +
     "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
     pos.getItemID() + "\n" + "Item Quantity: " + pos.getQuantity() + "\n" + "Total: " + fullpo.getTotal());
+
     alert.show();
 
 }
@@ -245,7 +252,15 @@ public void highlightClick(MouseEvent event) {
 public void exit_Button2(ActionEvent event) {
         Stage stage = (Stage) exitBtn2.getScene().getWindow();
         stage.close();
-}
+} 
+
+
+/** 
+ * Returns to the database view
+ * 
+ * @param event - on button click
+ * @throws Exception - if DBScreen.fxml is unreachable
+ */
 
  @FXML
  public void returnToDB(ActionEvent event) throws Exception{
