@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -27,18 +25,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent; 
 import CS3250.SQLPo;
 import CS3250.DisplayPO;
-<<<<<<< HEAD
 import CS3250.POItem;
 import javafx.scene.control.Alert; 
-=======
-
-/**
- * Controls the PO Screen
- * 
- * @author Kyle Brown, Hunter DeArment
- * 
- */
->>>>>>> 8b33b43dea91a10e8291285619e1727270a191a8
 public class poController {
 
     @FXML
@@ -163,15 +151,7 @@ public void dispBtn(ActionEvent event){
     });
 }
 
-<<<<<<< HEAD
 @FXML
-=======
-/**
- * Shows the view screen
- * 
- * @param event - on click event
- */
->>>>>>> 8b33b43dea91a10e8291285619e1727270a191a8
 public void viewBtn(ActionEvent event){
     SQLPo sp = new SQLPo();
     sp.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
@@ -184,11 +164,10 @@ public void viewBtn(ActionEvent event){
     alert.setTitle("Detailed Purchase View");
     alert.setHeaderText("Detailed PO");
     alert.setContentText("Ordered by: " + fullpo.getName() + "\n" + "BuyerID: " + pos.getBuyerID() + "\n" + "Buyer Email: " + 
-    
+    fullpo.getEmail() + "\n" + 
     "Purchase ID: " + pos.getPOID() + "\n" +
     "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
     pos.getItemID() + "\n" + "Item Quantity: " + pos.getQuantity() + "\n" + "Total: " + fullpo.getTotal());
-   
     alert.show();
 
 }
