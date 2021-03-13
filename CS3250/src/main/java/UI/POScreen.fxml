@@ -12,13 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #e96f00, #cf8800, #ab9f00, #79b100, #06c00d);" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.dbController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: linear-gradient(to right bottom, #e96f00, #cf8800, #ab9f00, #79b100, #06c00d);" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.poController">
    <children>
       <AnchorPane layoutX="9.0" layoutY="8.0" prefHeight="508.0" prefWidth="878.0" style="-fx-background-color: white; -fx-opacity: .9; -fx-background-radius: 1em;" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="8.0">
          <children>
             <AnchorPane layoutX="15.0" layoutY="14.0" prefHeight="38.0" prefWidth="849.0">
                <children>
-                  <Label layoutX="361.0" layoutY="2.0" text="Welcome To IMS" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="361.0" AnchorPane.rightAnchor="360.0" AnchorPane.topAnchor="2.0">
+                  <Label layoutX="361.0" layoutY="2.0" text="Purchase Orders" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="361.0" AnchorPane.rightAnchor="360.0" AnchorPane.topAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -44,7 +44,7 @@
                </children>
             </AnchorPane>
             <Button fx:id="btnAdd" layoutX="24.0" layoutY="415.0" mnemonicParsing="false" onAction="#handleCrud" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Add" />
-            <Button fx:id="btnUpdate" layoutX="24.0" layoutY="445.0" mnemonicParsing="false" onAction="#handleCrud" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Update" />
+            <Button fx:id="btnShipped" layoutX="24.0" layoutY="445.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Shipped" />
             <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleCrud" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Delete" />
             <VBox layoutX="11.0" layoutY="107.0" prefHeight="303.0" prefWidth="100.0" spacing="10.0">
                <children>

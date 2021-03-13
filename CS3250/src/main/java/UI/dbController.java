@@ -1,26 +1,24 @@
 package UI;
 
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import CS3250.SQLData;
 
 /**
@@ -28,6 +26,8 @@ import CS3250.SQLData;
  * @author Hunter DeArment Kyle Brown
  * 
  */
+=======
+
 public class dbController {
 
     @FXML
@@ -59,6 +59,9 @@ public class dbController {
 
     @FXML
     public TextField textSid = new TextField();
+
+    @FXML
+    public TextField searchBox = new TextField(); 
 
     @FXML
     public TableView<UI.dataBaseItems> table;
@@ -110,6 +113,23 @@ public class dbController {
         col_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
 
         table.setItems(oblist);
+
+
+        FilteredList<dataBaseItems> filteredData = new FilteredList<>(oblist, p -> true); 
+        searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
+            filteredData.setPredicate(dataBaseItems -> { 
+                if(newVal == null || newVal.isEmpty()){
+                    return true; 
+                }
+                String lowerFilter = newVal.toLowerCase(); 
+                if(dataBaseItems.getProductID().toLowerCase().contains(lowerFilter)){
+                    return true;
+                }return false;
+            });
+        });
+        SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        table.setItems(sortedData);
     }
 
 /**
@@ -128,15 +148,30 @@ public void handleCrud(ActionEvent event) throws SQLException {
     }
 }
 
+
 /**
  * Inserts an item into the database
  * @throws SQLException - Throws if sql related error
  */
+
+@FXML
+public void highlightClick(MouseEvent event) {
+    UI.dataBaseItems selectedItem = table.getSelectionModel().getSelectedItem();
+    
+    textId.setText(selectedItem.getProductID());
+    textQuantity.setText(selectedItem.getStockQuantity());
+    textCost.setText(selectedItem.getWholesaleCost());
+    textPrice.setText(selectedItem.getSalePrice());
+    textSid.setText(selectedItem.getSupplierID());
+}
+
 private void insertItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
     String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + textId.getText() + "', '" + textSid.getText() + "' , '"+ textQuantity.getText() + "' , '" + textCost.getText() + "' , '" + textPrice.getText() + "');" ;
     st.execute(statement);
+    oblist.clear();
+    initialize();
 }
 
 /**
@@ -197,5 +232,12 @@ public void exit_Button2(ActionEvent event) {
         Stage stage = (Stage) exitBtn2.getScene().getWindow();
         stage.close();
 }
+
+
+
+
+
+
+
 
 }

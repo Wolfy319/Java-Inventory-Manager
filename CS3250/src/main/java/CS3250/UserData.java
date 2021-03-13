@@ -97,6 +97,25 @@ public class UserData {
         } catch (SQLException ex) {
         }
     }
+
+    public CS3250.User getUser(int id) {
+        String statement = "SELECT * FROM Users WHERE ID = '" + id + "';";
+        try {
+                User currUser = new User();
+            rs = st.executeQuery(statement);
+            while(rs.next()){
+                    currUser.setUsername(rs.getBytes(1));
+                    currUser.setPassword(rs.getBytes(2));
+                    currUser.setSalt(rs.getBytes(3));
+                    currUser.setID(rs.getInt("ID"));
+                    return currUser;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // sends username and returns list of passwords.
    public ArrayList<User> getUser(byte[] username) {
         String statement = "SELECT * FROM Users;";
