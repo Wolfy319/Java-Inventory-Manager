@@ -11,7 +11,19 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
  
+/**
+ * Class used to create users, encrypt passwords/usernames, generate salts for password encryption, and to authenticate users on login
+ */
 public class UserAuthenticator {
+	
+	/** 
+	 * Creates a new user and adds it to the database
+	 * @param username - Plaintext username
+	 * @param password - Plaintext password
+	 * @param data - UserData object used to connect to database and add user
+	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
+	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
+	 */
 	public static void createUser(String username, String password, UserData data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		User newUser = new User();
 		
@@ -23,6 +35,15 @@ public class UserAuthenticator {
 		return;
 	}
 	
+	
+	/** 
+	 * Creates a new user but doesn't add it to the database
+	 * @param username - Plaintext username
+	 * @param password - Plaintext password
+	 * @return User - User object containing username, password, and randomized salt
+	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
+	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
+	 */
 	public static User createUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		User newUser = new User();
 		
@@ -33,6 +54,16 @@ public class UserAuthenticator {
 		return newUser;
 	}
  
+	
+	/** 
+	 * Checks the entered username and password against those stored in the database to see if the login is valid or not
+	 * @param username - Plaintext username
+	 * @param password - Plaintext password
+	 * @param data - UserData object passed in from the GUI
+	 * @return boolean - True if there exists a user with the same username and password, false if not
+	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
+	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
+	 */
 	public static boolean authenticate(String username, String password, UserData data)
 	   throws NoSuchAlgorithmException, InvalidKeySpecException {
 		byte[] encryptedUser = getEncryptedUsername(username);
@@ -51,6 +82,14 @@ public class UserAuthenticator {
 		return false;
 	 }
  
+	
+	/** 
+	 * Hashes a plaintext username into a byte array using PBKDF2
+	 * @param username - Plaintext username
+	 * @return byte[] - Hashed username 
+	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
+	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
+	 */
 	public static byte[] getEncryptedUsername(String username) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		String algorithm = "PBKDF2WithHmacSHA1"; // PBKDF2 with SHA-1 as the hashing algorithm
 		byte[] pepper = {0,0,0,0,0,0,0,0}; // Use the same salt for every username for easy lookup
@@ -65,6 +104,15 @@ public class UserAuthenticator {
 		return f.generateSecret(spec).getEncoded();
 	}
 	
+	
+	/** 
+	 * Hashes a plaintext password with PBKDF2 and a randomized salt into a byte array
+	 * @param password - Plaintext password
+	 * @param salt - Randomized byte array
+	 * @return byte[] - Hashed password
+	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
+	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
+	 */
 	public static byte[] getEncryptedPassword(String password, byte[] salt)
 	throws NoSuchAlgorithmException, InvalidKeySpecException {
 	  
@@ -82,6 +130,12 @@ public class UserAuthenticator {
 		return f.generateSecret(spec).getEncoded();
 	}
  
+	
+	/** 
+	 * Generates a randomized byte array of length 8
+	 * @return byte[] - Randomized byte array of length 8
+	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
+	 */
 	public static byte[] generateSalt() throws NoSuchAlgorithmException {
 		// Apparently important to use SecureRandom instead of just Random
 		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");

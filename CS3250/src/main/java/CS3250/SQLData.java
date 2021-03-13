@@ -72,8 +72,9 @@ public class SQLData implements DataInterface {
 
     
     /** 
-     * @param ID
-     * @param e
+     * Inserts an entry into the database
+     * @param ID - Product ID
+     * @param e - Entry object to be inserted
      */
     @Override
     public void createEntry(String ID, Entry e) {
@@ -90,8 +91,9 @@ public class SQLData implements DataInterface {
 
     
     /** 
-     * @param ID
-     * @return Entry
+     * Returns an entry from the database
+     * @param ID - Product ID of product to be read
+     * @return Entry - Entry to be read
      */
     @Override
     public Entry readEntry(String ID) {
@@ -135,8 +137,9 @@ public class SQLData implements DataInterface {
     }
     
     /** 
-     * @param s
-     * @return Entry
+     * Creates a new entry object from a string
+     * @param s - String containing product ID, supplier ID, stock quantity, wholesale cost and sale price of a product
+     * @return Entry - Entry object filled with fields from string
      */
     private Entry parseEntry(String s){
         Entry e = new Entry();
@@ -151,8 +154,9 @@ public class SQLData implements DataInterface {
 
     
     /** 
-     * @param ID
-     * @param e
+     * Updates an existing entry in the database
+     * @param ID - Product ID of the item to be updated
+     * @param e - Entry containing updated fields
      */
     @Override
     public void updateEntry(String ID, Entry e) {
@@ -164,7 +168,8 @@ public class SQLData implements DataInterface {
 
     
     /** 
-     * @param ID
+     * Deletes an entry from the database
+     * @param ID - Product ID of item to be deleted
      */
     @Override
     public void deleteEntry(String ID) {
@@ -177,8 +182,9 @@ public class SQLData implements DataInterface {
     }
 
     
-    /** 
-     * @param e
+    /**
+     * Saves an entry into the database
+     * @param e - Entry to be saved
      */
     @Override
     public void saveEntry(Entry e) {
@@ -188,7 +194,8 @@ public class SQLData implements DataInterface {
 
     
     /** 
-     * @return int
+     * Returns the total number of entries inside of the database
+     * @return int - Number of entries in database
      */
     @Override
     public int retSize() {
