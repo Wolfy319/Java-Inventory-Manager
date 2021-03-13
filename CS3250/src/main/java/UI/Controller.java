@@ -19,7 +19,7 @@ import CS3250.UserAuthenticator;
 import CS3250.UserData;
 
 /**
- * Controllers the login screen
+ * Controls the login screen
  * 
  * @author Kyle Brown
  * 
