@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -15,11 +17,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.Scene; 
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.scene.Parent; 
 import CS3250.SQLPo;
 import CS3250.DisplayPO;
+import CS3250.POItem;
+import javafx.scene.control.Alert; 
 public class poController {
 
     @FXML
@@ -42,6 +51,9 @@ public class poController {
 
     @FXML
     public Button rptView;
+
+    @FXML
+    public Button ret_db; 
 
     @FXML
     public TextField searchBox = new TextField();
@@ -130,10 +142,26 @@ public void dispBtn(ActionEvent event){
     });
 }
 
+@FXML
 public void viewBtn(ActionEvent event){
-    Integer user = Integer.valueOf(textUser.getText());
+    SQLPo sp = new SQLPo();
+    sp.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    Integer user = Integer.valueOf(textPid.getText());
     DisplayPO fullpo = new DisplayPO();
-    fullPO.SQLPo.GenerateFullPO(user);
+    fullpo = sp.GenerateFullPO(user);
+    POItem pos = new POItem();
+    pos = fullpo.getLi().get(0);
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Detailed Purchase View");
+    alert.setHeaderText("Detailed PO");
+    alert.setContentText("Ordered by: " + fullpo.getName() + "\n" + "BuyerID: " + pos.getBuyerID() + "\n" + "Buyer Email: " + 
+    
+    "Purchase ID: " + pos.getPOID() + "\n" +
+    "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
+    pos.getItemID() + "\n" + "Item Quantity: " + pos.getQuantity() + "\n" + "Total: " + fullpo.getTotal());
+   
+    alert.show();
+
 }
 
 
@@ -185,7 +213,14 @@ public void exit_Button2(ActionEvent event) {
         stage.close();
 }
 
- 
+ @FXML
+ public void returnToDB(ActionEvent event) throws Exception{
+    Parent DbsScreen = FXMLLoader.load(getClass().getResource("DBScreen.fxml"));
+    Scene DbsScene = new Scene(DbsScreen);
+    Stage dbsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    dbsStage.setScene(DbsScene);
+    dbsStage.show();
+ }
 
 }
 
