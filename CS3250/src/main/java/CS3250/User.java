@@ -8,6 +8,7 @@ public class User {
 	private byte[] password;
 	private byte[] salt;
 	private int ID = 0;
+	private String email;
 	
 	
 	/** 
@@ -17,9 +18,24 @@ public class User {
 	public byte[] getUsername() {
 		return username;
 	}
-	
-	
-	/** 
+
+	/**
+   * Returns user email
+   * @return String - User email
+   */
+	public String getEmail() {
+		return email;
+	}
+
+  /**
+   * Sets user email
+   * @param email - User email to be stored
+   */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+  /** 
 	 * Sets hashed username
 	 * @param username - Byte array version of hashed username
 	 */
