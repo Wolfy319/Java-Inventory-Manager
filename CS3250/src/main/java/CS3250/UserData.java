@@ -120,8 +120,31 @@ public class UserData {
         } catch (SQLException ex) {
         }
     }
-    
+  
     /** 
+     * Returns a list of all User objects from the database who match a given ID
+     * @return ArrayList<User> - List containing all users matching ID
+     */
+    public CS3250.User getUser(int id) {
+        String statement = "SELECT * FROM Users WHERE ID = '" + id + "';";
+        try {
+                User currUser = new User();
+            rs = st.executeQuery(statement);
+            while(rs.next()){
+                    currUser.setUsername(rs.getBytes(1));
+                    currUser.setPassword(rs.getBytes(2));
+                    currUser.setSalt(rs.getBytes(3));
+                    currUser.setID(rs.getInt("ID"));
+                    return currUser;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+  /** 
      * Returns a list of all User objects from the database who match a username
      * @param username - Hashed username of the user to be looked for on the database
      * @return ArrayList<User> - List of all matching users
