@@ -108,6 +108,7 @@ public class UserData {
                     currUser.setPassword(rs.getBytes(2));
                     currUser.setSalt(rs.getBytes(3));
                     currUser.setID(rs.getInt("ID"));
+                    currUser.setEmail(rs.getString("email"));
                     return currUser;
             }
         } catch (SQLException e) {
