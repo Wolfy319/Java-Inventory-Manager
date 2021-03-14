@@ -5,11 +5,20 @@ public class User {
 	private byte[] password;
 	private byte[] salt;
 	private int ID = 0;
+	private String email;
 	
 	public byte[] getUsername() {
 		return username;
 	}
-	
+		
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public void setUsername(byte[] username) {
 		this.username = username;
 	}

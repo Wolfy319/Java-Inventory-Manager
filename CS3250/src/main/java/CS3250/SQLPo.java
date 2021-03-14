@@ -78,12 +78,14 @@ public class SQLPo {
         DisplayPO disp = new DisplayPO();
         var po = getPo(ID);
         var usr = u.getUser(po.userID);
+        var email = usr.getEmail();
         var name = usr.getUsername();
         String n = new String(name);
         disp.setName(n);
         disp.setDate(Date.valueOf(po.getDate()));
         disp.setTotal(po.getTotal());
         disp.setLi(po.items);
+        disp.setEmail(email);
         return disp;
     }
 

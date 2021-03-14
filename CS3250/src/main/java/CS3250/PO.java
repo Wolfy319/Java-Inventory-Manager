@@ -12,7 +12,14 @@ public class PO {
     String Username = "";
     double total = 0.0;
     String date = "";
+    String email = "";
 
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public int getUserID() {
         return userID;
     }
