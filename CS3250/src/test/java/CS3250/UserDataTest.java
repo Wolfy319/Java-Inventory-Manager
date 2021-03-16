@@ -25,8 +25,11 @@ public class UserDataTest {
         init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
         User e = new User();
         e.setID(200);
+        e.setEmail("James-cool@coolGuys.com");
         e.setPassword("password".getBytes());
         e.setUsername("Username".getBytes());
+        e.setEmail("email@test.com");
+        e.setRole("admin");
         e.setSalt("salt".getBytes());
         init.createEntry("ID", e);
         int initial = init.retSize();

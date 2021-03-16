@@ -11,6 +11,9 @@ import com.mysql.jdbc.Statement;
 
 import javafx.collections.ObservableList;
 
+/**
+ * Class to connect to and edit a MySQL database containing various product entries
+ */
 public class SQLData implements DataInterface {
 
     String connectionString = "";
@@ -20,6 +23,11 @@ public class SQLData implements DataInterface {
     Statement st;
     ResultSet rs;
 
+    
+    /** 
+     * Connects to Database using a connection string and confirms connection
+     * @param filename - String containing database connection, username and password
+     */
     @Override
     public void initializeDatabase(String filename) {
         StringParsers s = new StringParsers();
@@ -40,6 +48,11 @@ public class SQLData implements DataInterface {
         
     }
 
+    /** 
+     * Inserts an entry into the database
+     * @param ID - Product ID
+     * @param e - Entry object to be inserted
+     */
     @Override
     public void createEntry(String ID, Entry e) {
         String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + e.getProductID() + "', '" + e.getSupplierID() + "' , '"+ e.getStockQuantity() + "' , '" + e.getWholesaleCost() + "' , '" + e.getSalePrice() + "');" ;
@@ -53,6 +66,12 @@ public class SQLData implements DataInterface {
         
     }
 
+    
+    /** 
+     * Returns an entry from the database
+     * @param ID - Product ID of product to be read
+     * @return Entry - Entry to be read
+     */
     @Override
     public Entry readEntry(String ID) {
         String statement = "SELECT * FROM DataEntries HAVING productID ='"+ ID + "';";
@@ -65,6 +84,11 @@ public class SQLData implements DataInterface {
         }
         return null;
     }
+    
+    /** 
+     * Pulls all entries from DB's product table and returns them as a list
+     * @return ArrayList<Entry> - List containing all entries from database
+     */
     public ArrayList<Entry> getEntries(){
         String statement = "SELECT * FROM DataEntries;";
         String s = "";
@@ -88,6 +112,12 @@ public class SQLData implements DataInterface {
        
 
     }
+    
+    /** 
+     * Creates a new entry object from a string
+     * @param s - String containing product ID, supplier ID, stock quantity, wholesale cost and sale price of a product
+     * @return Entry - Entry object filled with fields from string
+     */
     private Entry parseEntry(String s){
         Entry e = new Entry();
         var ar = s.split("_");
@@ -99,6 +129,12 @@ public class SQLData implements DataInterface {
         return e;
     }
 
+    
+    /** 
+     * Updates an existing entry in the database
+     * @param ID - Product ID of the item to be updated
+     * @param e - Entry containing updated fields
+     */
     @Override
     public void updateEntry(String ID, Entry e) {
         deleteEntry(ID);
@@ -107,6 +143,11 @@ public class SQLData implements DataInterface {
 
     }
 
+    
+    /** 
+     * Deletes an entry from the database
+     * @param ID - Product ID of item to be deleted
+     */
     @Override
     public void deleteEntry(String ID) {
         String statement = "DELETE FROM DataEntries WHERE productID ='"+ ID + "';";
@@ -117,12 +158,22 @@ public class SQLData implements DataInterface {
         }
     }
 
+    
+    /**
+     * Saves an entry into the database
+     * @param e - Entry to be saved
+     */
     @Override
     public void saveEntry(Entry e) {
         createEntry(e.getProductID(), e);
 
     }
 
+    
+    /** 
+     * Returns the total number of entries inside of the database
+     * @return int - Number of entries in database
+     */
     @Override
     public int retSize() {
         int rsCount = 0;
