@@ -4,20 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
+/**
+ * Class to create, populate and edit a psuedodatabase
+ */
 public class CSVData implements DataInterface {
-    /*
-     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! this is where we need to
-     * create our methods !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     * 
-     * One note is that we already have a list of Entry type objects, so when
-     * dealing with the list we will be getting or setting entry objects which holds
-     * all our individual datas.
-     */
 
     private Vector<Entry> Data = new Vector<Entry>();
     private int NumEntries;
     private HashMap<String, Entry> initialData = new HashMap<String, Entry>();
 
+    
+    /** 
+     * Parses a CSV file containing products and stores them in a psuedodatabase of entry objects
+     * 
+     * @param filename
+     */
     @Override
     public void initializeDatabase(String filename) {
         // Initialize a HashMap that stores all inventory data
@@ -33,6 +34,13 @@ public class CSVData implements DataInterface {
 
     }
 
+    
+    /** 
+     * Adds an entry object to the psuedodatabase
+     * 
+     * @param ID - Product ID to be used for lookup key
+     * @param e - Entry object to be added
+     */
     @Override
     public void createEntry(String ID, Entry e) {
         // Put into hashmap and creates a new entry
@@ -40,6 +48,12 @@ public class CSVData implements DataInterface {
 
     }
 
+    
+    /** 
+     * Returns an entry to be read from psuedodatabase
+     * @param ID
+     * @return Entry
+     */
     @Override
     public Entry readEntry(String ID) {
         // What entry is to be read from the hashmap
@@ -47,6 +61,12 @@ public class CSVData implements DataInterface {
 
     }
 
+    
+    /** 
+     * Updates an entry in the psuedodatabase
+     * @param ID
+     * @param e
+     */
     @Override
     public void updateEntry(String ID, Entry e) {
         // we will just replace the entry with a new one that
@@ -56,23 +76,43 @@ public class CSVData implements DataInterface {
         createEntry(ID, e);
     }
 
+    
+    /** 
+     * Deletes a product from the psuedodatabase
+     * @param id
+     */
     @Override
     public void deleteEntry(String id) {
         // deletes entry using id provided
         initialData.remove(id);
     }
 
+    
+    /** 
+     * Saves an entry into the psuedodatabase
+     * @param e
+     */
     @Override
     public void saveEntry(Entry e) {
         createEntry(e.getProductID(), e);
     }
 
+    
+    /** 
+     * Returns the number of entries in the psuedodatabase
+     * @return int
+     */
     @Override
     public int retSize() {
         // returns size of HashMap to test delete function
         return initialData.size();
     }
 
+    
+    /** 
+     * Returns a list of all entries in psuedodatabase
+     * @return ArrayList<Entry>
+     */
     @Override
     public ArrayList<Entry> getEntries() {
         // TODO Auto-generated method stub

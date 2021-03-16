@@ -10,7 +10,9 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
-
+/**
+ * Class to connect to and alter a database containing a list of users
+ */
 public class UserData {
 
     String connectionString = "";
@@ -21,6 +23,11 @@ public class UserData {
     ResultSet rs;
     
     
+    
+    /** 
+     * Returns a list of all User objects from the database
+     * @return ArrayList<User> - List containing all users
+     */
     public ArrayList<User> getUsers() {
         String statement = "SELECT * FROM Users;";
         String s = "";
@@ -35,6 +42,12 @@ public class UserData {
                     currUser.setPassword(rs.getBytes(2));
                     currUser.setSalt(rs.getBytes(3));
                     currUser.setID(rs.getInt("ID"));
+                    currUser.setEmail(rs.getString("email"));
+
+
+                    currUser.setRole(rs.getString("role"));
+
+
                     arr.add(currUser);
                 }
             
@@ -45,6 +58,11 @@ public class UserData {
     }
 
     
+    
+    /** 
+     * Connects to database using connection string and confirms connection
+     * @param filename - String containing database connection, username and password
+     */
     public void initializeDatabase(String filename) {
         parseString(filename);
         try {
@@ -60,6 +78,11 @@ public class UserData {
 
     }
 
+    
+    /** 
+     * Parses a string containing the database connection, username and password
+     * @param s - String to be parsed
+     */
     private void parseString(String s){
         s+=" ";
         String buffer = "";
@@ -81,20 +104,68 @@ public class UserData {
     }
 
    
+    
+    /** 
+     * Inserts a user into the database
+     * @param ID - ID to be used for indexing
+     * @param e - User to be stored
+     */
     public void createEntry(String ID, User e) {        
-        byte[] ubytes = e.getUsername();
+        byte[] ubytes = e.getUsername(); 
         byte[] pbytes = e.getPassword();
         byte[] sbytes = e.getSalt();
+        String email = e.getEmail();
+
         String sql = "INSERT INTO Users(Username,Password,salt) VALUES(?,?,?)";
+        String sql = "INSERT INTO Users(Username,Password,salt,email,roles) VALUES(?,?,?,?,?)";
+
         try (PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql)) {
                 pst.setBytes(1, ubytes);
                 pst.setBytes(2, pbytes);
                 pst.setBytes(3, sbytes);
+                pst.setString(4, email);
+
+
+                pst.setString(5, e.getRole());
+
                 pst.executeUpdate();
         } catch (SQLException ex) {
         }
     }
-    // sends username and returns list of passwords.
+  
+    /** 
+     * Returns a list of all User objects from the database who match a given ID
+     * @return ArrayList<User> - List containing all users matching ID
+     */
+    public CS3250.User getUser(int id) {
+        String statement = "SELECT * FROM Users WHERE ID = '" + id + "';";
+        try {
+                User currUser = new User();
+            rs = st.executeQuery(statement);
+            while(rs.next()){
+                    currUser.setUsername(rs.getBytes(1));
+                    currUser.setPassword(rs.getBytes(2));
+                    currUser.setSalt(rs.getBytes(3));
+                    currUser.setID(rs.getInt("ID"));
+                    currUser.setEmail(rs.getString("email"));
+
+
+                    currUser.setRole(rs.getString("role"));
+
+                    return currUser;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+  /** 
+     * Returns a list of all User objects from the database who match a username
+     * @param username - Hashed username of the user to be looked for on the database
+     * @return ArrayList<User> - List of all matching users
+     */
    public ArrayList<User> getUser(byte[] username) {
         String statement = "SELECT * FROM Users;";
         String s = "";
@@ -110,6 +181,11 @@ public class UserData {
                     currUser.setPassword(rs.getBytes(2));
                     currUser.setSalt(rs.getBytes(3));
                     currUser.setID(rs.getInt("ID"));
+                    currUser.setEmail(rs.getString("email"));
+
+
+                    currUser.setRole(rs.getString("role"));
+
                     arr.add(currUser);
                 }
             }
@@ -119,6 +195,12 @@ public class UserData {
         return arr;
     }
    
+    
+    /** 
+     * Edits a user on the database
+     * @param ID - Not used
+     * @param e - User object with updated fields
+     */
     public void updateUser(int ID, User e) {
         deleteUser(e.getID());
         createEntry("holder",e);
@@ -126,6 +208,11 @@ public class UserData {
     }
 
   
+    
+    /** 
+     * Deletes a user from the database
+     * @param id - ID of the user to be deleted
+     */
     public void deleteUser(int id) {
         String statement = "DELETE FROM Users WHERE ID ='"+ id + "';";
         try {
@@ -137,12 +224,22 @@ public class UserData {
 
    
 
-        public void saveEntry(User e) {
-            String newEntry = String.valueOf(e.getID());
-            createEntry(newEntry, e);
-        }
+        
+    /** 
+     * Saves a user to the database
+     * @param e - User to be saved
+     */
+    public void saveEntry(User e) {
+        String newEntry = String.valueOf(e.getID());
+        createEntry(newEntry, e);
+    }
     
 
+    
+    /** 
+     * Returns the size of the user table
+     * @return int - Total number of Users stored in the database
+     */
     public int retSize() {
         String statement = "SELECT COUNT(*) FROM Users;";
         try {

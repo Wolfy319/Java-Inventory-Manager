@@ -1,27 +1,38 @@
 package UI;
 
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import java.sql.Statement;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import CS3250.SQLData;
+
+/**
+ * Controls the db screen
+ * @author Hunter DeArment Kyle Brown
+ * 
+ */
+
 
 public class dbController {
 
@@ -41,6 +52,9 @@ public class dbController {
     public Button btnDelete;
 
     @FXML
+    public Button btnPO = new Button(); 
+
+    @FXML
     public TextField textId = new TextField();
 
     @FXML
@@ -56,13 +70,15 @@ public class dbController {
     public TextField textSid = new TextField();
 
     @FXML
+    public TextField searchBox = new TextField(); 
+
+    @FXML
     public TableView<UI.dataBaseItems> table;
 
     @FXML
     public TableColumn<UI.dataBaseItems, String> col_id;
 
     @FXML
-
     public TableColumn<UI.dataBaseItems, Integer> col_quantityid;
 
     @FXML
@@ -76,7 +92,11 @@ public class dbController {
 
 
     ObservableList oblist = FXCollections.observableArrayList();
-
+    
+    /**
+     * Intializes the database into the table view
+     * @throws SQLException - throws if their is an sql related error
+     */
     @FXML
     public void initialize() throws SQLException {
         try {
@@ -101,9 +121,30 @@ public class dbController {
         col_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
 
         table.setItems(oblist);
+
+
+        FilteredList<dataBaseItems> filteredData = new FilteredList<>(oblist, p -> true); 
+        searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
+            filteredData.setPredicate(dataBaseItems -> { 
+                if(newVal == null || newVal.isEmpty()){
+                    return true; 
+                }
+                String lowerFilter = newVal.toLowerCase(); 
+                if(dataBaseItems.getProductID().toLowerCase().contains(lowerFilter)){
+                    return true;
+                }return false;
+            });
+        });
+        SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+        table.setItems(sortedData);
     }
 
-
+/**
+ * Handles if one of the buttons is selected and executes the designated code
+ * @param event - clicking button event
+ * @throws SQLException - throws if there is an sql related error
+ */
 @FXML
 public void handleCrud(ActionEvent event) throws SQLException {
     if (event.getSource() == btnAdd) {
@@ -115,13 +156,36 @@ public void handleCrud(ActionEvent event) throws SQLException {
     }
 }
 
+
+/**
+ * Inserts an item into the database
+ * @throws SQLException - Throws if sql related error
+ */
+
+@FXML
+public void highlightClick(MouseEvent event) {
+    UI.dataBaseItems selectedItem = table.getSelectionModel().getSelectedItem();
+    
+    textId.setText(selectedItem.getProductID());
+    textQuantity.setText(selectedItem.getStockQuantity());
+    textCost.setText(selectedItem.getWholesaleCost());
+    textPrice.setText(selectedItem.getSalePrice());
+    textSid.setText(selectedItem.getSupplierID());
+}
+
 private void insertItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
     String statement="INSERT INTO DataEntries(productID,supplierID,stockQuantity,WholesaleCost,salePrice) VALUES('" + textId.getText() + "', '" + textSid.getText() + "' , '"+ textQuantity.getText() + "' , '" + textCost.getText() + "' , '" + textPrice.getText() + "');" ;
     st.execute(statement);
+    oblist.clear();
+    initialize();
 }
 
+/**
+ * Updates an item in the database
+ * @throws SQLException - Throws if sql related error
+ */
 private void updateItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
@@ -134,6 +198,10 @@ private void updateItem() throws SQLException {
 
 Statement st;
 
+/**
+ * Deletes an item from the database
+ * @throws SQLException - Throws if sql related error
+ */
 private void deleteItem() throws SQLException{
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
@@ -145,7 +213,10 @@ private void deleteItem() throws SQLException{
     
 }
 
-
+/**
+ * Attemps to initialize the database into the table view
+ * @param event - Loading values into the table view
+ */
 public void ibutton(ActionEvent event){
     try_it.setOnAction(new EventHandler<ActionEvent>() {
         @Override public void handle(ActionEvent e) {
@@ -160,11 +231,27 @@ public void ibutton(ActionEvent event){
 }
 
 
-// Exits db screen
+/**
+ * Exits the db screen
+ * @param event - Button click event
+ */
 @FXML
 public void exit_Button2(ActionEvent event) {
         Stage stage = (Stage) exitBtn2.getScene().getWindow();
         stage.close();
 }
+
+
+public void po_button(ActionEvent event) throws IOException{
+    Parent poScreen = FXMLLoader.load(getClass().getResource("POScreen.fxml"));
+    Scene poScene = new Scene(poScreen);
+    Stage poStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    poStage.setScene(poScene);
+    poStage.show();
+}
+
+
+
+
 
 }
