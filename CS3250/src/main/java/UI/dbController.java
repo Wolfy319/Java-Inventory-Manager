@@ -1,5 +1,6 @@
 package UI;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,10 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 import CS3250.SQLData;
 
 /**
@@ -46,6 +52,9 @@ public class dbController {
     public Button btnDelete;
 
     @FXML
+    public Button btnPO = new Button(); 
+
+    @FXML
     public TextField textId = new TextField();
 
     @FXML
@@ -70,7 +79,6 @@ public class dbController {
     public TableColumn<UI.dataBaseItems, String> col_id;
 
     @FXML
-
     public TableColumn<UI.dataBaseItems, Integer> col_quantityid;
 
     @FXML
@@ -234,7 +242,13 @@ public void exit_Button2(ActionEvent event) {
 }
 
 
-
+public void po_button(ActionEvent event) throws IOException{
+    Parent poScreen = FXMLLoader.load(getClass().getResource("POScreen.fxml"));
+    Scene poScene = new Scene(poScreen);
+    Stage poStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    poStage.setScene(poScene);
+    poStage.show();
+}
 
 
 

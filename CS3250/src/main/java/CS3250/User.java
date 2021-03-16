@@ -9,6 +9,7 @@ public class User {
 	private byte[] salt;
 	private int ID = 0;
 	private String email;
+
 	private String role;
 
 	
@@ -18,6 +19,7 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
 	
 	
 	/** 
@@ -28,26 +30,36 @@ public class User {
 		return username;
 	}
 
+		
+
+
 	/**
    * Returns user email
    * @return String - User email
    */
+
 	public String getEmail() {
 		return email;
 	}
+
+
 
   /**
    * Sets user email
    * @param email - User email to be stored
    */
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+
 
   /** 
 	 * Sets hashed username
 	 * @param username - Byte array version of hashed username
 	 */
+
 	public void setUsername(byte[] username) {
 		this.username = username;
 	}

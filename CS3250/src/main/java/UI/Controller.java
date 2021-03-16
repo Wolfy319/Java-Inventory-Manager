@@ -7,19 +7,21 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-
+import javafx.scene.control.Alert; 
 import CS3250.UserAuthenticator;
 import CS3250.UserData;
 
 /**
- * Controllers the login screen
+ * Controls the login screen
  * 
  * @author Kyle Brown
  * 
@@ -114,7 +116,10 @@ public class Controller {
     	}
     	else {
     		Stage stage = (Stage) signBtn.getScene().getWindow();
-            stage.close();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Login ERROR");
+            alert.setHeaderText("INCORRECT Username or Password");
+            alert.showAndWait();
     	}
 
     }

@@ -10,6 +10,9 @@ import java.util.List;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class SQLPo {
 
     String connectionString = "";
@@ -75,14 +78,18 @@ public class SQLPo {
         DisplayPO disp = new DisplayPO();
         var po = getPo(ID);
         var usr = u.getUser(po.userID);
+        var email = usr.getEmail();
         var name = usr.getUsername();
         String n = new String(name);
         disp.setName(n);
         disp.setDate(Date.valueOf(po.getDate()));
         disp.setTotal(po.getTotal());
         disp.setLi(po.items);
+        disp.setEmail(email);
         return disp;
     }
+
+    
     public List<String> GenerateShortPOs(){
         List<String> arr = new ArrayList<String>();
         String statement2 = "SELECT * FROM PO;";
@@ -97,7 +104,7 @@ public class SQLPo {
                 line +=  new String(usr.getUsername()) + "*";
                 line += rs.getString("date") + "*";
                 line += rs.getString("total");
-                arr.add(line);   
+                 
             }             
         }
         catch(Exception e){}
