@@ -28,6 +28,8 @@ public class UserDataTest {
         e.setEmail("James-cool@coolGuys.com");
         e.setPassword("password".getBytes());
         e.setUsername("Username".getBytes());
+        e.setEmail("email@test.com");
+        e.setRole("admin");
         e.setSalt("salt".getBytes());
         init.createEntry("ID", e);
         int initial = init.retSize();
