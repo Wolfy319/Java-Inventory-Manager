@@ -1,3 +1,11 @@
+steps:
+
+cd angular - getting into the angular project workspace
+npm install - to download dependancys (like maven) 
+ng serve    - to start development server.
+
+Make sure your gitignore has this: 
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
