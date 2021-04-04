@@ -49,14 +49,16 @@
             <Button fx:id="btnDelete" layoutX="24.0" layoutY="475.0" mnemonicParsing="false" onAction="#handleCrud" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Delete" />
             <VBox layoutX="11.0" layoutY="107.0" prefHeight="261.0" prefWidth="100.0" spacing="10.0">
                <children>
-                  <Label text="User_ID" />
-                  <TextField fx:id="textUser" prefHeight="17.0" prefWidth="100.0" />
+                  <Label text="Product_ID" />
+                  <TextField fx:id="textPid" prefHeight="17.0" prefWidth="100.0" />
                   <Label text="Date" />
                   <TextField fx:id="textDate" prefHeight="17.0" prefWidth="100.0" />
-                  <Label text="Total" />
+                  <Label text="Quantity" />
                   <TextField fx:id="textTotal" prefHeight="17.0" prefWidth="100.0" />
-                  <Label text="ID" />
-                  <TextField fx:id="textPid" prefHeight="17.0" prefWidth="100.0" />
+                  <Label text="Customer_location" />
+                  <TextField fx:id="textLoc" prefHeight="17.0" prefWidth="100.0" />
+                   <Label text="Email" />
+                  <TextField fx:id="textEmail" prefHeight="17.0" prefWidth="100.0" />
                </children>
             </VBox>
             <Button fx:id="rptView" layoutX="24.0" layoutY="381.0" mnemonicParsing="false" onAction="#viewBtn" prefHeight="15.0" prefWidth="75.0" style="-fx-background-color: orange;" text="View" />

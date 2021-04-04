@@ -56,7 +56,7 @@ public class poController {
     public TextField searchBox = new TextField();
     
     @FXML
-    public TextField textUser = new TextField();
+    public TextField textLoc = new TextField();
 
     @FXML
     public TextField textDate = new TextField();
@@ -66,6 +66,9 @@ public class poController {
 
     @FXML
     public TextField textPid = new TextField();
+
+    @FXML 
+    public TextField textEmail = new TextField();
 
     @FXML
     public TableView<UI.observablePO> poTable;
@@ -88,9 +91,16 @@ public class poController {
     SQLPo po = new SQLPo();
     
     ObservableList poList;
+    @FXML
+    public void initialize() {
+        try {
+            displayTable();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
+    }
   
-   
-    
     /**
      * Displays the PO screen data
      * 
@@ -104,8 +114,21 @@ public class poController {
     total_id.setCellValueFactory(new PropertyValueFactory<>("email"));
     ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 
-    poTable.setItems(poList);
-
+    
+    FilteredList<observablePO> filteredList = new FilteredList<>(poList);
+    searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
+        filteredList.setPredicate(poFact -> { 
+            if(newVal == null || newVal.isEmpty()){
+                return true; 
+            }
+            String lowerFilter = newVal.toLowerCase(); 
+            if(poFact.getProductID().toLowerCase().contains(lowerFilter)){
+                return true;
+            }return false;
+        });
+    });
+    SortedList<observablePO> sortedData = new SortedList<>(filteredList); 
+    poTable.setItems(sortedData);
 }
 
 /**
@@ -144,7 +167,7 @@ public void viewBtn(ActionEvent event){
     alert.setContentText("Ordered by: " + fullpo.getEmail()  + "Loacted: " + fullpo.getCustomerLocation() + "\n" + 
     "Purchase ID: " + fullpo.getID() + "\n" +
     "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
-    fullpo.getProductID() + "\n" + "Item Quantity: " + fullpo.getQuantity() + "\n" + "Total: ");
+    fullpo.getProductID() + "\n" + "Item Quantity: " + fullpo.getQuantity());
     alert.show();
 
 }
@@ -174,10 +197,14 @@ Statement st;
  * @throws SQLException - throws if an error in the sql
  */
 private void addItem() throws SQLException {
-    Connection con = UIDBConnector.getConnection();
-    st =  (Statement) con.createStatement();
-    String statement="INSERT INTO PO(userID,date,total,ID) VALUES(" + textUser.getText() + ", '" + textDate.getText() + "', "+ textTotal.getText() + ", " + textPid.getText() + ");";
-    st.execute(statement);
+    observablePO p = new observablePO();
+    p.setCustomerLocation(textLoc.getText());
+    p.setDate(textDate.getText());
+    p.setEmail(textEmail.getText());
+    p.setProductID(textPid.getText());
+    p.quantity(Integer.parseInt(textTotal.getText()));
+    po.createEntry("0", p);
+
     poList.clear();
     displayTable();
 }
@@ -207,10 +234,11 @@ private void deleteItem() throws SQLException {
 public void highlightClick(MouseEvent event) {
     UI.observablePO selectedItem = poTable.getSelectionModel().getSelectedItem();
     
-    textUser.setText(selectedItem.getEmail());
+    textEmail.setText(selectedItem.getEmail());
     textDate.setText(selectedItem.getDate());
+    textLoc.setText(selectedItem.getCustomerLocation());
     textTotal.setText(Integer.toString(selectedItem.getQuantity()));
-    textPid.setText(Integer.toString(selectedItem.getID()));
+    textPid.setText(selectedItem.getProductID());
 }
 
 /**

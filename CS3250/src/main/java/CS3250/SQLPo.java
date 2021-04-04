@@ -10,6 +10,7 @@ import java.util.List;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import UI.observablePO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -42,9 +43,9 @@ public class SQLPo {
     }
 
     // need to create table for PO's and swap this string
-    public void createEntry(String ID, PO p) {
-        String statement = "INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES('" + p.getProductID() + "', '" + p.quantity
-                + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.customerLocation  +"');";
+    public void createEntry(String ID, observablePO p) {
+        String statement = "INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES('" + p.getProductID() + "', '" + p.getQuantity()
+                + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.getCustomerLocation()  +"');";
         String statement2 = "GET * FROM PO WHERE userID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);

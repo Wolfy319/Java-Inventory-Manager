@@ -41,6 +41,9 @@ public class observablePO {
     public void quantity(int q) {
         this.quantity.set(q);
     }
+    public void setCustomerLocation(String customerLocation) {
+        this.customerLocation.set(customerLocation);
+    }
     public void setID(int iD) {
         ID.set(iD);;
     }
