@@ -33,10 +33,10 @@
             <Separator layoutX="119.0" layoutY="59.0" orientation="VERTICAL" prefHeight="447.0" prefWidth="20.0" style="-fx-background-color: orange; -fx-opacity: .8;" AnchorPane.bottomAnchor="-1.0" AnchorPane.topAnchor="59.0" />
             <TableView fx:id="poTable" layoutX="139.0" layoutY="59.0" onMouseClicked="#highlightClick" prefHeight="461.0" prefWidth="757.0" style="-fx-background-radius: 1em;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="139.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="59.0">
               <columns>
-                <TableColumn fx:id="user_id" prefWidth="141.0" text="User_ID" />
+                <TableColumn fx:id="user_id" prefWidth="141.0" text="ProductID" />
                   <TableColumn fx:id="date_id" prefWidth="153.0" text="Date" />
-                  <TableColumn fx:id="total_id" prefWidth="150.0" text="Total" />
-                  <TableColumn fx:id="ID" prefWidth="141.0" text="ID" />
+                  <TableColumn fx:id="total_id" prefWidth="150.0" text="Email" />
+                  <TableColumn fx:id="ID" prefWidth="141.0" text="PO ID" />
               </columns>
             </TableView>
             <AnchorPane layoutY="60.0" prefHeight="154.0" prefWidth="121.0">

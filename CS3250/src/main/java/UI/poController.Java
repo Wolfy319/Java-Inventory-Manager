@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import CS3250.DisplayPO;
-import CS3250.POItem;
+import CS3250.PO;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,69 +68,44 @@ public class poController {
     public TextField textPid = new TextField();
 
     @FXML
-    public TableView<UI.poFact> poTable;
+    public TableView<UI.observablePO> poTable;
 
     @FXML
-    public TableColumn<UI.poFact, String> user_id;
+    public TableColumn<UI.observablePO, String> user_id;
 
    
     @FXML
-    public TableColumn<UI.poFact, String> date_id;
+    public TableColumn<UI.observablePO, String> date_id;
 
 
     @FXML
-    public TableColumn<UI.poFact, String> total_id; 
+    public TableColumn<UI.observablePO, String> total_id; 
 
     @FXML
-    public TableColumn<UI.poFact, String> ID; 
+    public TableColumn<UI.observablePO, String> ID; 
 
     
+    SQLPo po = new SQLPo();
     
-    ObservableList poList = FXCollections.observableArrayList();
+    ObservableList poList;
+  
+   
+    
     /**
      * Displays the PO screen data
      * 
      * @throws SQLException - thrown if there is an error in the sql syntax
      */
  public void displayTable() throws SQLException{
-    
-    try {
-        Connection con = UIDBConnector.getConnection();
-
-        ResultSet rs = con.createStatement().executeQuery("SELECT * FROM PO");
-    
-        while (rs.next()) {// "should be column names"
-
-            poList.add(new poFact(rs.getString("userID"), rs.getString("date"),
-                    rs.getString("total"), rs.getString("ID")));
-        }
-
-
-
-    }finally{}
-    user_id.setCellValueFactory(new PropertyValueFactory<>("userID"));
+    po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    poList = FXCollections.observableArrayList(po.GenerateShortPOs());
+    user_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
     date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
-    total_id.setCellValueFactory(new PropertyValueFactory<>("total"));
+    total_id.setCellValueFactory(new PropertyValueFactory<>("email"));
     ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 
     poTable.setItems(poList);
 
-    FilteredList<poFact> filteredData = new FilteredList<>(poList, p -> true); 
-    searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
-        filteredData.setPredicate(poFact -> { 
-            if(newVal == null || newVal.isEmpty()){
-                return true; 
-            }
-            String lowerFilter = newVal.toLowerCase(); 
-            if(poFact.getUserID().toLowerCase().contains(lowerFilter)){
-                return true;
-            }return false;
-        });
-    });
-    SortedList<poFact> sortedData = new SortedList<>(filteredData); 
-    sortedData.comparatorProperty().bind(poTable.comparatorProperty());
-    poTable.setItems(sortedData);
-   
 }
 
 /**
@@ -161,20 +135,16 @@ public void dispBtn(ActionEvent event){
 public void viewBtn(ActionEvent event){
     SQLPo sp = new SQLPo();
     sp.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-    Integer user = Integer.valueOf(textPid.getText());
-    DisplayPO fullpo = new DisplayPO();
-    fullpo = sp.GenerateFullPO(user);
-    POItem pos = new POItem();
-    pos = fullpo.getLi().get(0);
+    Integer PID = Integer.valueOf(textPid.getText());
+    PO fullpo = new PO();
+    fullpo = sp.getPo(PID);
     Alert alert = new Alert(AlertType.CONFIRMATION);
     alert.setTitle("Detailed Purchase View");
     alert.setHeaderText("Detailed PO");
-    alert.setContentText("Ordered by: " + fullpo.getName() + "\n" + "BuyerID: " + pos.getBuyerID() + "\n" + "Buyer Email: " + 
-    fullpo.getEmail() + "\n" + 
-    "Purchase ID: " + pos.getPOID() + "\n" +
+    alert.setContentText("Ordered by: " + fullpo.getEmail()  + "Loacted: " + fullpo.getCustomerLocation() + "\n" + 
+    "Purchase ID: " + fullpo.getID() + "\n" +
     "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
-    pos.getItemID() + "\n" + "Item Quantity: " + pos.getQuantity() + "\n" + "Total: " + fullpo.getTotal());
-
+    fullpo.getProductID() + "\n" + "Item Quantity: " + fullpo.getQuantity() + "\n" + "Total: ");
     alert.show();
 
 }
@@ -235,12 +205,12 @@ private void deleteItem() throws SQLException {
  */
 @FXML
 public void highlightClick(MouseEvent event) {
-    UI.poFact selectedItem = poTable.getSelectionModel().getSelectedItem();
+    UI.observablePO selectedItem = poTable.getSelectionModel().getSelectedItem();
     
-    textUser.setText(selectedItem.getUserID());
+    textUser.setText(selectedItem.getEmail());
     textDate.setText(selectedItem.getDate());
-    textTotal.setText(selectedItem.getTotal());
-    textPid.setText(selectedItem.getID());
+    textTotal.setText(Integer.toString(selectedItem.getQuantity()));
+    textPid.setText(Integer.toString(selectedItem.getID()));
 }
 
 /**
@@ -271,6 +241,6 @@ public void exit_Button2(ActionEvent event) {
     dbsStage.show();
  }
 
+
+
 }
-
-
