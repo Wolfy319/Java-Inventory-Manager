@@ -87,6 +87,7 @@ public class poController {
     @FXML
     public TableColumn<UI.observablePO, String> ID; 
 
+    int id = 0;
     
     SQLPo po = new SQLPo();
     
@@ -110,6 +111,7 @@ public class poController {
     po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
     poList = FXCollections.observableArrayList(po.GenerateShortPOs());
     user_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
+    date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
     date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
     total_id.setCellValueFactory(new PropertyValueFactory<>("email"));
     ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
@@ -158,7 +160,7 @@ public void dispBtn(ActionEvent event){
 public void viewBtn(ActionEvent event){
     SQLPo sp = new SQLPo();
     sp.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-    Integer PID = Integer.valueOf(textPid.getText());
+    Integer PID = Integer.valueOf(id);
     PO fullpo = new PO();
     fullpo = sp.getPo(PID);
     Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -217,8 +219,7 @@ private void addItem() throws SQLException {
 private void deleteItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
-    String toBeDeleted = textPid.getText();
-    String statement = "DELETE FROM PO WHERE ID ='"+ toBeDeleted + "';";
+    String statement = "DELETE FROM PO WHERE ID ='"+ id+ "';";
     st.execute(statement);
     poList.clear();
     displayTable();
@@ -239,6 +240,7 @@ public void highlightClick(MouseEvent event) {
     textLoc.setText(selectedItem.getCustomerLocation());
     textTotal.setText(Integer.toString(selectedItem.getQuantity()));
     textPid.setText(selectedItem.getProductID());
+    id = selectedItem.getID();
 }
 
 /**
