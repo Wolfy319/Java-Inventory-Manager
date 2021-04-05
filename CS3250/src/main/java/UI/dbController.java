@@ -18,12 +18,18 @@ import com.itextpdf.kernel.geom.Path;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfXrefTable;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.UnitValue;
+
+import org.apache.pdfbox.printing.PDFPrintable;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,7 +49,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import UI.pdfGen;
 import CS3250.SQLData;
 
 /**
@@ -293,8 +298,39 @@ public void showReport(ActionEvent event) throws IOException{
     headingBreak.setTextAlignment(TextAlignment.CENTER);
     doc.add(headingBreak);
     
+    //Add Table
+    float[] columnWidths = {1.5f, 2f, 5f, 2f};
+    Table table = new Table(UnitValue.createPercentArray(columnWidths));
+    Cell cells = new Cell(4,4)
+                .add(new Paragraph("Sales Snap-Shot"))
+                .setTextAlignment(TextAlignment.CENTER);
+    table.addHeaderCell(cells);            
+    table.setFixedPosition(100, 650,400);
 
+    Cell totalSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("Total Sales: ")); 
+    table.addFooterCell(totalSalesCell);
+    doc.add(table); 
 
+    Cell thisMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("This Months Sales: ")); 
+    table.addFooterCell(thisMonthSalesCell);
+    doc.add(table);
+
+    Cell thisWeekSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("This Weeks Sales: ")); 
+    table.addFooterCell(thisWeekSalesCell);
+    doc.add(table);
+
+    Cell mostPopularItemCell = new Cell(4, 4)
+                       .add(new Paragraph("Most Popular Item: ")); 
+    table.addFooterCell(mostPopularItemCell);
+    doc.add(table);
+
+    Cell bestCustomerCell = new Cell(4, 4)
+                       .add(new Paragraph("Best Customer by revenue: ")); 
+    table.addFooterCell(bestCustomerCell);
+    doc.add(table);
 
     doc.close();
     Desktop.getDesktop().open(tempSales);
