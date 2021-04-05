@@ -166,7 +166,7 @@ public void viewBtn(ActionEvent event){
     Alert alert = new Alert(AlertType.CONFIRMATION);
     alert.setTitle("Detailed Purchase View");
     alert.setHeaderText("Detailed PO");
-    alert.setContentText("Ordered by: " + fullpo.getEmail()  + "Loacted: " + fullpo.getCustomerLocation() + "\n" + 
+    alert.setContentText("Ordered by: " + fullpo.getEmail() + "\n"  + "Located: " + fullpo.getCustomerLocation() + "\n" + 
     "Purchase ID: " + fullpo.getID() + "\n" +
     "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
     fullpo.getProductID() + "\n" + "Item Quantity: " + fullpo.getQuantity());
