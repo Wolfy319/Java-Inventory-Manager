@@ -127,12 +127,12 @@ public class dbController {
             Connection con = UIDBConnector.getConnection();
 
             ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
-            int counter = 0;
-            while (rs.next() && counter < 10) {// "should be column names"
+            
+            while (rs.next()) {// "should be column names"
 
                 oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
                         rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
-                counter += 1;
+                
             }
 
 
