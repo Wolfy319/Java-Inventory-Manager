@@ -70,7 +70,7 @@ public class CSVParser {
 			    	fields = line.split(",");     // Split the row into individual fields
 			    	
 			    	// Fill in fields
-			    	populateDB(fields[0], fields[1], Integer.parseInt(fields[2]), fields[3], Integer.parseInt(fields[4]));
+			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]));
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -78,7 +78,7 @@ public class CSVParser {
 		return;
 	}
 
-	private void populateDB(String date, String customerEmail, int customerLocation, String productID, int productQuantity) {
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, int productQuantity) {
 		System.out.println(date + " " + customerEmail + " " + customerLocation + " " + productID + " " + productQuantity);
 		return;
 	}
