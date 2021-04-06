@@ -60,10 +60,9 @@ public class CSVParser {
 	 * @param database - Database object
 	 * 
 	 */
-	public void readOrdersCSV(String filename, DataInterface database){
+	public void readOrdersCSV(String filename, SQLPo newEntry){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
-		SQLPo newEntry = new SQLPo();
 		newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);

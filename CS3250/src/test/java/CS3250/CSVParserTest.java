@@ -14,6 +14,8 @@ class CSVParserTest {
 	CSVData data = new CSVData();
 	String file = "customer_orders_team5.csv";
 
+	SQLPo po = new SQLPo();
+
 	
 	// @Test
 	// public void ReadCSVWorks() {
@@ -23,7 +25,7 @@ class CSVParserTest {
 	
 	@Test
 	public void ReadCSVWorks() {
-		parse.readOrdersCSV(file, data);
+		parse.readOrdersCSV(file, po);
 		assert(true);
 	}
 }

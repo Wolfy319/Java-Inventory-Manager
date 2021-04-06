@@ -23,9 +23,6 @@ public class observablePO {
     public String getEmail() {
         return email.get();
     }
-    public void setStockQuantity(int quant) {
-        this.quantity = quant;
-    }
     public void setEmail(String email) {
         this.email.set(email);
     }
