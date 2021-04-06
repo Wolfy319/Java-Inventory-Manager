@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
@@ -22,7 +23,7 @@ public class CSVParser {
 	 * @param database - Database object
 	 * 
 	 */
-	public void readCSV(String filename, DataInterface database){
+	public void readProductsCSV(String filename, DataInterface database){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		
@@ -49,4 +50,37 @@ public class CSVParser {
 		}
 		return;
 	}
+
+	/**
+	 * Parses a CSV file full of products into Entry objects
+	 *  
+	 * @param filename - Path to the csv file to be parsed
+	 * @param database - Database object
+	 * 
+	 */
+	public void readOrdersCSV(String filename, DataInterface database){
+		String line;  	// Current row contents
+		String[] fields;// Array to store individual product fields
+		
+		// Try to open the file and start reading
+		try (InputStream inputStream = getClass().getResourceAsStream(filename);
+			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+				reader.readLine();
+			    while((line = reader.readLine()) != null) {
+			    	fields = line.split(",");     // Split the row into individual fields
+			    	
+			    	// Fill in fields
+			    	populateDB(fields[0], fields[1], Integer.parseInt(fields[2]), fields[3], Integer.parseInt(fields[4]));
+			    }
+		} catch (IOException e) {
+				e.printStackTrace();
+		}
+		return;
+	}
+
+	private void populateDB(String date, String customerEmail, int customerLocation, String productID, int productQuantity) {
+		System.out.println(date + " " + customerEmail + " " + customerLocation + " " + productID + " " + productQuantity);
+		return;
+	}
+	
 }
