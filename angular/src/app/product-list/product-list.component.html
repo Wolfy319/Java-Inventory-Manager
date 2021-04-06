@@ -1,0 +1,51 @@
+
+<div class="container">
+
+    <table class="table-hover table bg-light">
+        <thead>
+            <td>productID</td>
+            <td>salePrice</td>
+            <td>supplierID</td>
+            <td>stockQuantity</td>
+            <td>wholesaleCost</td>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of entries">
+                <td>{{item.productID}}</td>
+                <td>{{item.salePrice}}</td>
+                <td>{{item.supplierID}}</td>
+                <td>{{item.stockQuantity}}</td>
+                <td>{{item.wholesaleCost}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="container">
+            <div class="row">
+
+                <div class="col-5">
+                    
+                    <form [formGroup]="form" (ngSubmit)="submit()">
+                        
+                        <div class="span">
+                            <div class="form-group-item">
+                                <select formControlName="website" class="form-control">
+                                    <option disabled>Select size</option>
+                                    <option>Choose size</option>
+                                    <option *ngFor="let web of numEntries">{{web}}</option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>
+                    </form>
+                </div>
+                <div class="col-5">    
+                    <button class= 'btn btn-secondary' (click)="next()" >next page</button>
+                </div>
+            </div>
+    </div>
+    
+
+</div>

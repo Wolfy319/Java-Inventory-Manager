@@ -121,8 +121,5 @@ public class Controller {
             alert.setHeaderText("INCORRECT Username or Password");
             alert.showAndWait();
     	}
-
     }
-
 }
-

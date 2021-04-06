@@ -1,5 +1,33 @@
+steps:
 
+cd angular - getting into the angular project workspace
+npm install - to download dependancys (like maven) 
+ng serve    - to start development server.
 
+Make sure your gitignore has this: 
+
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+.DS_Store
 
 
 
@@ -48,6 +76,4 @@ angular/typings
 # System Files
 angular/.DS_Store
 angular/Thumbs.db
-
-*.csv
 
