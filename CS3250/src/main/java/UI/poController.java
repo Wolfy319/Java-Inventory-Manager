@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import CS3250.DisplayPO;
-import CS3250.POItem;
+import CS3250.PO;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,7 +56,7 @@ public class poController {
     public TextField searchBox = new TextField();
     
     @FXML
-    public TextField textUser = new TextField();
+    public TextField textLoc = new TextField();
 
     @FXML
     public TextField textDate = new TextField();
@@ -68,70 +67,70 @@ public class poController {
     @FXML
     public TextField textPid = new TextField();
 
-    @FXML
-    public TableView<UI.poFact> poTable;
+    @FXML 
+    public TextField textEmail = new TextField();
 
     @FXML
-    public TableColumn<UI.poFact, String> user_id;
+    public TableView<UI.observablePO> poTable;
+
+    @FXML
+    public TableColumn<UI.observablePO, String> user_id;
 
    
     @FXML
-    public TableColumn<UI.poFact, String> date_id;
+    public TableColumn<UI.observablePO, String> date_id;
 
 
     @FXML
-    public TableColumn<UI.poFact, String> total_id; 
+    public TableColumn<UI.observablePO, String> total_id; 
 
     @FXML
-    public TableColumn<UI.poFact, String> ID; 
+    public TableColumn<UI.observablePO, String> ID; 
 
+    int id = 0;
     
+    SQLPo po = new SQLPo();
     
-    ObservableList poList = FXCollections.observableArrayList();
+    ObservableList poList;
+    @FXML
+    public void initialize() {
+        try {
+            displayTable();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
+    }
+  
     /**
      * Displays the PO screen data
      * 
      * @throws SQLException - thrown if there is an error in the sql syntax
      */
  public void displayTable() throws SQLException{
-    
-    try {
-        Connection con = UIDBConnector.getConnection();
-
-        ResultSet rs = con.createStatement().executeQuery("SELECT * FROM PO");
-    
-        while (rs.next()) {// "should be column names"
-
-            poList.add(new poFact(rs.getString("userID"), rs.getString("date"),
-                    rs.getString("total"), rs.getString("ID")));
-        }
-
-
-
-    }finally{}
-    user_id.setCellValueFactory(new PropertyValueFactory<>("userID"));
+    po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    poList = FXCollections.observableArrayList(po.GenerateShortPOs());
+    user_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
     date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
-    total_id.setCellValueFactory(new PropertyValueFactory<>("total"));
+    date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
+    total_id.setCellValueFactory(new PropertyValueFactory<>("email"));
     ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
 
-    poTable.setItems(poList);
-
-    FilteredList<poFact> filteredData = new FilteredList<>(poList, p -> true); 
+    
+    FilteredList<observablePO> filteredList = new FilteredList<>(poList);
     searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
-        filteredData.setPredicate(poFact -> { 
+        filteredList.setPredicate(poFact -> { 
             if(newVal == null || newVal.isEmpty()){
                 return true; 
             }
             String lowerFilter = newVal.toLowerCase(); 
-            if(poFact.getUserID().toLowerCase().contains(lowerFilter)){
+            if(poFact.getProductID().toLowerCase().contains(lowerFilter)){
                 return true;
             }return false;
         });
     });
-    SortedList<poFact> sortedData = new SortedList<>(filteredData); 
-    sortedData.comparatorProperty().bind(poTable.comparatorProperty());
+    SortedList<observablePO> sortedData = new SortedList<>(filteredList); 
     poTable.setItems(sortedData);
-   
 }
 
 /**
@@ -161,20 +160,16 @@ public void dispBtn(ActionEvent event){
 public void viewBtn(ActionEvent event){
     SQLPo sp = new SQLPo();
     sp.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-    Integer user = Integer.valueOf(textPid.getText());
-    DisplayPO fullpo = new DisplayPO();
-    fullpo = sp.GenerateFullPO(user);
-    POItem pos = new POItem();
-    pos = fullpo.getLi().get(0);
+    Integer PID = Integer.valueOf(id);
+    PO fullpo = new PO();
+    fullpo = sp.getPo(PID);
     Alert alert = new Alert(AlertType.CONFIRMATION);
     alert.setTitle("Detailed Purchase View");
     alert.setHeaderText("Detailed PO");
-    alert.setContentText("Ordered by: " + fullpo.getName() + "\n" + "BuyerID: " + pos.getBuyerID() + "\n" + "Buyer Email: " + 
-    fullpo.getEmail() + "\n" + 
-    "Purchase ID: " + pos.getPOID() + "\n" +
+    alert.setContentText("Ordered by: " + fullpo.getEmail() + "\n"  + "Located: " + fullpo.getCustomerLocation() + "\n" + 
+    "Purchase ID: " + fullpo.getID() + "\n" +
     "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
-    pos.getItemID() + "\n" + "Item Quantity: " + pos.getQuantity() + "\n" + "Total: " + fullpo.getTotal());
-
+    fullpo.getProductID() + "\n" + "Item Quantity: " + fullpo.getQuantity());
     alert.show();
 
 }
@@ -204,10 +199,14 @@ Statement st;
  * @throws SQLException - throws if an error in the sql
  */
 private void addItem() throws SQLException {
-    Connection con = UIDBConnector.getConnection();
-    st =  (Statement) con.createStatement();
-    String statement="INSERT INTO PO(userID,date,total,ID) VALUES(" + textUser.getText() + ", '" + textDate.getText() + "', "+ textTotal.getText() + ", " + textPid.getText() + ");";
-    st.execute(statement);
+    observablePO p = new observablePO();
+    p.setCustomerLocation(textLoc.getText());
+    p.setDate(textDate.getText());
+    p.setEmail(textEmail.getText());
+    p.setProductID(textPid.getText());
+    p.quantity(Integer.parseInt(textTotal.getText()));
+    po.createEntry("0", p);
+
     poList.clear();
     displayTable();
 }
@@ -220,8 +219,7 @@ private void addItem() throws SQLException {
 private void deleteItem() throws SQLException {
     Connection con = UIDBConnector.getConnection();
     st =  (Statement) con.createStatement();
-    String toBeDeleted = textPid.getText();
-    String statement = "DELETE FROM PO WHERE ID ='"+ toBeDeleted + "';";
+    String statement = "DELETE FROM PO WHERE ID ='"+ id+ "';";
     st.execute(statement);
     poList.clear();
     displayTable();
@@ -235,12 +233,14 @@ private void deleteItem() throws SQLException {
  */
 @FXML
 public void highlightClick(MouseEvent event) {
-    UI.poFact selectedItem = poTable.getSelectionModel().getSelectedItem();
+    UI.observablePO selectedItem = poTable.getSelectionModel().getSelectedItem();
     
-    textUser.setText(selectedItem.getUserID());
+    textEmail.setText(selectedItem.getEmail());
     textDate.setText(selectedItem.getDate());
-    textTotal.setText(selectedItem.getTotal());
-    textPid.setText(selectedItem.getID());
+    textLoc.setText(selectedItem.getCustomerLocation());
+    textTotal.setText(Integer.toString(selectedItem.getQuantity()));
+    textPid.setText(selectedItem.getProductID());
+    id = selectedItem.getID();
 }
 
 /**
@@ -271,6 +271,6 @@ public void exit_Button2(ActionEvent event) {
     dbsStage.show();
  }
 
+
+
 }
-
-
