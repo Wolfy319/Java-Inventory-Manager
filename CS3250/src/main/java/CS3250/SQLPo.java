@@ -46,7 +46,7 @@ public class SQLPo {
     public void createEntry(String ID, observablePO p) {
         String statement = "INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES('" + p.getProductID() + "', '" + p.getQuantity()
                 + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.getCustomerLocation()  +"');";
-        String statement2 = "GET * FROM PO WHERE userID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
+        String statement2 = "GET * FROM PO WHERE productID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);
             rs = st.executeQuery(statement2);
