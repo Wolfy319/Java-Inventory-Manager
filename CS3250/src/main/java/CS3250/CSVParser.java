@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import UI.observablePO;
+
 /*
   This class will eventually hook up to our database,
   so in the future it might change from adding the entries 
@@ -61,7 +63,8 @@ public class CSVParser {
 	public void readOrdersCSV(String filename, DataInterface database){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
-		
+		SQLPo newEntry = new SQLPo();
+		newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -70,7 +73,7 @@ public class CSVParser {
 			    	fields = line.split(",");     // Split the row into individual fields
 			    	
 			    	// Fill in fields
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]));
+			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -78,8 +81,18 @@ public class CSVParser {
 		return;
 	}
 
-	private void populateDB(String date, String customerEmail, String customerLocation, String productID, int productQuantity) {
-		System.out.println(date + " " + customerEmail + " " + customerLocation + " " + productID + " " + productQuantity);
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, int productQuantity, SQLPo PoDB) {
+		System.out.print(date + " " + customerEmail);
+		observablePO po = new observablePO();
+		po.setDate(date);
+		po.setEmail(customerEmail);
+		po.setCustomerLocation(customerLocation);
+		po.setProductID(productID);
+		po.quantity(productQuantity);
+
+		
+		
+		PoDB.createEntry("1", po); 
 		return;
 	}
 	
