@@ -112,10 +112,9 @@ public class poController {
     poList = FXCollections.observableArrayList(po.GenerateShortPOs());
     user_id.setCellValueFactory(new PropertyValueFactory<>("productID"));
     date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
-    date_id.setCellValueFactory(new PropertyValueFactory<>("date"));
     total_id.setCellValueFactory(new PropertyValueFactory<>("email"));
     ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
-
+    
     
     FilteredList<observablePO> filteredList = new FilteredList<>(poList);
     searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
