@@ -158,6 +158,7 @@ public class totalViewController {
         cellThree.setText("WholeSale_Cost");
         cellFour.setText("Sale_Price");
         cellFive.setText("Supplier_ID");
+
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
         cellFour.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
@@ -190,7 +191,7 @@ public class totalViewController {
 
     SQLPo po = new SQLPo();
     ObservableList poList;
-   public Boolean orderScreenDisplayed;
+    public Boolean orderScreenDisplayed;
     
     @FXML
     public void showOrders(){
@@ -337,29 +338,12 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
 }
 
 
-@FXML
-public void viewBtn(ActionEvent event){
-    SQLPo sp = new SQLPo();
-    sp.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-    Integer PID = Integer.valueOf(cellFour.toString());
-    PO fullpo = new PO();
-    fullpo = sp.getPo(PID);
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Detailed Purchase View");
-    alert.setHeaderText("Detailed PO");
-    alert.setContentText("Ordered by: " + fullpo.getEmail() + "\n"  + "Located: " + fullpo.getCustomerLocation() + "\n" + 
-    "Purchase ID: " + fullpo.getID() + "\n" +
-    "Ordered on: " + fullpo.getDate() + "\n" + "Item ID: " +
-    fullpo.getProductID() + "\n" + "Item Quantity: " + fullpo.getQuantity());
-    alert.show();
-
-}
 
 @FXML
 public void highlightClick(MouseEvent event) {
     
-    if(orderScreenDisplayed = false){
-    UI.observablePO selectedItem = (observablePO) total_Table.getSelectionModel().getSelectedItem();
+    if(orderScreenDisplayed == true){
+    UI.observablePO selectedItem = (UI.observablePO) total_Table.getSelectionModel().getSelectedItem();
     
     textId.setText(selectedItem.getProductID());
     textQuantity.setText(selectedItem.getDate());
@@ -367,7 +351,7 @@ public void highlightClick(MouseEvent event) {
     textPrice.setText(selectedItem.getCustomerLocation());
     textSid.setText(selectedItem.getEmail());
     }
-    else{
+    else if (orderScreenDisplayed == false){
     UI.dataBaseItems selectedItem = (UI.dataBaseItems) total_Table.getSelectionModel().getSelectedItem();
     
     textId.setText(selectedItem.getProductID());
