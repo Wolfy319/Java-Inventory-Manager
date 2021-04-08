@@ -127,8 +127,11 @@ public class totalViewController {
 
     @FXML
     public void showInventory() throws SQLException{
+
+        orderScreenDisplayed = false;
+
         total_Table.getItems().clear();
-        textField1.setText("   Id");
+        textField1.setText("   Product Id");
         textField2.setText("   Quantity");
         textField3.setText("   Cost");
         textField4.setText("   Price");
@@ -187,13 +190,13 @@ public class totalViewController {
 
     SQLPo po = new SQLPo();
     ObservableList poList;
-    Boolean orderScreenDisplayed = null;
+   public Boolean orderScreenDisplayed;
     
     @FXML
     public void showOrders(){
         orderScreenDisplayed = true; 
 
-        textField1.setText("   Id");
+        textField1.setText("   Product Id");
         textField2.setText("   Date");
         textField3.setText("   Quantity");
         textField4.setText("   Customer Location");
@@ -352,9 +355,32 @@ public void viewBtn(ActionEvent event){
 
 }
 
-
-
+@FXML
+public void highlightClick(MouseEvent event) {
     
+    if(orderScreenDisplayed = false){
+    UI.observablePO selectedItem = (observablePO) total_Table.getSelectionModel().getSelectedItem();
+    
+    textId.setText(selectedItem.getProductID());
+    textQuantity.setText(selectedItem.getDate());
+    textCost.setText(selectedItem.getQuantity());
+    textPrice.setText(selectedItem.getCustomerLocation());
+    textSid.setText(selectedItem.getEmail());
+    }
+    else{
+    UI.dataBaseItems selectedItem = (UI.dataBaseItems) total_Table.getSelectionModel().getSelectedItem();
+    
+    textId.setText(selectedItem.getProductID());
+    textQuantity.setText(selectedItem.getStockQuantity());
+    textCost.setText(selectedItem.getWholesaleCost());
+    textPrice.setText(selectedItem.getSalePrice());
+    textSid.setText(selectedItem.getSupplierID());
+
+    }
+    
+}
+
+
 
 
     

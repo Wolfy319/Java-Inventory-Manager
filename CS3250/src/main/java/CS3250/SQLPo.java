@@ -74,7 +74,7 @@ public class SQLPo {
                 po.setDate(rs.getString("date"));
                 po.setID(rs.getInt("ID"));
                 po.setCustomerLocation(rs.getString("custLoc"));
-                po.quantity(rs.getInt("quantity"));
+                po.quantity(rs.getString("quantity"));
                 arr.add(po);
             }             
         }

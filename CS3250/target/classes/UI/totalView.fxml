@@ -147,7 +147,7 @@
             </JFXButton>
          </children>
       </VBox>
-      <TableView fx:id="total_Table" fixedCellSize="-2.0" layoutX="222.0" prefHeight="618.0" prefWidth="516.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="222.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="0.0">
+      <TableView fx:id="total_Table" fixedCellSize="-2.0" layoutX="222.0" onMouseClicked="#highlightClick" prefHeight="618.0" prefWidth="516.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="222.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="0.0">
         <columns>
           <TableColumn fx:id="cellOne" prefWidth="96.80006408691406" text="C1" />
           <TableColumn fx:id="CellTwo" prefWidth="99.20001220703125" text="C2" />
