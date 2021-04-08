@@ -50,7 +50,7 @@ public class SQLPo {
         try {
             st.execute(statement);
             rs = st.executeQuery(statement2);
-            p.setID(rs.getInt("ID"));
+            p.setID(rs.getString("ID"));
 
         } catch (SQLException e1) {
             e1.printStackTrace();
@@ -72,7 +72,7 @@ public class SQLPo {
                 po.setProductID(rs.getString("productID"));
                 po.setEmail( rs.getString("email"));
                 po.setDate(rs.getString("date"));
-                po.setID(rs.getInt("ID"));
+                po.setID(rs.getString("ID"));
                 po.setCustomerLocation(rs.getString("custLoc"));
                 po.quantity(rs.getString("quantity"));
                 arr.add(po);

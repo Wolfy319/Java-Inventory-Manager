@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class observablePO {
-    IntegerProperty ID = new SimpleIntegerProperty(0);
+    StringProperty ID = new SimpleStringProperty();
     StringProperty productID = new SimpleStringProperty();
     StringProperty quantity=new SimpleStringProperty();
     StringProperty customerLocation = new SimpleStringProperty();
@@ -44,10 +44,10 @@ public class observablePO {
     public void setCustomerLocation(String customerLocation) {
         this.customerLocation.set(customerLocation);
     }
-    public void setID(int iD) {
+    public void setID(String iD) {
         ID.set(iD);;
     }
-    public int getID() {
+    public String getID() {
         return ID.get();
     }
 }

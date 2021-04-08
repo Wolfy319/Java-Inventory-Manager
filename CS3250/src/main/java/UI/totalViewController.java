@@ -20,6 +20,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.mysql.jdbc.Statement;
 
 import CS3250.PO;
 import CS3250.SQLPo;
@@ -107,6 +108,9 @@ public class totalViewController {
     private TextField textSid;
 
     @FXML
+    private TextField textID;
+
+    @FXML
     private Label textField1; 
 
     @FXML
@@ -120,6 +124,9 @@ public class totalViewController {
 
     @FXML
     private Label textField5;
+
+    @FXML
+    private Label textField6;
 
 
 
@@ -136,7 +143,8 @@ public class totalViewController {
         textField3.setText("   Cost");
         textField4.setText("   Price");
         textField5.setText("   Sid");
-
+        textField6.setText(" ");
+        textID.setText("");
         try {
             Connection con = UIDBConnector.getConnection();
 
@@ -158,6 +166,8 @@ public class totalViewController {
         cellThree.setText("WholeSale_Cost");
         cellFour.setText("Sale_Price");
         cellFive.setText("Supplier_ID");
+
+
 
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
@@ -202,6 +212,7 @@ public class totalViewController {
         textField3.setText("   Quantity");
         textField4.setText("   Customer Location");
         textField5.setText("   Email");
+        textField6.setText("   ID");
 
         cellOne.setText("productID");
         CellTwo.setText("Date");
@@ -350,6 +361,7 @@ public void highlightClick(MouseEvent event) {
     textCost.setText(selectedItem.getQuantity());
     textPrice.setText(selectedItem.getCustomerLocation());
     textSid.setText(selectedItem.getEmail());
+    textID.setText(selectedItem.getID());
     }
     else if (orderScreenDisplayed == false){
     UI.dataBaseItems selectedItem = (UI.dataBaseItems) total_Table.getSelectionModel().getSelectedItem();
@@ -361,11 +373,57 @@ public void highlightClick(MouseEvent event) {
     textSid.setText(selectedItem.getSupplierID());
 
     }
+
     
 }
 
+Statement st;
+@FXML
+public void addItem() throws SQLException{
+    if(orderScreenDisplayed == true){
+        observablePO p = new observablePO();
+        p.setCustomerLocation(textPrice.getText());
+        p.setDate(textQuantity.getText());
+        p.setEmail(textSid.getText());
+        p.setProductID(textId.getText());
+        p.quantity(textCost.getText());
+        po.createEntry("0", p);
+        total_Table.getItems().clear();
+        showOrders();
+        
+    }
+    else if (orderScreenDisplayed == false){
+        Connection con = UIDBConnector.getConnection();
+        st =  (Statement) con.createStatement();
+        String statement = "UPDATE DataEntries SET supplierID = '" + textSid.getText() + "', stockQuantity = " + textQuantity.getText() + ", wholesaleCost = " + textCost.getText() + ", salePrice = " + textPrice.getText() + "WHERE productID = '" + textId.getText() + "'";
+        st.execute(statement);
+        total_Table.getItems().clear();
+        showInventory();
+    }
+    
+}
+
+@FXML
+public void delItem() throws SQLException{
+    if (orderScreenDisplayed == true){
+        String id = textID.getText();
+        Connection con = UIDBConnector.getConnection();
+        st =  (Statement) con.createStatement();
+        String statement = "DELETE FROM PO WHERE ID ='"+ id+ "';";
+        st.execute(statement);
 
 
+    }
+    else if (orderScreenDisplayed == false){
+        Connection con = UIDBConnector.getConnection();
+        st =  (Statement) con.createStatement();
+        String toBeDeleted = textId.getText();
+        String statement = "DELETE FROM DataEntries WHERE productID ='"+ toBeDeleted + "';";
+        st.execute(statement);
+        total_Table.getItems().clear();
+        showInventory();
+    }
+}
 
     
 }
