@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        <div class="">
+            <table class="table-hover table bg-light">
+                <thead>
+                    <td>Email</td>
+                    <td>Product ID</td>
+                    <td>Date</td>
+                    <td>quantity</td>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of orders">
+                        <td>{{item.email}}</td>
+                        <td>{{item.productID}}</td>
+                        <td>{{item.date}}</td>
+                        <td>{{item.quantity}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

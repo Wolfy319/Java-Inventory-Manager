@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit {
     if(cookies.get("session")){
       this.data$ = cookies.get("session");
       this.data$ = jwt_decode(this.data$);
+      console.log(this.data$);
       this.dt$ = this.data$["Username"];
       
 

@@ -17,6 +17,7 @@ import { Quote } from '@angular/compiler';
 
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'src/auth.service';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AuthService } from 'src/auth.service';
     NavbarComponent,
     HomeComponent,
     ProductListComponent,
-    ReccomendedComponent
+    ReccomendedComponent,
+    OrdersComponent
   ],
   imports: [
     AppRoutingModule,
@@ -50,6 +52,9 @@ import { AuthService } from 'src/auth.service';
             {path:
               'reccomended',
               component: ReccomendedComponent  },
+              {path:
+                'orders',
+                component: OrdersComponent  },
               
             ]),
     BrowserModule
