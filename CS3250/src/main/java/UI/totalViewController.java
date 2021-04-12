@@ -132,9 +132,10 @@ public class totalViewController {
 
     ObservableList oblist = FXCollections.observableArrayList();
 
+    
     @FXML
     public void showInventory() throws SQLException{
-
+       
         orderScreenDisplayed = false;
 
         total_Table.getItems().clear();
@@ -192,7 +193,7 @@ public class totalViewController {
         });
        // SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
         //sortedData.comparatorProperty().bind(total_Table.comparatorProperty());
-       // total_Table.setItems(sortedData);
+        //total_Table.setItems((ObservableList<dataBaseItems>) sortedData);
         
     }
 
