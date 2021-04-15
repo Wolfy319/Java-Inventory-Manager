@@ -41,6 +41,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import UI.poStream;
 
 public class totalViewController {
 
@@ -195,6 +196,7 @@ public class totalViewController {
         //sortedData.comparatorProperty().bind(total_Table.comparatorProperty());
         //total_Table.setItems((ObservableList<dataBaseItems>) sortedData);
         
+        
     }
 
     
@@ -287,7 +289,7 @@ public class totalViewController {
 }
 
 @FXML
-public void showReport(ActionEvent event) throws IOException, java.io.IOException{
+public void showReport(ActionEvent event) throws IOException, java.io.IOException, SQLException{
     //Creates temporary sales pdf
     File tempSales = File.createTempFile("SalesReport", ".pdf"); 
     PdfWriter writer = new PdfWriter(tempSales);
@@ -343,6 +345,9 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
                        .add(new Paragraph("Best Customer by revenue: ")); 
     table.addFooterCell(bestCustomerCell);
     doc.add(table);
+
+    poStream test = new poStream();
+    test.calcTotalSales();
 
     doc.close();
     Desktop.getDesktop().open(tempSales);
