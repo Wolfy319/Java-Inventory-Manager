@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.itextpdf.io.IOException;
-import com.itextpdf.layout.element.Table;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -16,32 +15,28 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Statement;
 
-import CS3250.PO;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import UI.poStream;
 
 public class totalViewController {
 
@@ -192,7 +187,7 @@ public class totalViewController {
                 }return false;
             });
         });
-       // SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
+        //SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
         //sortedData.comparatorProperty().bind(total_Table.comparatorProperty());
         //total_Table.setItems((ObservableList<dataBaseItems>) sortedData);
         
@@ -290,6 +285,17 @@ public class totalViewController {
 
 @FXML
 public void showReport(ActionEvent event) throws IOException, java.io.IOException, SQLException{
+ 
+
+    poStream totalSaleStream = new poStream();
+    poStream currentMonthSales = new poStream();
+    
+   jChart test = new jChart();
+   test.lineChartTest();
+   
+
+
+
     //Creates temporary sales pdf
     File tempSales = File.createTempFile("SalesReport", ".pdf"); 
     PdfWriter writer = new PdfWriter(tempSales);
@@ -322,32 +328,37 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     table.setFixedPosition(100, 650,400);
 
     Cell totalSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("Total Sales: ")); 
+                       .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
     table.addFooterCell(totalSalesCell);
     doc.add(table); 
 
     Cell thisMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("This Months Sales: ")); 
+                       .add(new Paragraph("This Months Sales: " + "$" + currentMonthSales.calcCurrentMonthSales())); 
     table.addFooterCell(thisMonthSalesCell);
     doc.add(table);
 
-    Cell thisWeekSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("This Weeks Sales: ")); 
-    table.addFooterCell(thisWeekSalesCell);
+    Cell twoMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("May Sales: " + "$" + currentMonthSales.calcTwoMonthSales())); 
+    table.addFooterCell(twoMonthSalesCell);
     doc.add(table);
 
-    Cell mostPopularItemCell = new Cell(4, 4)
-                       .add(new Paragraph("Most Popular Item: ")); 
-    table.addFooterCell(mostPopularItemCell);
+    Cell threeMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("April Sales: " + "$" + currentMonthSales.calcThreeMonthSales())); 
+    table.addFooterCell(threeMonthSalesCell);
     doc.add(table);
 
-    Cell bestCustomerCell = new Cell(4, 4)
-                       .add(new Paragraph("Best Customer by revenue: ")); 
-    table.addFooterCell(bestCustomerCell);
-    doc.add(table);
+   // Cell bestCustomerCell = new Cell(4, 4)
+   //                    .add(new Paragraph("Best Customer by revenue: ")); 
+   // table.addFooterCell(bestCustomerCell);
+   // doc.add(table);
 
-    poStream test = new poStream();
-    test.calcTotalSales();
+   String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
+   ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
+   Image salesChartImage = new Image(salesChartData);
+  // salesChartImage.scaleAbsolute(400, 400);
+   salesChartImage.setFixedPosition(25,50);
+   doc.add(salesChartImage);
+
 
     doc.close();
     Desktop.getDesktop().open(tempSales);
