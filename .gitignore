@@ -50,4 +50,6 @@ angular/.DS_Store
 angular/Thumbs.db
 
 *.csv
-
+*.class
+*.vscode
+*.gitignore
