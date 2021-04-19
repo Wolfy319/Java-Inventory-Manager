@@ -77,7 +77,9 @@ public class SQLData implements DataInterface {
         String statement = "SELECT * FROM DataEntries HAVING productID ='"+ ID + "';";
         try {
             rs = st.executeQuery(statement);
-            rs.next();
+            if(!rs.next()) {
+                return new Entry();
+            }
             System.out.println(rs.getString("productID"));
         } catch (SQLException e) {
             e.printStackTrace();
