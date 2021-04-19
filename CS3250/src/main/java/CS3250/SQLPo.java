@@ -101,6 +101,18 @@ public class SQLPo {
         return po;
     }
 
+    public boolean poExists(String PID, int quantity, String date, String email, String location) {
+        String statement2 = "SELECT * FROM PO WHERE productID = '" + PID + "' AND quantity = '" + quantity + "' AND date = '" + date + "' AND email = '" + email + "' AND custLoc = '" + location + "';";       
+        try {
+            rs = st.executeQuery(statement2);
+            return rs.next();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        
+        return false;
+    }
+
     
 
     public void updateEntry(String ID, Entry e) {
