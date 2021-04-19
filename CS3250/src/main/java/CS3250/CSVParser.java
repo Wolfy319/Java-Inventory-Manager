@@ -63,8 +63,7 @@ public class CSVParser {
 	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
-		newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-		inventory.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -75,7 +74,7 @@ public class CSVParser {
 			    	// Fill in fields
 			    	// populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
 					// Update inventory
-					updateInventory(fields[0], Integer.parseInt(fields[4]), inventory);
+					updateInventory(fields[3], Integer.parseInt(fields[4]), inventory);
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();

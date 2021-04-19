@@ -12,11 +12,11 @@ import CS3250.CSVParser;
 class CSVParserTest {
 	CSVParser parse = new CSVParser();
 	CSVData data = new CSVData();
-	String file = "customer_orders_team5.csv";
+	String file = "test.csv";
 
-	SQLPo po = new SQLPo();
+	SQLPo newPo = new SQLPo();
+	SQLData inventory = new SQLData();	
 
-	
 	// @Test
 	// public void ReadCSVWorks() {
 	// 	parse.readCSV(file, data);
@@ -25,7 +25,7 @@ class CSVParserTest {
 	
 	@Test
 	public void ReadCSVWorks() {
-		parse.readOrdersCSV(file, po);
+		parse.readOrdersCSV(file, po, inventory);
 		assert(true);
 	}
 }

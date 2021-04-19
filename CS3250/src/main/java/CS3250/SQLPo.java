@@ -109,11 +109,13 @@ public class SQLPo {
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
-        
+
         return false;
     }
 
-    
+    public void updateInventory(String productID, int orderedQuantity) {
+		
+	}
 
     public void updateEntry(String ID, Entry e) {
         // TODO Auto-generated method stub

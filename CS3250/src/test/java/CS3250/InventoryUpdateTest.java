@@ -14,4 +14,7 @@ public class InventoryUpdateTest {
         assertEquals(po.poExists("8Q86U5HFQ2I2", 1, "2020-01-01", "sui@icloud.com", "24449"), true);
         assertEquals(po.poExists("FAKEPRODUCT", 1, "2020-01-01", "FAKEEMAIL", "24449"), false);
 	}
+    
+    // newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+	// 	inventory.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
 }
