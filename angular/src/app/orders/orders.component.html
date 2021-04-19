@@ -7,6 +7,7 @@
                     <td>Product ID</td>
                     <td>Date</td>
                     <td>quantity</td>
+                    <td>options</td>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of orders">
@@ -14,6 +15,7 @@
                         <td>{{item.productID}}</td>
                         <td>{{item.date}}</td>
                         <td>{{item.quantity}}</td>
+                        <td><a class="btn btn-primary" href="/orders/{{item.id}}">View</a></td>
                     </tr>
                 </tbody>
             </table>
