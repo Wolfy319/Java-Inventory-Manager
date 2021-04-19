@@ -60,10 +60,11 @@ public class CSVParser {
 	 * @param database - Database object
 	 * 
 	 */
-	public void readOrdersCSV(String filename, SQLPo newEntry){
+	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		inventory.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -72,12 +73,33 @@ public class CSVParser {
 			    	fields = line.split(",");     // Split the row into individual fields
 			    	
 			    	// Fill in fields
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
+			    	// populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
+					// Update inventory
+					updateInventory(fields[0], Integer.parseInt(fields[4]), inventory);
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
 		}
 		return;
+	}
+
+	public void updateInventory(String productID, int orderedQuantity, SQLData inventory) {
+		
+		
+		Entry inventoryItem = inventory.readEntry(productID);
+		if(inventoryItem.getProductID() == null) {
+			System.out.println("Ordered item " + productID + " doesn't exist!");
+		}
+		else {
+			if(inventoryItem.getStockQuantity() < orderedQuantity) {
+				System.out.println("Order quantity exceeds quantity in inventory!");
+			}
+			else {
+				int currentQuantity = inventoryItem.getStockQuantity();
+				inventoryItem.setStockQuantity(currentQuantity - orderedQuantity);
+				inventory.updateEntry(productID, inventoryItem);
+			}
+		}
 	}
 
 	private void populateDB(String date, String customerEmail, String customerLocation, String productID, int productQuantity, SQLPo PoDB) {
@@ -89,9 +111,10 @@ public class CSVParser {
 		po.setProductID(productID);
 		po.quantity(productQuantity);
 
-		
-		
-		PoDB.createEntry("1", po); 
+		// if(!PoDB.poExists(productID, productQuantity, date, customerEmail, customerLocation) {
+		// 	PoDB.createEntry("1", po);
+		// }
+		 
 		return;
 	}
 	
