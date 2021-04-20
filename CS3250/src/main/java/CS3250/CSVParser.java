@@ -86,7 +86,7 @@ public class CSVParser {
 		
 		
 		Entry inventoryItem = inventory.readEntry(productID);
-		if(inventoryItem.getProductID() == null) {
+		if(inventoryItem == null) {
 			System.out.println("Ordered item " + productID + " doesn't exist!");
 		}
 		else {

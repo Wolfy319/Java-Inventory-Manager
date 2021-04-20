@@ -75,16 +75,24 @@ public class SQLData implements DataInterface {
     @Override
     public Entry readEntry(String ID) {
         String statement = "SELECT * FROM DataEntries HAVING productID ='"+ ID + "';";
+        String s = "";
+        Entry result = new Entry();
         try {
             rs = st.executeQuery(statement);
             if(!rs.next()) {
                 return new Entry();
             }
             System.out.println(rs.getString("productID"));
+            s += rs.getString(1);
+            s += "_" +  rs.getString(2);
+            s += "_" +  rs.getString(3);
+            s += "_" +  rs.getString(4);
+            s +=  "_" + rs.getString(5);
+            result = parseEntry(s);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
     
     /** 

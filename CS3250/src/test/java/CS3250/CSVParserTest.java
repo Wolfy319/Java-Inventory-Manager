@@ -17,6 +17,7 @@ class CSVParserTest {
 	SQLPo newPo = new SQLPo();
 	SQLData inventory = new SQLData();	
 
+	
 	// @Test
 	// public void ReadCSVWorks() {
 	// 	parse.readCSV(file, data);
@@ -25,7 +26,9 @@ class CSVParserTest {
 	
 	@Test
 	public void ReadCSVWorks() {
-		parse.readOrdersCSV(file, po, inventory);
+		newPo.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		inventory.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		parse.readOrdersCSV(file, newPo, inventory);
 		assert(true);
 	}
 }
