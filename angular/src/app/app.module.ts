@@ -19,6 +19,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from 'src/auth.service';
 import { OrdersComponent } from './orders/orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
+import { BuyItemsComponent } from './buy-items/buy-items.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ViewOrderComponent } from './view-order/view-order.component';
     ProductListComponent,
     ReccomendedComponent,
     OrdersComponent,
-    ViewOrderComponent
+    ViewOrderComponent,
+    BuyItemsComponent
   ],
   imports: [
     AppRoutingModule,
@@ -60,6 +62,9 @@ import { ViewOrderComponent } from './view-order/view-order.component';
                 {path:
                   'orders/:id',
                   component: ViewOrderComponent  },
+                  {path:
+                    'buy/:item',
+                    component: BuyItemsComponent  },
               
             ]),
     BrowserModule
