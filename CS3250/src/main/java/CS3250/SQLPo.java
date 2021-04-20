@@ -15,7 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class SQLPo {
-
+    SQLData inventory = new SQLData();
     String connectionString = "";
     String username = "";
     String password = "";
@@ -32,8 +32,11 @@ public class SQLPo {
         password = a[2];
         try {
             con = (Connection) DriverManager.getConnection(connectionString, username, password);
+            inventory.con = this.con;
             st = (Statement) con.createStatement();
+            inventory.st = this.st;
             rs = st.executeQuery("SELECT VERSION()");
+            inventory.rs = this.rs;
             if (rs.next()) {
                 System.out.println("Connected to..." + rs.getString(1));
             }
@@ -44,8 +47,28 @@ public class SQLPo {
 
     // need to create table for PO's and swap this string
     public void createEntry(String ID, observablePO p) {
+        Entry inventoryItem = inventory.readEntry(p.getProductID());
+        if(poExists(p.getProductID(), p.getQuantity(), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
+            System.out.println("Order already exists");
+            return;
+        }
+        if(inventoryItem == null) {
+            System.out.println("Ordered item " + p.getProductID() + " doesn't exist!");
+            return;
+        }
+        else {
+            if(inventoryItem.getStockQuantity() < p.getQuantity()) {
+                System.out.println("Order quantity exceeds quantity in inventory!");
+                return;
+            }
+            else {
+                int currentQuantity = inventoryItem.getStockQuantity();
+                inventoryItem.setStockQuantity(currentQuantity - p.getQuantity());
+                inventory.updateEntry(p.getProductID(), inventoryItem);
+            }
+        }
         String statement = "INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES('" + p.getProductID() + "', '" + p.getQuantity()
-                + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.getCustomerLocation()  +"');";
+            + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.getCustomerLocation()  +"');";
         String statement2 = "GET * FROM PO WHERE productID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);
@@ -55,7 +78,6 @@ public class SQLPo {
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
-
     }
 
     

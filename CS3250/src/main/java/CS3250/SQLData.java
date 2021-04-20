@@ -80,7 +80,7 @@ public class SQLData implements DataInterface {
         try {
             rs = st.executeQuery(statement);
             if(!rs.next()) {
-                return new Entry();
+                return null;
             }
             System.out.println(rs.getString("productID"));
             s += rs.getString(1);

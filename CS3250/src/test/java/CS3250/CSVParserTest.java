@@ -12,7 +12,7 @@ import CS3250.CSVParser;
 class CSVParserTest {
 	CSVParser parse = new CSVParser();
 	CSVData data = new CSVData();
-	String file = "test.csv";
+	String file = "customer_orders_team5.csv";
 
 	SQLPo newPo = new SQLPo();
 	SQLData inventory = new SQLData();	

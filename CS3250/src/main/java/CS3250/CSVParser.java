@@ -72,9 +72,7 @@ public class CSVParser {
 			    	fields = line.split(",");     // Split the row into individual fields
 			    	
 			    	// Fill in fields
-			    	// populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
-					// Update inventory
-					updateInventory(fields[3], Integer.parseInt(fields[4]), inventory);
+			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -110,9 +108,7 @@ public class CSVParser {
 		po.setProductID(productID);
 		po.quantity(productQuantity);
 
-		// if(!PoDB.poExists(productID, productQuantity, date, customerEmail, customerLocation) {
-		// 	PoDB.createEntry("1", po);
-		// }
+		PoDB.createEntry("1", po);
 		 
 		return;
 	}

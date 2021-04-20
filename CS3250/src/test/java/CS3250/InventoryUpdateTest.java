@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
+import UI.observablePO;
+
 public class InventoryUpdateTest {
     SQLPo po = new SQLPo();
 	
@@ -15,6 +17,16 @@ public class InventoryUpdateTest {
         assertEquals(po.poExists("FAKEPRODUCT", 1, "2020-01-01", "FAKEEMAIL", "24449"), false);
 	}
     
-    // newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-	// 	inventory.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+	@Test
+    public void UpdateWorks() {
+		observablePO p = new observablePO();
+		p.setProductID("000TESTENTRY");
+		p.quantity(1);
+		p.setDate("2021-10-12");
+		p.setEmail("testemail@email.com");
+		p.setCustomerLocation("00000");
+		po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+
+		po.createEntry("1", p);
+	}
 }
