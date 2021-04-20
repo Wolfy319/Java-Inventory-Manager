@@ -26,7 +26,6 @@
                   <JFXButton fx:id="try_it" layoutX="130.0" layoutY="2.0" text="huh" textFill="WHITE" />
                   <Button fx:id="exitBtn2" layoutX="783.0" layoutY="-10.0" mnemonicParsing="false" onAction="#exit_Button2" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Exit" />
                   <Button fx:id="btnPO" layoutX="707.0" layoutY="-10.0" mnemonicParsing="false" onAction="#po_button" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Purchases" />
-                  <Button fx:id="btnReports" layoutX="631.0" layoutY="-10.0" mnemonicParsing="false" onAction="#showReport" prefHeight="25.0" prefWidth="75.0" style="-fx-background-color: orange;" text="Reports" />
                </children>
             </AnchorPane>
             <Separator layoutX="-1.0" layoutY="43.0" prefHeight="17.0" prefWidth="877.0" style="-fx-background-color: orange; -fx-opacity: .80;" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" />
