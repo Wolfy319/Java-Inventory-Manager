@@ -347,15 +347,14 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     table.addFooterCell(threeMonthSalesCell);
     doc.add(table);
 
-   // Cell bestCustomerCell = new Cell(4, 4)
-   //                    .add(new Paragraph("Best Customer by revenue: ")); 
-   // table.addFooterCell(bestCustomerCell);
-   // doc.add(table);
+   Cell bestCustomerCell = new Cell(4, 4)
+                       .add(new Paragraph("Best Customer by orders: ")); 
+   table.addFooterCell(bestCustomerCell);
+   doc.add(table);
 
    String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
    ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
    Image salesChartImage = new Image(salesChartData);
-  // salesChartImage.scaleAbsolute(400, 400);
    salesChartImage.setFixedPosition(25,50);
    doc.add(salesChartImage);
 

@@ -106,16 +106,20 @@ public String calcTotalSales() throws SQLException{
     Iterator<String> quantIt = quantSet.iterator(); 
 
     Double totalSales = 0.0;
-
+    
     while(quantIt.hasNext()){
         String qauntKey = (String) quantIt.next();
         
         List tempQauntList = (List) prodAndQuant.get(qauntKey);
         
         Double tempPrice = productPrice.get(qauntKey);
+        if(tempPrice == null){
+            break;
+        }
         totalSales += tempPrice * (Integer) tempQauntList.get(0);
     }
     return String.format("%,.2f", totalSales); 
+    
 }    
 
 public void currentMonthPrep() throws SQLException {
