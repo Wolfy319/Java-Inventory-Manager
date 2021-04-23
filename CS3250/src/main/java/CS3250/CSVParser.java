@@ -53,23 +53,24 @@
 // 		return;
 // 	}
 
-// 	/**
-// 	 * Parses a CSV file full of products into Entry objects
-// 	 *  
-// 	 * @param filename - Path to the csv file to be parsed
-// 	 * @param database - Database object
-// 	 * 
-// 	 */
-// 	public void readOrdersCSV(String filename, SQLPo newEntry){
-// 		String line;  	// Current row contents
-// 		String[] fields;// Array to store individual product fields
-// 		newEntry.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-// 		// Try to open the file and start reading
-// 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
-// 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-// 				reader.readLine();
-// 			    while((line = reader.readLine()) != null) {
-// 			    	fields = line.split(",");     // Split the row into individual fields
+/**
+	 * Parses a CSV file full of products into Entry objects
+	 *  
+	 * @param filename - Path to the csv file to be parsed
+	 * @param database - Database object
+	 * 
+	 */
+	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory){
+		String line;  	// Current row contents
+		String[] fields;// Array to store individual product fields
+		
+		// Try to open the file and start reading
+		try (InputStream inputStream = getClass().getResourceAsStream(filename);
+			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+				reader.readLine();
+			    while((line = reader.readLine()) != null) {
+			    	fields = line.split(",");     // Split the row into individual fields
+
 			    	
 // 			    	// Fill in fields
 // 			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
@@ -80,19 +81,38 @@
 // 		return;
 // 	}
 
-// 	// private void populateDB(String date, String customerEmail, String customerLocation, String productID, int productQuantity, SQLPo PoDB) {
-// 	// 	System.out.print(date + " " + customerEmail);
-// 	// 	observablePO po = new observablePO();
-// 	// 	po.setDate(date);
-// 	// 	po.setEmail(customerEmail);
-// 	// 	po.setCustomerLocation(customerLocation);
-// 	// 	po.setProductID(productID);
-// 	// 	po.quantity(productQuantity);
+	public void updateInventory(String productID, int orderedQuantity, SQLData inventory) {
+		
+		
+		Entry inventoryItem = inventory.readEntry(productID);
+		if(inventoryItem == null) {
+			System.out.println("Ordered item " + productID + " doesn't exist!");
+		}
+		else {
+			if(inventoryItem.getStockQuantity() < orderedQuantity) {
+				System.out.println("Order quantity exceeds quantity in inventory!");
+			}
+			else {
+				int currentQuantity = inventoryItem.getStockQuantity();
+				inventoryItem.setStockQuantity(currentQuantity - orderedQuantity);
+				inventory.updateEntry(productID, inventoryItem);
+			}
+		}
+	}
 
-		
-		
-// 	// 	PoDB.createEntry("1", po); 
-// 	// 	return;
-// 	// }
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, int productQuantity, SQLPo PoDB) {
+		System.out.print(date + " " + customerEmail);
+		observablePO po = new observablePO();
+		po.setDate(date);
+		po.setEmail(customerEmail);
+		po.setCustomerLocation(customerLocation);
+		po.setProductID(productID);
+		po.quantity(productQuantity);
+
+		PoDB.createEntry("1", po);
+		 
+		return;
+	}
+
 	
 // }

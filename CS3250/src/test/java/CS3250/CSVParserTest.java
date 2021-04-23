@@ -14,7 +14,9 @@
 // 	CSVData data = new CSVData();
 // 	String file = "customer_orders_team5.csv";
 
-// 	SQLPo po = new SQLPo();
+	SQLPo newPo = new SQLPo();
+	SQLData inventory = new SQLData();	
+
 
 	
 // 	// @Test
@@ -23,9 +25,12 @@
 // 	// 	assertEquals(42585, data.retSize());
 // 	// }
 	
-// 	@Test
-// 	public void ReadCSVWorks() {
-// 		parse.readOrdersCSV(file, po);
-// 		assert(true);
-// 	}
-// }
+	@Test
+	public void ReadCSVWorks() {
+		newPo.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		inventory.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		parse.readOrdersCSV(file, newPo, inventory);
+		assert(true);
+	}
+}
+
