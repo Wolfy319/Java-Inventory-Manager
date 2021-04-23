@@ -48,6 +48,7 @@ public class App extends Application {
         }
     });
 
+    
         //Displays the stage(window)
         primaryStage.show();
         //showNextStage("DBScreen.fxml");
