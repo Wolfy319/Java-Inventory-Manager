@@ -10,11 +10,12 @@ import java.util.List;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
+import UI.observablePO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class SQLPo {
-
+    SQLData inventory = new SQLData();
     String connectionString = "";
     String username = "";
     String password = "";
@@ -31,8 +32,11 @@ public class SQLPo {
         password = a[2];
         try {
             con = (Connection) DriverManager.getConnection(connectionString, username, password);
+            inventory.con = this.con;
             st = (Statement) con.createStatement();
+            inventory.st = this.st;
             rs = st.executeQuery("SELECT VERSION()");
+            inventory.rs = this.rs;
             if (rs.next()) {
                 System.out.println("Connected to..." + rs.getString(1));
             }
@@ -42,76 +46,67 @@ public class SQLPo {
     }
 
     // need to create table for PO's and swap this string
-    public void createEntry(String ID, PO p) {
-        String statement = "INSERT INTO PO(userID,total,date) VALUES('" + p.getUserID() + "', '" + p.getTotal()
-                + "' , '" + p.getDate() + "');";
-        String statement2 = "GET * FROM PO WHERE userID = '" + p.getUserID() + "' AND date = '" + p.getDate() + "';";
+    public void createEntry(String ID, observablePO p) {
+        Entry inventoryItem = inventory.readEntry(p.getProductID());
+        if(poExists(p.getProductID(), p.getQuantity(), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
+            System.out.println("Order already exists");
+            return;
+        }
+        if(inventoryItem == null) {
+            System.out.println("Ordered item " + p.getProductID() + " doesn't exist!");
+            return;
+        }
+        else {
+            if(inventoryItem.getStockQuantity() < p.getQuantity()) {
+                System.out.println("Order quantity exceeds quantity in inventory!");
+                return;
+            }
+            else {
+                int currentQuantity = inventoryItem.getStockQuantity();
+                inventoryItem.setStockQuantity(currentQuantity - p.getQuantity());
+                inventory.updateEntry(p.getProductID(), inventoryItem);
+            }
+        }
+        String statement = "INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES('" + p.getProductID() + "', '" + p.getQuantity()
+            + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.getCustomerLocation()  +"');";
+        String statement2 = "GET * FROM PO WHERE productID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);
             rs = st.executeQuery(statement2);
-            p.setID(rs.getInt("ID"));
-            savePoItems(p.items, p);
+            p.setID(rs.getString("ID"));
 
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
-
-    }
-
-    private void savePoItems(List<POItem> l, PO pp) {
-        SQLPoItem poinit = new SQLPoItem();
-        poinit.InitializeDatabase(connectionString);
-        POItem pi = new POItem();
-        for (int j = 0; j < l.size(); j++) {
-            pi.setItemID(l.get(j).ItemID);
-            pi.setBuyerID(pp.getUserID());
-            pi.setPOID(pp.getID());
-            pi.setQuantity(l.get(j).Quantity);
-            poinit.createEntry(0, pi);
-
-        }
-    }
-
-    public DisplayPO GenerateFullPO(int ID){
-        UserData u = new UserData();
-        u.initializeDatabase(connectionString + " " + username + " " + password);
-        DisplayPO disp = new DisplayPO();
-        var po = getPo(ID);
-        var usr = u.getUser(po.userID);
-        var email = usr.getEmail();
-        var name = usr.getUsername();
-        String n = new String(name);
-        disp.setName(n);
-        disp.setDate(Date.valueOf(po.getDate()));
-        disp.setTotal(po.getTotal());
-        disp.setLi(po.items);
-        disp.setEmail(email);
-        return disp;
     }
 
     
-    public List<String> GenerateShortPOs(){
-        List<String> arr = new ArrayList<String>();
+    public List<UI.observablePO> GenerateShortPOs(){
+        List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
         String statement2 = "SELECT * FROM PO;";
         UserData u = new UserData();
         u.initializeDatabase(connectionString + " " + username + " " + password);
-        String line = "";
+        UI.observablePO po = new UI.observablePO();
         try{
             rs = st.executeQuery(statement2);
             while (rs.next()) {
-                line = "";
-                var usr =(u.getUser(rs.getInt("userID")));
-                line +=  new String(usr.getUsername()) + "*";
-                line += rs.getString("date") + "*";
-                line += rs.getString("total");
-                 
+                po = new UI.observablePO();
+                po.setProductID(rs.getString("productID"));
+                po.setEmail( rs.getString("email"));
+                po.setDate(rs.getString("date"));
+                po.setID(rs.getString("ID"));
+                po.setCustomerLocation(rs.getString("custLoc"));
+                po.quantity(rs.getString("quantity"));
+                arr.add(po);
             }             
         }
-        catch(Exception e){}
+        catch(Exception e){
+            System.out.println(e);
+        }
         return arr;
     }
 
-    private PO getPo(int ID) {
+    public PO getPo(int ID) {
         String statement2 = "SELECT * FROM PO WHERE id = '" + ID + "';";
         PO po = new PO();
         try {
@@ -119,9 +114,8 @@ public class SQLPo {
             rs.next();
             po.setDate(rs.getString("date"));
             po.setID(rs.getInt("ID"));
-            po.setTotal(rs.getDouble("total"));
-            po.setUserID(rs.getInt("userID"));
-            po.setItems(getItems(po));
+            po.setProductID(rs.getString("productID"));
+            po.customerLocation = rs.getString("custLoc");
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
@@ -129,25 +123,21 @@ public class SQLPo {
         return po;
     }
 
-    private List<POItem> getItems(PO po) {
-        String statement2 = "SELECT * FROM POItems WHERE POID = '" + po.ID + "';";
-        List<POItem> li = new ArrayList<POItem>();
+    public boolean poExists(String PID, int quantity, String date, String email, String location) {
+        String statement2 = "SELECT * FROM PO WHERE productID = '" + PID + "' AND quantity = '" + quantity + "' AND date = '" + date + "' AND email = '" + email + "' AND custLoc = '" + location + "';";       
         try {
-            var rs = st.executeQuery(statement2);
-            while (rs.next()) {
-                POItem pi = new POItem();
-                pi.setBuyerID(rs.getInt("BuyerID"));
-                pi.setID(rs.getInt("ID"));
-                pi.setItemID(rs.getInt("ItemID"));
-                pi.setPOID(po.ID);
-                pi.setQuantity(rs.getInt(("Quantity")));
-                li.add(pi);
-            }
-        } catch (Exception e) {
-            System.out.println("error");
+            rs = st.executeQuery(statement2);
+            return rs.next();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
         }
-        return li;
+
+        return false;
     }
+
+    public void updateInventory(String productID, int orderedQuantity) {
+		
+	}
 
     public void updateEntry(String ID, Entry e) {
         // TODO Auto-generated method stub

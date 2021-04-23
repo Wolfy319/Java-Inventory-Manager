@@ -116,8 +116,7 @@ public class UserData {
         byte[] sbytes = e.getSalt();
         String email = e.getEmail();
 
-        String sql = "INSERT INTO Users(Username,Password,salt) VALUES(?,?,?)";
-        String sql = "INSERT INTO Users(Username,Password,salt,email,roles) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO Users(Username,Password,salt,email,role) VALUES(?,?,?,?,?)";
 
         try (PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql)) {
                 pst.setBytes(1, ubytes);

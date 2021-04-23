@@ -8,11 +8,12 @@ import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.Test;
 
 class UserAuthDBTest {
-	static UserData data = new UserData();
-	@Test
-	void test() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        data.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-    	
+        DataMan init = new MockUserDB();
+        Database db;
+        @Test
+        void ConnectionWorks(){
+            init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+            db = new Database(init);
         /*
          	Authorized Users:
             Username 	Password
@@ -24,10 +25,7 @@ class UserAuthDBTest {
     		"customer"  "password"
          */
         
-        assertEquals(UserAuthenticator.authenticate("pineapple", "onpizza", data), true);
-        assertNotEquals(UserAuthenticator.authenticate("pineapple", "fakepassword", data), true);
-        assertNotEquals(UserAuthenticator.authenticate("notarealuser", "onpizza", data), true);
-        assertNotEquals(UserAuthenticator.authenticate("notarealuser", "fakepassword", data), true);
-	}
+                assertNotEquals(db.listEntries(), null);
+        }
 
 }

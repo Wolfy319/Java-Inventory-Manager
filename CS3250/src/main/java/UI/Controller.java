@@ -108,7 +108,7 @@ public class Controller {
     	String password = get_Pass();
     	if(authenticated(username,password)) {
     		// TODO - FXMLLoader can't find DBScreen for some reason
-    		Parent DbsScreen = FXMLLoader.load(getClass().getResource("DBScreen.fxml"));
+    		Parent DbsScreen = FXMLLoader.load(getClass().getResource("totalView.fxml"));
             Scene DbsScene = new Scene(DbsScreen);
             Stage dbsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             dbsStage.setScene(DbsScene);
@@ -121,8 +121,9 @@ public class Controller {
             alert.setHeaderText("INCORRECT Username or Password");
             alert.showAndWait();
     	}
-
     }
 
-}
 
+    
+
+}
