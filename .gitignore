@@ -51,3 +51,6 @@ angular/Thumbs.db
 
 *.csv
 
+*.class
+*.png
+*.gitignore
