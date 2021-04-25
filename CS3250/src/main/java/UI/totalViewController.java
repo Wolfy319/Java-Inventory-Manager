@@ -23,7 +23,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Statement;
 
+import CS3250.DataMan;
+import CS3250.Database;
 import CS3250.Entry;
+import CS3250.PODB;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -135,6 +138,7 @@ public class totalViewController {
     public void initialize() throws SQLException {
         showOrders();
     }
+
     @FXML
     public void showInventory() throws SQLException{
        
@@ -201,12 +205,16 @@ public class totalViewController {
     
 
 
-    SQLPo po = new SQLPo();
+ 
     ObservableList poList;
     public Boolean orderScreenDisplayed;
-    
+    DataMan<observablePO> items;
     @FXML
-    public void showOrders(){
+    public void showOrders() throws SQLException{
+        UIDBConnector udb = new UIDBConnector();
+        items = udb.getPOConnection();
+
+        List<observablePO> rs = items.getEntries();
         orderScreenDisplayed = true; 
 
         textField1.setText("   Product Id");
@@ -226,8 +234,8 @@ public class totalViewController {
         
     
 
-        po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-        poList = FXCollections.observableArrayList(po.GenerateShortPOs());
+      
+        poList = FXCollections.observableArrayList(rs);
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("Date"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("Email"));
@@ -273,7 +281,12 @@ public class totalViewController {
     public void ordersBtn(ActionEvent event){
         orders_Btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                showOrders();;
+                try {
+                    showOrders();
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                };
             }
         });
     }
@@ -408,7 +421,7 @@ public void addItem() throws SQLException{
         p.setEmail(textSid.getText());
         p.setProductID(textId.getText());
         p.quantity(textCost.getText());
-        po.createEntry("0", p);
+        items.createEntry("0", p);
         total_Table.getItems().clear();
         showOrders();
         
