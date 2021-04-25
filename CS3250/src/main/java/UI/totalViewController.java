@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.itextpdf.io.IOException;
 import com.itextpdf.io.image.ImageData;
@@ -22,6 +23,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Statement;
 
+import CS3250.Entry;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -130,6 +132,10 @@ public class totalViewController {
 
     
     @FXML
+    public void initialize() throws SQLException {
+        showOrders();
+    }
+    @FXML
     public void showInventory() throws SQLException{
        
         orderScreenDisplayed = false;
@@ -143,17 +149,15 @@ public class totalViewController {
         textField6.setText(" ");
         textID.setText("");
         try {
-            Connection con = UIDBConnector.getConnection();
+            UIDBConnector udb = new UIDBConnector();
 
-            ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
-            
-            while (rs.next()) {// "should be column names"
+            var items = udb.getItemsConnection();
+            List<Entry> rs = items.getEntries();
 
-                oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
-                        rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
-                
+            for (Entry object : rs) {
+                oblist.add(new dataBaseItems(object.getProductID(), Integer.toString(object.getStockQuantity()),
+               Double.toString(object.getWholesaleCost()), Double.toString(object.getSalePrice()), object.getSupplierID()));
             }
-
 
 
         }finally{}
