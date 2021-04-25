@@ -21,7 +21,7 @@ public class InventoryUpdateTest {
     public void UpdateWorks() {
 		observablePO p = new observablePO();
 		p.setProductID("000TESTENTRY");
-		p.quantity(1);
+		p.quantity("" + 1);
 		p.setDate("2021-10-12");
 		p.setEmail("testemail@email.com");
 		p.setCustomerLocation("00000");
