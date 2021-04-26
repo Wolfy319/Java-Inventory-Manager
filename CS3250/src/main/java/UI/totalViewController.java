@@ -12,10 +12,12 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.jfoenix.controls.JFXButton;
@@ -289,7 +291,10 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
 
     poStream totalSaleStream = new poStream();
     poStream currentMonthSales = new poStream();
+    String[] bestCustomer = totalSaleStream.bestCustomer(); 
     
+    Double bestCustomerRevenue = Double.valueOf(bestCustomer[1]);
+
    jChart test = new jChart();
    test.lineChartTest();
    
@@ -300,7 +305,6 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     File tempSales = File.createTempFile("SalesReport", ".pdf"); 
     PdfWriter writer = new PdfWriter(tempSales);
     PdfDocument salesDoc = new PdfDocument(writer);
-    PdfPage pageOne = salesDoc.addNewPage();
     Document doc = new Document(salesDoc);
 
     //Adds Rt3 Logo
@@ -328,9 +332,15 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     table.setFixedPosition(100, 650,400);
 
     Cell totalSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
-    table.addFooterCell(totalSalesCell);
-    doc.add(table); 
+            .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
+            table.addFooterCell(totalSalesCell);
+            doc.add(table); 
+
+    Cell totalOrdersCell = new Cell(4,4)
+            .add(new Paragraph("Total orders:" + totalSaleStream.totalOrderCount()));
+            table.addFooterCell(totalOrdersCell);
+            doc.add(table); 
+
 
     Cell thisMonthSalesCell = new Cell(4, 4)
                        .add(new Paragraph("This Months Sales: " + "$" + currentMonthSales.calcCurrentMonthSales())); 
@@ -348,14 +358,19 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     doc.add(table);
 
    Cell bestCustomerCell = new Cell(4, 4)
-                       .add(new Paragraph("Best Customer by orders: ")); 
+                       .add(new Paragraph("Best Customer by Revenue: " + bestCustomer[0]
+                       + "\n" + "Total Spent: $" + String.format("%,.2f", bestCustomerRevenue))); 
+                       
    table.addFooterCell(bestCustomerCell);
    doc.add(table);
+   
+   doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+   salesDoc.addNewPage();
 
    String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
    ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
    Image salesChartImage = new Image(salesChartData);
-   salesChartImage.setFixedPosition(25,50);
+   //salesChartImage.setFixedPosition(25,20);
    doc.add(salesChartImage);
 
 
