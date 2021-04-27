@@ -295,6 +295,9 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     Double bestCustomerRevenue = Double.valueOf(bestCustomer[1]);
     String[] weeklySales = totalSaleStream.thisWeeksSales();
     Double currentWeekSales = Double.valueOf(weeklySales[1]);
+    Double twoWeekSales = Double.valueOf(weeklySales[3]);
+    Double threeWeekSales = Double.valueOf(weeklySales[5]);
+
    jChart test = new jChart();
    test.lineChartTest();
    
@@ -364,13 +367,24 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
    table.addFooterCell(bestCustomerCell);
    doc.add(table);
 
-   Cell thisWeeksSales = new Cell(4,4)
+   Cell thisWeeksSalesCell = new Cell(4,4)
                         .add(new Paragraph("Sales for the week of " + weeklySales[0]
                         + "\n" + "Sales: $" + String.format("%,.2f", currentWeekSales)));
-    table.addFooterCell(thisWeeksSales);
+    table.addFooterCell(thisWeeksSalesCell);
     doc.add(table);
-                        
+                     
+    Cell twoWeekSalesCell = new Cell(4,4)
+                        .add(new Paragraph("Sales for the week of " + weeklySales[2]
+                        + "\n" + "Sales: $" + String.format("%,.2f", twoWeekSales)));
+    table.addFooterCell(twoWeekSalesCell);
+    doc.add(table);
    
+    Cell threeWeekSalesCell = new Cell(4,4)
+                        .add(new Paragraph("Sales for the week of " + weeklySales[4]
+                        + "\n" + "Sales: $" + String.format("%,.2f", threeWeekSales)));
+    table.addFooterCell(threeWeekSalesCell);
+    doc.add(table);
+    
    doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
    salesDoc.addNewPage();
 

@@ -351,7 +351,9 @@ public String[] bestCustomer() throws SQLException{
 public String[] thisWeeksSales() throws SQLException{
     productCostMap();
 
-    Double weeklyTotal = 0.0;
+    Double currentWeeklyTotal = 0.0;
+    Double twoWeekTotal = 0.0;
+    Double threeWeekTotal = 0.0; 
 
     String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1"; 
     SQLPo SQLPO = new SQLPo(); 
@@ -364,6 +366,8 @@ public String[] thisWeeksSales() throws SQLException{
     String endDateDay = endDate.substring(endDate.length()-2);
     String endWeekMonth = endDate.substring(5,7);
     String endWeekYear = endDate.substring(0,4);
+
+    
 
     String beginWeekDate ="";
 
@@ -396,10 +400,101 @@ List<observablePO> weeklyPos = SQLPO.GenerateWeeklyPO(currentWeekSQL);
 for(int i = 0; i < weeklyPos.size();){
     String tempProductID = weeklyPos.get(i).getProductID();
     int tempQuant = Integer.valueOf(weeklyPos.get(i).getQuantity());
-    weeklyTotal += productPrice.get(tempProductID) * tempQuant; 
+    currentWeeklyTotal += productPrice.get(tempProductID) * tempQuant; 
     i++; 
 }
- return new String[]{beginWeekDate, String.valueOf(weeklyTotal)};
+//_______________________________________________________________________________________________________________________________//
+String weekTwoEndDay = beginWeekDate.substring(beginWeekDate.length() - 2);
+Integer tempWeekTwoEndDay = Integer.valueOf(weekTwoEndDay) - 1; 
+weekTwoEndDay = String.valueOf(tempWeekTwoEndDay);
+String weekTwoEndMonth = beginWeekDate.substring(5,7);
+String weekTwoEndYear = beginWeekDate.substring(0,4);
+String weekTwoStartDate = "";
+
+String weekTwoEndDate = weekTwoEndYear + "-" + weekTwoEndMonth + "-" + weekTwoEndDay;
+
+if(Integer.valueOf(weekTwoEndDay) < 7){
+    int tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
+    int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekTwoEndMonth));                                                                                         
+    weekTwoStartDate = weekTwoEndYear + "-" + weekTwoEndMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+}
+else if(Integer.valueOf(weekTwoEndDay) < 7 && Integer.valueOf(weekTwoEndMonth) == 12){
+    int tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
+    int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekTwoEndMonth)); 
+    int prevYear = Integer.valueOf(weekTwoEndYear) - 1;                                                                                        
+    weekTwoStartDate = prevYear + "-" + weekTwoEndMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+}
+else{
+ int weekTwoStartDayInt = Integer.valueOf(weekTwoEndDay) - 7;
+String weekTwoStartDayString = String.valueOf(weekTwoStartDayInt);
+
+if(weekTwoStartDayString.length() < 2){
+    weekTwoStartDayString = "0" + weekTwoStartDayString; 
+}
+weekTwoStartDate = endWeekYear + "-" + endWeekMonth + "-" + weekTwoStartDayString;
+
+}
+
+String twoWeekSQL = "SELECT * FROM testDB.PO WHERE date >= "+ "'" + weekTwoStartDate + "'" +" AND date <= " + "'" + weekTwoEndDate + "'";
+
+List<observablePO> twoWeekPos = SQLPO.GenerateWeeklyPO(twoWeekSQL);
+
+for(int i = 0; i < twoWeekPos.size();){
+    String tempProductID = twoWeekPos.get(i).getProductID();
+    int tempQuant = Integer.valueOf(twoWeekPos.get(i).getQuantity());
+    twoWeekTotal += productPrice.get(tempProductID) * tempQuant; 
+    i++; 
+}
+
+//_____________________________________________________________________________________________________________________________________________________________//
+String weekThreeEndDay = weekTwoStartDate.substring(weekTwoStartDate.length() - 2);
+Integer tempWeekThreeEndDay = Integer.valueOf(weekThreeEndDay) - 1; 
+weekTwoEndDay = String.valueOf(tempWeekTwoEndDay);
+String weekThreeEndMonth = weekTwoStartDate.substring(5,7);
+String weekThreeEndYear = weekTwoStartDate.substring(0,4);
+String weekThreeStartDate = "";
+
+String weekThreeEndDate = weekThreeEndYear + "-" + weekThreeEndMonth + "-" + weekThreeEndDay;
+
+if(Integer.valueOf(weekThreeEndDay) < 7){
+    int tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
+    int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekThreeEndMonth));                                                                                         
+    weekThreeStartDate = weekThreeEndYear + "-" + weekThreeEndMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+}
+else if(Integer.valueOf(weekThreeEndDay) < 7 && Integer.valueOf(weekThreeEndMonth) == 12){
+    int tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
+    int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekThreeEndMonth)); 
+    int prevYear = Integer.valueOf(weekThreeEndYear) - 1;                                                                                        
+    weekThreeStartDate = prevYear + "-" + weekThreeEndMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+}
+else{
+ int weekThreeStartDayInt = Integer.valueOf(weekThreeEndDay) - 7;
+String weekThreeStartDayString = String.valueOf(weekThreeStartDayInt);
+
+if(weekThreeStartDayString.length() < 2){
+    weekThreeStartDayString = "0" + weekThreeStartDayString; 
+}
+weekThreeStartDate = weekTwoEndYear + "-" + weekTwoEndMonth + "-" + weekThreeStartDayString;
+
+}
+
+String threeWeekSQL = "SELECT * FROM testDB.PO WHERE date >= "+ "'" + weekThreeStartDate + "'" +" AND date <= " + "'" + weekThreeEndDate + "'";
+
+List<observablePO> threeWeekPos = SQLPO.GenerateWeeklyPO(threeWeekSQL);
+
+for(int i = 0; i < threeWeekPos.size();){
+    String tempProductID = threeWeekPos.get(i).getProductID();
+    int tempQuant = Integer.valueOf(threeWeekPos.get(i).getQuantity());
+    threeWeekTotal += productPrice.get(tempProductID) * tempQuant; 
+    i++; 
+}
+
+//_______________________________________________________________________________________________________________________________________________________________//
+
+//return{1st week date, 1st week sales, 2nd week date, 2nd week sales, 3rd week date, 3rd week sales}
+//index       0             1               2             3                4             5
+ return new String[]{beginWeekDate, String.valueOf(currentWeeklyTotal), weekTwoStartDate, String.valueOf(twoWeekTotal),
+     weekThreeStartDate, String.valueOf(threeWeekTotal)};
 }        
           
 //EOF        
