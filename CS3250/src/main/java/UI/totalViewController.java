@@ -290,16 +290,25 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
  
 
     poStream totalSaleStream = new poStream();
-    poStream currentMonthSales = new poStream();
+    
     String[] bestCustomer = totalSaleStream.bestCustomer(); 
     Double bestCustomerRevenue = Double.valueOf(bestCustomer[1]);
+
+    String[] totalSales = totalSaleStream.salesCalc(); 
+    Double totSales = Double.valueOf(totalSales[0]);
+    Double currentMonthSales = Double.valueOf(totalSales[2]);
+    Double twoMonthSales = Double.valueOf(totalSales[4]);
+    Double threeMonthSales = Double.valueOf(totalSales[6]);
+    int totalOrders = Integer.valueOf(totalSales[7]);
+
+
     String[] weeklySales = totalSaleStream.thisWeeksSales();
     Double currentWeekSales = Double.valueOf(weeklySales[1]);
     Double twoWeekSales = Double.valueOf(weeklySales[3]);
     Double threeWeekSales = Double.valueOf(weeklySales[5]);
 
    jChart test = new jChart();
-   test.lineChartTest();
+ //  test.lineChartTest();
    
 
 
@@ -335,28 +344,28 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     table.setFixedPosition(100, 650,400);
 
     Cell totalSalesCell = new Cell(4, 4)
-            .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
+            .add(new Paragraph("Total Sales: " + "$" + String.format("%,.2f", totSales))); 
             table.addFooterCell(totalSalesCell);
             doc.add(table); 
 
     Cell totalOrdersCell = new Cell(4,4)
-            .add(new Paragraph("Total orders:" + totalSaleStream.totalOrderCount()));
+            .add(new Paragraph("Total orders:" + String.format("%,8d%n", totalOrders)));
             table.addFooterCell(totalOrdersCell);
             doc.add(table); 
 
 
     Cell thisMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("This Months Sales: " + "$" + currentMonthSales.calcCurrentMonthSales())); 
-    table.addFooterCell(thisMonthSalesCell);
-    doc.add(table);
+                      .add(new Paragraph("Sales in " + totalSales[1] + ": $" + String.format("%,.2f", currentMonthSales))); 
+   table.addFooterCell(thisMonthSalesCell);
+   doc.add(table);
 
-    Cell twoMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("May Sales: " + "$" + currentMonthSales.calcTwoMonthSales())); 
-    table.addFooterCell(twoMonthSalesCell);
-    doc.add(table);
+   Cell twoMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("Sales in " + totalSales[3] + ": $" + String.format("%,.2f", twoMonthSales))); 
+   table.addFooterCell(twoMonthSalesCell);
+   doc.add(table);
 
     Cell threeMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("April Sales: " + "$" + currentMonthSales.calcThreeMonthSales())); 
+                       .add(new Paragraph("Sales in " + totalSales[5] + ": $" + String.format("%,.2f", threeMonthSales))); 
     table.addFooterCell(threeMonthSalesCell);
     doc.add(table);
 
