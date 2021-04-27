@@ -3,7 +3,11 @@ package UI;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,8 +46,26 @@ public class poStream {
 
          HashMap <String, Double> productPrice = new HashMap<String, Double>();
 
+        HashMap <String, Integer> daysAndMonths = new HashMap<String, Integer>(); 
+        
 
 
+
+    public void daysAndMonths(){
+        daysAndMonths.put("01", 21);
+        daysAndMonths.put("02", 28);
+        daysAndMonths.put("03", 31);
+        daysAndMonths.put("04", 30);
+        daysAndMonths.put("05", 31);
+        daysAndMonths.put("06", 30);
+        daysAndMonths.put("07", 31);
+        daysAndMonths.put("08", 31);
+        daysAndMonths.put("09", 30);
+        daysAndMonths.put("10", 31);
+        daysAndMonths.put("11", 30);
+        daysAndMonths.put("12", 31);
+    }
+        
 
     public void productCostMap() throws SQLException{
         Connection poCon = UIDBConnector.getConnection();
@@ -322,9 +344,63 @@ public String[] bestCustomer() throws SQLException{
         }
         i++;
     }
+
     return new String[]{bestCustomer, String.valueOf(highestTotal)}; 
 }
-        
+
+public String[] thisWeeksSales() throws SQLException{
+    productCostMap();
+
+    Double weeklyTotal = 0.0;
+
+    String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1"; 
+    SQLPo SQLPO = new SQLPo(); 
+    SQLPO.initializeDatabase(filename);
+    String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
+
+    List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
+
+    String endDate = latestPO.get(0).getDate();
+    String endDateDay = endDate.substring(endDate.length()-2);
+    String endWeekMonth = endDate.substring(5,7);
+    String endWeekYear = endDate.substring(0,4);
+
+    String beginWeekDate ="";
+
+    if(Integer.valueOf(endDateDay) < 7){
+        int tempdayval = Math.abs(Integer.valueOf(endDateDay) - 7);
+        int prevMonthDays = daysAndMonths.get(Integer.valueOf(endWeekMonth));                                                                                         
+        beginWeekDate = endWeekYear + "-" + endWeekMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+}
+else if(Integer.valueOf(endDateDay) < 7 && Integer.valueOf(endWeekMonth) == 12){
+        int tempdayval = Math.abs(Integer.valueOf(endDate) - 7);
+        int prevMonthDays = daysAndMonths.get(Integer.valueOf(endWeekMonth)); 
+        int prevYear = Integer.valueOf(endWeekYear) - 1;                                                                                        
+        beginWeekDate = prevYear + "-" + endWeekMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+}
+else{
+     int beginWeekDayInt = Integer.valueOf(endDateDay) - 7;
+    String beginWeekDayString = String.valueOf(beginWeekDayInt);
+    
+    if(beginWeekDayString.length() < 2){
+        beginWeekDayString = "0" + beginWeekDayString; 
+    }
+   beginWeekDate = endWeekYear + "-" + endWeekMonth + "-" + beginWeekDayString;
+   
+}
+
+String currentWeekSQL = "SELECT * FROM testDB.PO WHERE date >= "+ "'" + beginWeekDate+ "'" +" AND date <= " + "'" + endDate + "'";
+
+List<observablePO> weeklyPos = SQLPO.GenerateWeeklyPO(currentWeekSQL);
+
+for(int i = 0; i < weeklyPos.size();){
+    String tempProductID = weeklyPos.get(i).getProductID();
+    int tempQuant = Integer.valueOf(weeklyPos.get(i).getQuantity());
+    weeklyTotal += productPrice.get(tempProductID) * tempQuant; 
+    i++; 
+}
+ return new String[]{beginWeekDate, String.valueOf(weeklyTotal)};
+}        
           
 //EOF        
 }

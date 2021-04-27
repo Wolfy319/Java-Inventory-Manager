@@ -292,9 +292,9 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     poStream totalSaleStream = new poStream();
     poStream currentMonthSales = new poStream();
     String[] bestCustomer = totalSaleStream.bestCustomer(); 
-    
     Double bestCustomerRevenue = Double.valueOf(bestCustomer[1]);
-
+    String[] weeklySales = totalSaleStream.thisWeeksSales();
+    Double currentWeekSales = Double.valueOf(weeklySales[1]);
    jChart test = new jChart();
    test.lineChartTest();
    
@@ -363,6 +363,13 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
                        
    table.addFooterCell(bestCustomerCell);
    doc.add(table);
+
+   Cell thisWeeksSales = new Cell(4,4)
+                        .add(new Paragraph("Sales for the week of " + weeklySales[0]
+                        + "\n" + "Sales: $" + String.format("%,.2f", currentWeekSales)));
+    table.addFooterCell(thisWeeksSales);
+    doc.add(table);
+                        
    
    doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
    salesDoc.addNewPage();

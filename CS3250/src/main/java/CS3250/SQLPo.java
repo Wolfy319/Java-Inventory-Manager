@@ -123,4 +123,28 @@ public class SQLPo {
         return 0;
     }
 
+    public List<UI.observablePO> GenerateWeeklyPO(String statement2){
+        List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
+        UserData u = new UserData();
+        u.initializeDatabase(connectionString + " " + username + " " + password);
+        UI.observablePO po = new UI.observablePO();
+        try{
+            rs = st.executeQuery(statement2);
+            while (rs.next()) {
+                po = new UI.observablePO();
+                po.setProductID(rs.getString("productID"));
+                po.setEmail( rs.getString("email"));
+                po.setDate(rs.getString("date"));
+                po.setID(rs.getString("ID"));
+                po.setCustomerLocation(rs.getString("custLoc"));
+                po.quantity(rs.getString("quantity"));
+                arr.add(po);
+            }             
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return arr;
+    }
+
 }
