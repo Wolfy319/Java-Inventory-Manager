@@ -16,8 +16,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import javafx.scene.control.Alert; 
+import javafx.scene.control.Alert;
+import CS3250.DataMan;
+import CS3250.User;
 import CS3250.UserAuthenticator;
+import CS3250.UserDB;
 import CS3250.UserData;
 
 /**
@@ -75,7 +78,7 @@ public class Controller {
      * @throws InvalidKeySpecException - Throws if invalid key specification
      */
     public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    	UserData data = new UserData();
+    	DataMan<User> data = new UserDB();
     	try{
     		data.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
     	} catch(Exception e) {
