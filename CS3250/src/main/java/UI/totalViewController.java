@@ -307,8 +307,9 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     Double twoWeekSales = Double.valueOf(weeklySales[3]);
     Double threeWeekSales = Double.valueOf(weeklySales[5]);
 
-   jChart test = new jChart();
- //  test.lineChartTest();
+   jChart salesCharts = new jChart();
+    salesCharts.lineChart();
+    salesCharts.weeklyOrdersSales();
    
 
 
@@ -400,9 +401,15 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
    String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
    ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
    Image salesChartImage = new Image(salesChartData);
-   //salesChartImage.setFixedPosition(25,20);
    doc.add(salesChartImage);
 
+   doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+   salesDoc.addNewPage();
+
+   String salesChangeLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesChangeChart.PNG";
+   ImageData salesChangeData = ImageDataFactory.create(salesChangeLoc);
+   Image salesChangeImage = new Image(salesChangeData);
+   doc.add(salesChangeImage);
 
     doc.close();
     Desktop.getDesktop().open(tempSales);

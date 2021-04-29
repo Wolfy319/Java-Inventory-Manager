@@ -49,7 +49,7 @@ public class poStream {
         daysAndMonths.put("12", 31);
     }
 
-    public void numMonth(){
+    public void numMonth() {
         numMonth.put("01", "January");
         numMonth.put("02", "Febuary");
         numMonth.put("03", "March");
@@ -82,7 +82,7 @@ public class poStream {
 
     }
 
-    public String[] salesCalc() throws SQLException{
+    public String[] salesCalc() throws SQLException {
         numMonth();
         productCostMap();
 
@@ -97,84 +97,67 @@ public class poStream {
 
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
         String totalSalesSQL = "SELECT * FROM testDB.PO";
-        
 
-
-
-        List<observablePO> allPos = SQLPO.GenerateWeeklyPO(totalSalesSQL); 
+        List<observablePO> allPos = SQLPO.GenerateWeeklyPO(totalSalesSQL);
         List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
 
-        int totalOrders = allPos.size(); 
+        int totalOrders = allPos.size();
 
         String currentMonthPO = latestPO.get(0).getDate();
-        String currentMonthNum = currentMonthPO.substring(5,7);
+        String currentMonthNum = currentMonthPO.substring(5, 7);
         String currentMonth = numMonth.get(currentMonthNum);
-        String twoMonthNum = "0" + String.valueOf(Integer.valueOf(currentMonthNum) - 1); 
-        String twoMonth = numMonth.get(twoMonthNum); 
+        String twoMonthNum = "0" + String.valueOf(Integer.valueOf(currentMonthNum) - 1);
+        String twoMonth = numMonth.get(twoMonthNum);
         String threeMonthNum = "0" + String.valueOf(Integer.valueOf(currentMonthNum) - 2);
-        String threeMonth = numMonth.get(threeMonthNum); 
-        
+        String threeMonth = numMonth.get(threeMonthNum);
+
         String currentMonthSQL = "SELECT * FROM PO WHERE monthname (date) = " + "'" + currentMonth + "'";
-        String twoMonthSQL = "SELECT * FROM PO WHERE monthname (date) = " + "'" + twoMonth + "'";                       
+        String twoMonthSQL = "SELECT * FROM PO WHERE monthname (date) = " + "'" + twoMonth + "'";
         String threeMonthSQL = "SELECT * FROM PO WHERE monthname (date) = " + "'" + threeMonth + "'";
 
         List<observablePO> currentPos = SQLPO.GenerateWeeklyPO(currentMonthSQL);
         List<observablePO> twoPos = SQLPO.GenerateWeeklyPO(twoMonthSQL);
         List<observablePO> threePos = SQLPO.GenerateWeeklyPO(threeMonthSQL);
 
-        for(int i = 0; i <currentPos.size();){
+        for (int i = 0; i < currentPos.size();) {
             String tmpProductID = currentPos.get(i).getProductID();
-            int tmpQuant = Integer.valueOf(currentPos.get(i).getQuantity()); 
+            int tmpQuant = Integer.valueOf(currentPos.get(i).getQuantity());
             currentMonthTotal += productPrice.get(tmpProductID) * tmpQuant;
             i++;
         }
 
-        for(int i = 0; i <twoPos.size();){
+        for (int i = 0; i < twoPos.size();) {
             String tmpProductID = twoPos.get(i).getProductID();
-            int tmpQuant = Integer.valueOf(twoPos.get(i).getQuantity()); 
+            int tmpQuant = Integer.valueOf(twoPos.get(i).getQuantity());
             twoMonthTotal += productPrice.get(tmpProductID) * tmpQuant;
             i++;
         }
 
-        for(int i = 0; i <threePos.size();){
+        for (int i = 0; i < threePos.size();) {
             String tmpProductID = threePos.get(i).getProductID();
-            int tmpQuant = Integer.valueOf(threePos.get(i).getQuantity()); 
+            int tmpQuant = Integer.valueOf(threePos.get(i).getQuantity());
             threeMonthTotal += productPrice.get(tmpProductID) * tmpQuant;
             i++;
         }
 
-        for(int i = 0; i <allPos.size();){
+        for (int i = 0; i < allPos.size();) {
             String tmpProductID = allPos.get(i).getProductID();
 
-            int tmpQuant = Integer.valueOf(allPos.get(i).getQuantity()); 
-            if(productPrice.get(tmpProductID) == null){
+            int tmpQuant = Integer.valueOf(allPos.get(i).getQuantity());
+            if (productPrice.get(tmpProductID) == null) {
                 i++;
-                continue; 
+                continue;
             }
             totalSales += productPrice.get(tmpProductID) * tmpQuant;
             i++;
         }
-        
-                            //                0            1                              2                3                    4                   5             6         
-        return new String[]{String.valueOf(totalSales),currentMonth, String.valueOf(currentMonthTotal) ,twoMonth, String.valueOf(twoMonthTotal), threeMonth, String.valueOf(threeMonthTotal)
-        , String.valueOf(totalOrders)};
+
+        // 0 1 2 3 4 5 6
+        return new String[] { String.valueOf(totalSales), currentMonth, String.valueOf(currentMonthTotal), twoMonth,
+                String.valueOf(twoMonthTotal), threeMonth, String.valueOf(threeMonthTotal)
+                // 7
+                , String.valueOf(totalOrders) };
     }
-
-    
-
-    
-
-
-
- 
-
-   
-
-    
-
-    
-
-    
 
     public String[] bestCustomer() throws SQLException {
         String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
@@ -354,13 +337,18 @@ public class poStream {
             i++;
         }
 
+        String numWeekOrders = String.valueOf(weeklyPos.size());
+        String numTwoWeekOrders = String.valueOf(twoWeekPos.size());
+        String numThreeWeekOrders = String.valueOf(threeWeekPos.size());
         // _______________________________________________________________________________________________________________________________________________________________//
 
         // return{1st week date, 1st week sales, 2nd week date, 2nd week sales, 3rd week
         // date, 3rd week sales}
         // index 0 1 2 3 4 5
+        System.out.println("begindate: " + beginWeekDate);
         return new String[] { beginWeekDate, String.valueOf(currentWeeklyTotal), weekTwoStartDate,
-                String.valueOf(twoWeekTotal), weekThreeStartDate, String.valueOf(threeWeekTotal) };
+                String.valueOf(twoWeekTotal), weekThreeStartDate, String.valueOf(threeWeekTotal), numWeekOrders,
+                numTwoWeekOrders, numThreeWeekOrders };
     }
 
     // EOF
