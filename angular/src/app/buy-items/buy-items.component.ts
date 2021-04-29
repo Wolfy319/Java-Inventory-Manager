@@ -29,7 +29,7 @@ export class BuyItemsComponent implements OnInit {
       this.data$ = jwt_decode(this.data$);
       console.log(this.data$);
       this.dt$ = this.data$["email"];
-    this.router.navigate([`/orders`]);
+    this.router.navigate([`/`]);
      this.url = `http://localhost:8080/buy?id=${this.item}&email=${this.dt$}&loc=${this.loc}` 
      console.log(this.url)
      this.http.get(this.url).subscribe(res =>{
