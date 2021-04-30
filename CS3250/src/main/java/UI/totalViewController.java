@@ -291,6 +291,14 @@ public class totalViewController {
         Double twoWeekSales = Double.valueOf(weeklySales[3]);
         Double threeWeekSales = Double.valueOf(weeklySales[5]);
 
+        String[] bestProducts = totalSaleStream.popularItems();
+        Double bestTotal = Double.valueOf(bestProducts[1]);
+        Double secTotal = Double.valueOf(bestProducts[3]);
+        Double thirdTotal = Double.valueOf(bestProducts[5]);
+
+        String[] dailySales = totalSaleStream.dailySales();
+        Double dSales = Double.valueOf(dailySales[0]);
+
         jChart salesCharts = new jChart();
         salesCharts.lineChart();
         salesCharts.weeklyOrdersSales();
@@ -325,6 +333,11 @@ public class totalViewController {
         Cell totalSalesCell = new Cell(4, 4)
                 .add(new Paragraph("Total Sales: " + "$" + String.format("%,.2f", totSales)));
         table.addFooterCell(totalSalesCell);
+        doc.add(table);
+
+        Cell dailySalesCell = new Cell(4, 4)
+                .add(new Paragraph("Sales for: " + dailySales[1] + "\n" + "Sales: $" + String.format("%,.2f", dSales)));
+        table.addFooterCell(dailySalesCell);
         doc.add(table);
 
         Cell totalOrdersCell = new Cell(4, 4)
@@ -366,6 +379,21 @@ public class totalViewController {
         Cell threeWeekSalesCell = new Cell(4, 4).add(new Paragraph("Sales for the week of " + weeklySales[4] + "\n"
                 + "Sales: $" + String.format("%,.2f", threeWeekSales)));
         table.addFooterCell(threeWeekSalesCell);
+        doc.add(table);
+
+        Cell bestProductsCell = new Cell(4, 4).add(new Paragraph("Best Selling Product: " + bestProducts[0] + "\n"
+                + "Sales: $" + String.format("%,.2f", bestTotal) + "\n"));
+        table.addFooterCell(bestProductsCell);
+        doc.add(table);
+
+        Cell secProductsCell = new Cell(4, 4).add(new Paragraph("Second Best Selling Product: " + bestProducts[2] + "\n"
+                + "Sales: $" + String.format("%,.2f", secTotal)));
+        table.addFooterCell(secProductsCell);
+        doc.add(table);
+
+        Cell thirdProductsCell = new Cell(4, 4).add(new Paragraph("Third Best Selling Product: " + bestProducts[4]
+                + "\n" + "Sales: $" + String.format("%,.2f", thirdTotal)));
+        table.addFooterCell(thirdProductsCell);
         doc.add(table);
 
         doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));

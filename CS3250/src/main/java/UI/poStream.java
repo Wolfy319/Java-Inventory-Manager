@@ -12,6 +12,8 @@ import java.util.Set;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
+import org.graalvm.compiler.core.common.type.ArithmeticOpTable.BinaryOp.And;
+
 import CS3250.SQLPo;
 
 public class poStream {
@@ -33,6 +35,8 @@ public class poStream {
     HashMap<String, Integer> daysAndMonths = new HashMap<String, Integer>();
 
     HashMap<String, String> numMonth = new HashMap<String, String>();
+
+    HashMap<String, Double> productSales = new HashMap<String, Double>();
 
     public void daysAndMonths() {
         daysAndMonths.put("01", 21);
@@ -251,7 +255,7 @@ public class poStream {
             currentWeeklyTotal += productPrice.get(tempProductID) * tempQuant;
             i++;
         }
-        // _______________________________________________________________________________________________________________________________//
+
         String weekTwoEndDay = beginWeekDate.substring(beginWeekDate.length() - 2);
         Integer tempWeekTwoEndDay = Integer.valueOf(weekTwoEndDay) - 1;
         weekTwoEndDay = String.valueOf(tempWeekTwoEndDay);
@@ -294,7 +298,6 @@ public class poStream {
             i++;
         }
 
-        // _____________________________________________________________________________________________________________________________________________________________//
         String weekThreeEndDay = weekTwoStartDate.substring(weekTwoStartDate.length() - 2);
         Integer tempWeekThreeEndDay = Integer.valueOf(weekThreeEndDay) - 1;
         weekTwoEndDay = String.valueOf(tempWeekTwoEndDay);
@@ -340,16 +343,114 @@ public class poStream {
         String numWeekOrders = String.valueOf(weeklyPos.size());
         String numTwoWeekOrders = String.valueOf(twoWeekPos.size());
         String numThreeWeekOrders = String.valueOf(threeWeekPos.size());
-        // _______________________________________________________________________________________________________________________________________________________________//
 
-        // return{1st week date, 1st week sales, 2nd week date, 2nd week sales, 3rd week
-        // date, 3rd week sales}
-        // index 0 1 2 3 4 5
-        System.out.println("begindate: " + beginWeekDate);
         return new String[] { beginWeekDate, String.valueOf(currentWeeklyTotal), weekTwoStartDate,
                 String.valueOf(twoWeekTotal), weekThreeStartDate, String.valueOf(threeWeekTotal), numWeekOrders,
                 numTwoWeekOrders, numThreeWeekOrders };
     }
 
-    // EOF
+    public String[] dailySales() throws SQLException {
+        productCostMap();
+
+        Double dayTotal = 0.0;
+
+        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        SQLPo SQLPO = new SQLPo();
+        SQLPO.initializeDatabase(filename);
+        String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
+
+        List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
+        List<observablePO> dailyPos = SQLPO
+                .GenerateWeeklyPO("Select * From testDB.PO where date = " + "'" + latestPO.get(0).getDate() + "'");
+
+        for (int i = 0; i < dailyPos.size(); i++) {
+            String tmpID = dailyPos.get(i).getProductID();
+            Double tmpPrice = productPrice.get(tmpID);
+            int tmpQuant = Integer.valueOf(dailyPos.get(i).getQuantity());
+            Double tmpTotal = tmpQuant * tmpPrice;
+            dayTotal += tmpTotal;
+
+        }
+        return new String[] { String.valueOf(dayTotal), latestPO.get(0).getDate() };
+
+    }
+
+    public String[] popularItems() throws SQLException {
+        productCostMap();
+
+        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        SQLPo SQLPO = new SQLPo();
+        SQLPO.initializeDatabase(filename);
+        String bestProductSQL = "SELECT * FROM testDB.PO";
+        List<observablePO> allPos = SQLPO.GenerateWeeklyPO(bestProductSQL);
+
+        String bestProdId = "";
+        String secProdId = "";
+        String thirdProdId = "";
+
+        Double bestTotal = 0.0;
+        Double secTotal = 0.0;
+        Double thirdTotal = 0.0;
+
+        for (int i = 0; i < allPos.size(); i++) {
+            if (productSales.get(allPos.get(i).getProductID()) == null) {
+                int tmpQuant = Integer.valueOf(allPos.get(i).getQuantity());
+                Double tmpPrice = productPrice.get(allPos.get(i).getProductID());
+
+                if (tmpPrice == null) {
+                    continue;
+                }
+
+                Double tmpTotal = tmpQuant * tmpPrice;
+
+                productSales.put(allPos.get(i).getProductID(), tmpTotal);
+
+                if (tmpTotal > bestTotal) {
+                    bestTotal = tmpTotal;
+                    bestProdId = allPos.get(i).getProductID();
+                }
+                if (tmpTotal < bestTotal && tmpTotal > thirdTotal && tmpTotal > secTotal) {
+                    secTotal = tmpTotal;
+                    secProdId = allPos.get(i).getProductID();
+                }
+                if (tmpTotal > thirdTotal && tmpTotal < secTotal) {
+                    thirdTotal = tmpTotal;
+                    thirdProdId = allPos.get(i).getProductID();
+                }
+
+            }
+
+            else {
+                String tmpProdId = allPos.get(i).getProductID();
+                int tmpQuant = Integer.valueOf(allPos.get(i).getQuantity());
+                Double tmpPrice = productPrice.get(allPos.get(i).getProductID());
+
+                if (tmpPrice == null) {
+                    continue;
+                }
+
+                Double tmpTotal = tmpQuant * tmpPrice;
+                Double currentTotal = productSales.get(tmpProdId);
+                currentTotal += tmpTotal;
+
+                productSales.put(tmpProdId, currentTotal);
+
+                if (currentTotal > bestTotal) {
+                    bestTotal = currentTotal;
+                    bestProdId = allPos.get(i).getProductID();
+                } else if (currentTotal < bestTotal && currentTotal > thirdTotal && currentTotal > secTotal) {
+                    secTotal = currentTotal;
+                    secProdId = allPos.get(i).getProductID();
+                } else if (currentTotal > thirdTotal && currentTotal < secTotal) {
+                    thirdTotal = currentTotal;
+                    thirdProdId = allPos.get(i).getProductID();
+                }
+
+            }
+
+        }
+        return new String[] { bestProdId, String.valueOf(bestTotal), secProdId, String.valueOf(secTotal), thirdProdId,
+                String.valueOf(thirdTotal) };
+    }
+
 }
