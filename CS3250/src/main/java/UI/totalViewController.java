@@ -10,7 +10,6 @@ import com.itextpdf.io.IOException;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
@@ -147,7 +146,7 @@ public class totalViewController {
 
             ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
 
-            while (rs.next()) {// "should be column names"
+            while (rs.next()) {
 
                 oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
                         rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
@@ -247,7 +246,6 @@ public class totalViewController {
                     showInventory();
                     ;
                 } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
