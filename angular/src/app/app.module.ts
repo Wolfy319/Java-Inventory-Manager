@@ -65,6 +65,9 @@ import { BuyComponent } from './buy/buy.component';
                   'orders/:id',
                   component: ViewOrderComponent  },
                   {path:
+                    'orders/:id',
+                    component: ViewOrderComponent  },
+                  {path:
                     'buy/:item',
                     component: BuyItemsComponent  },
               

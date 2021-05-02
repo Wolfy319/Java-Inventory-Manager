@@ -16,18 +16,19 @@ export class ViewOrderComponent implements OnInit {
   item: string;
   url: string;
   entry;
-  constructor(private http:HttpClient, private route: ActivatedRoute, private location:Location) { 
+  constructor(private http:HttpClient, private route: ActivatedRoute) { 
     this.ngOnInit();
     this.url = `http://localhost:8080/order?id=${this.item}` 
     console.log(this.url)
     this.http.get(this.url).subscribe(res =>{
       this.entry = res;
+      console.log(this.entry);
     });
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(res=>{
-      this.item = res.get("item")
+      this.item = res.get("id")
       
     })
   }

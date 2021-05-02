@@ -23,19 +23,21 @@ export class BuyItemsComponent implements OnInit {
 
   
   
-  yes() {
+  yes(location) {
     if(this.cookies.get("session")){
       this.data$ = this.cookies.get("session");
       this.data$ = jwt_decode(this.data$);
+      this.loc = location;
       console.log(this.data$);
       this.dt$ = this.data$["email"];
-    this.router.navigate([`/`]);
-     this.url = `http://localhost:8080/buy?id=${this.item}&email=${this.dt$}&loc=${this.loc}` 
-     console.log(this.url)
-     this.http.get(this.url).subscribe(res =>{
-       this.entries = res;
-       console.log(this.entries);
-     })
+      console.log(this.loc);
+      this.url = `http://localhost:8080/buy?id=${this.item}&email=${this.dt$}&loc=${this.loc}` 
+      console.log(this.url)
+      this.http.get(this.url).subscribe(res =>{
+        this.entries = res;
+        console.log(this.entries);
+      })
+      this.router.navigate([`/`]);
   }
   else{
     this.router.navigate([`/`]);
