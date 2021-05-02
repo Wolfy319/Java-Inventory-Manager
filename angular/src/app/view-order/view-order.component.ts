@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,9 +14,15 @@ export class ViewOrderComponent implements OnInit {
   email:any;
   address:any;
   item: string;
-  constructor(private route: ActivatedRoute) { 
+  url: string;
+  entry;
+  constructor(private http:HttpClient, private route: ActivatedRoute, private location:Location) { 
     this.ngOnInit();
-
+    this.url = `http://localhost:8080/order?id=${this.item}` 
+    console.log(this.url)
+    this.http.get(this.url).subscribe(res =>{
+      this.entry = res;
+    });
   }
 
   ngOnInit(): void {
