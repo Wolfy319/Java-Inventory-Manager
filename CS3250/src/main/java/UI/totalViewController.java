@@ -1,6 +1,8 @@
 package UI;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -130,7 +132,7 @@ public class totalViewController {
 
     
     @FXML
-    public void showInventory() throws SQLException{
+    public void showInventory() throws SQLException, java.io.IOException{
        
         orderScreenDisplayed = false;
 
@@ -202,7 +204,7 @@ public class totalViewController {
     public Boolean orderScreenDisplayed;
     
     @FXML
-    public void showOrders(){
+    public void showOrders() throws java.io.IOException{
         orderScreenDisplayed = true; 
 
         textField1.setText("   Product Id");
@@ -221,8 +223,9 @@ public class totalViewController {
 
         
     
-
-        po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+		BufferedReader reader = new BufferedReader(new FileReader(".config"));
+        po.initializeDatabase(reader.readLine());
+        reader.close();
         poList = FXCollections.observableArrayList(po.GenerateShortPOs());
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("Date"));
@@ -255,8 +258,8 @@ public class totalViewController {
         inv_Btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 try {
-                    showInventory();;
-                } catch (SQLException e1) {
+                    showInventory();
+                } catch (SQLException | java.io.IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
@@ -269,7 +272,12 @@ public class totalViewController {
     public void ordersBtn(ActionEvent event){
         orders_Btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                showOrders();;
+                try {
+                    showOrders();
+                } catch (java.io.IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                };
             }
         });
     }
@@ -327,10 +335,10 @@ public void showReport(ActionEvent event) throws IOException, java.io.IOExceptio
     table.addHeaderCell(cells);            
     table.setFixedPosition(100, 650,400);
 
-    Cell totalSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
-    table.addFooterCell(totalSalesCell);
-    doc.add(table); 
+    // Cell totalSalesCell = new Cell(4, 4)
+    //                    .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
+    // table.addFooterCell(totalSalesCell);
+    // doc.add(table); 
 
     Cell thisMonthSalesCell = new Cell(4, 4)
                        .add(new Paragraph("This Months Sales: " + "$" + currentMonthSales.calcCurrentMonthSales())); 
@@ -396,7 +404,7 @@ public void highlightClick(MouseEvent event) {
 
 Statement st;
 @FXML
-public void addItem() throws SQLException{
+public void addItem() throws SQLException, java.io.IOException{
     if(orderScreenDisplayed == true){
         observablePO p = new observablePO();
         p.setCustomerLocation(textPrice.getText());
