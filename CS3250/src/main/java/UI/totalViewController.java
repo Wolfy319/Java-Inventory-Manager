@@ -36,6 +36,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -126,6 +127,12 @@ public class totalViewController {
     @FXML
     private Label textField6;
 
+    @FXML
+    private JFXButton maximizeBtn;
+
+    @FXML
+    private JFXButton minBtn; 
+
     ObservableList oblist = FXCollections.observableArrayList();
 
     @FXML
@@ -155,7 +162,7 @@ public class totalViewController {
 
         } finally {
         }
-
+        
         cellOne.setText("Product_ID");
         CellTwo.setText("Stock_Quantity");
         cellThree.setText("WholeSale_Cost");
@@ -486,6 +493,19 @@ public class totalViewController {
             total_Table.getItems().clear();
             showInventory();
         }
+    }
+
+
+    @FXML
+    public void setMax(){
+        Stage stage = (Stage) basePane.getScene().getWindow();
+            stage.setMaximized(true);
+    }
+
+    @FXML
+    public void setMin(){
+        Stage stage = (Stage) basePane.getScene().getWindow();
+            stage.setMaximized(false);
     }
 
 }
