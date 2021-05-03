@@ -1,18 +1,14 @@
 package CS3250;
 
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import UI.observablePO;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class SQLPo {
     SQLData inventory = new SQLData();
@@ -48,7 +44,8 @@ public class SQLPo {
     // need to create table for PO's and swap this string
     public void createEntry(String ID, observablePO p) {
         Entry inventoryItem = inventory.readEntry(p.getProductID());
-        if(poExists(p.getProductID(), p.getQuantity(), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
+        int quantity = Integer.parseInt(p.getQuantity());
+        if(poExists(p.getProductID(), quantity, p.getDate(), p.getEmail(), p.getCustomerLocation())) {
             System.out.println("Order already exists");
             return;
         }
@@ -57,13 +54,13 @@ public class SQLPo {
             return;
         }
         else {
-            if(inventoryItem.getStockQuantity() < p.getQuantity()) {
+            if(inventoryItem.getStockQuantity() < quantity) {
                 System.out.println("Order quantity exceeds quantity in inventory!");
                 return;
             }
             else {
                 int currentQuantity = inventoryItem.getStockQuantity();
-                inventoryItem.setStockQuantity(currentQuantity - p.getQuantity());
+                inventoryItem.setStockQuantity(currentQuantity - quantity);
                 inventory.updateEntry(p.getProductID(), inventoryItem);
             }
         }
@@ -141,7 +138,6 @@ public class SQLPo {
 
     public void updateEntry(String ID, Entry e) {
         // TODO Auto-generated method stub
-
     }
 
     public void deleteEntry(String id) {
@@ -151,7 +147,6 @@ public class SQLPo {
 
     public void saveEntry(Entry e) {
         // TODO Auto-generated method stub
-
     }
 
     public int retSize() {
