@@ -1,5 +1,6 @@
 package UI;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +36,7 @@ public class poStream {
 
 
 
-    public void productCostMap() throws SQLException{
+    public void productCostMap() throws SQLException, IOException{
         Connection poCon = UIDBConnector.getConnection();
         ResultSet rs = poCon.createStatement().executeQuery("SELECT * FROM DataEntries");
         while (rs.next()){
@@ -44,7 +45,7 @@ public class poStream {
         }
     }
 
-    public void salesOrderMap() throws SQLException{
+    public void salesOrderMap() throws SQLException, IOException{
         Connection poCon = UIDBConnector.getConnection();
         ResultSet rs = poCon.createStatement().executeQuery("SELECT * FROM PO");
         while (rs.next()){

@@ -53,3 +53,8 @@ angular/Thumbs.db
 *.class
 *.vscode
 *.gitignore
+*.config
+*.png
+*.fxml
+*.yml
+*.jar
