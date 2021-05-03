@@ -1,18 +1,21 @@
-// package CS3250;
+package CS3250;
 
-// import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-// import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 
-// public class POTest {
-//     SQLPo init = new SQLPo();
-//     @Test
-//     void ConnectionWorks(){
-//         init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-//         System.out.println("...done");
+public class POTest {
+    DataMan init = new MockPODB();
+    Database db;
+    @Test
+    void ConnectionWorks(){
+        String connectionString = StringParsers.readConfig(".config");
+
+        init.initializeDatabase(connectionString);
+        db = new Database(init);
      
-//         var sp = init.GenerateShortPOs();
-//         assertNotEquals(1, null);
-//     }
+        var sp = init.getEntries();
+        assertNotEquals(sp, null);
+    }
     
-// }
+}

@@ -15,7 +15,7 @@ export class AuthService {
     
     this.username = username;
     this.password = password;
-    this.url = `http://216.137.177.30:8080/login?username=${this.username}&password=${this.password}`
+    this.url = `http://localhost:8080/login?username=${this.username}&password=${this.password}`
     let e = this.http.get(this.url);
     return e;
   

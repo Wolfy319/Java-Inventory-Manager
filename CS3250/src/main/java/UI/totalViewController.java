@@ -1,10 +1,13 @@
 package UI;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.itextpdf.io.IOException;
 import com.itextpdf.io.image.ImageData;
@@ -24,6 +27,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Statement;
 
+import CS3250.DataMan;
+import CS3250.Database;
+import CS3250.Entry;
+import CS3250.PODB;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -136,8 +143,15 @@ public class totalViewController {
     ObservableList oblist = FXCollections.observableArrayList();
 
     @FXML
-    public void showInventory() throws SQLException {
 
+
+    public void initialize() throws SQLException, java.io.IOException {
+        showOrders();
+    }
+
+    @FXML
+    public void showInventory() throws SQLException{
+       
         orderScreenDisplayed = false;
 
         total_Table.getItems().clear();
@@ -149,7 +163,7 @@ public class totalViewController {
         textField6.setText(" ");
         textID.setText("");
         try {
-            Connection con = UIDBConnector.getConnection();
+            UIDBConnector udb = new UIDBConnector();
 
             ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
 
@@ -162,6 +176,7 @@ public class totalViewController {
 
         } finally {
         }
+
         
         cellOne.setText("Product_ID");
         CellTwo.setText("Stock_Quantity");
@@ -196,13 +211,19 @@ public class totalViewController {
 
     }
 
-    SQLPo po = new SQLPo();
+ 
     ObservableList poList;
     public Boolean orderScreenDisplayed;
 
+    DataMan<observablePO> items;
     @FXML
-    public void showOrders() {
-        orderScreenDisplayed = true;
+
+    public void showOrders() throws SQLException, java.io.IOException{
+        UIDBConnector udb = new UIDBConnector();
+        items = udb.getPOConnection();
+
+        List<observablePO> rs = items.getEntries();
+        orderScreenDisplayed = true; 
 
         textField1.setText("   Product Id");
         textField2.setText("   Date");
@@ -218,9 +239,18 @@ public class totalViewController {
         cellFive.setText(" ");
         total_Table.getItems().clear();
 
-        po.initializeDatabase(
-                "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-        poList = FXCollections.observableArrayList(po.GenerateShortPOs());
+
+        
+    
+
+		BufferedReader reader = new BufferedReader(new FileReader(".config"));
+        po.initializeDatabase(reader.readLine());
+        reader.close();
+        poList = FXCollections.observableArrayList(rs);
+
+
+      
+
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("Date"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("Email"));
@@ -251,8 +281,10 @@ public class totalViewController {
             public void handle(ActionEvent e) {
                 try {
                     showInventory();
-                    ;
-                } catch (SQLException e1) {
+
+                } catch (SQLException | java.io.IOException e1) {
+                    // TODO Auto-generated catch block
+
                     e1.printStackTrace();
                 }
             }
@@ -262,10 +294,15 @@ public class totalViewController {
     @FXML
     public void ordersBtn(ActionEvent event) {
         orders_Btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                showOrders();
-                ;
+
+            @Override public void handle(ActionEvent e) {
+                try {
+                    showOrders();
+                } catch (Exception e1) {
+
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                };
             }
         });
     }
@@ -274,6 +311,105 @@ public class totalViewController {
     public void signoutBtn(ActionEvent event) {
         Stage stage = (Stage) exit_Btn.getScene().getWindow();
         stage.close();
+
+}
+
+@FXML
+public void showReport(ActionEvent event) throws IOException, java.io.IOException, SQLException{
+ 
+
+    poStream totalSaleStream = new poStream();
+    poStream currentMonthSales = new poStream();
+    
+   jChart test = new jChart();
+   test.lineChartTest();
+   
+
+
+
+    //Creates temporary sales pdf
+    File tempSales = File.createTempFile("SalesReport", ".pdf"); 
+    PdfWriter writer = new PdfWriter(tempSales);
+    PdfDocument salesDoc = new PdfDocument(writer);
+    PdfPage pageOne = salesDoc.addNewPage();
+    Document doc = new Document(salesDoc);
+
+    //Adds Rt3 Logo
+    String rt3Loc = "CS3250\\src\\main\\java\\UI\\Images\\RT3.png";
+    ImageData rt3Data = ImageDataFactory.create(rt3Loc);
+    Image rt3Image = new Image(rt3Data);
+    rt3Image.scaleAbsolute(100, 100);
+    rt3Image.setFixedPosition(250,675);
+    doc.add(rt3Image);
+
+    
+    //Sales Report heading
+    String headingText = "Sales Report Generated by IMS";
+    Paragraph headingBreak = new Paragraph(headingText);
+    headingBreak.setTextAlignment(TextAlignment.CENTER);
+    doc.add(headingBreak);
+    
+    //Add Table
+    float[] columnWidths = {1.5f, 2f, 5f, 2f};
+    Table table = new Table(UnitValue.createPercentArray(columnWidths));
+    Cell cells = new Cell(4,4)
+                .add(new Paragraph("Sales Snap-Shot"))
+                .setTextAlignment(TextAlignment.CENTER);
+    table.addHeaderCell(cells);            
+    table.setFixedPosition(100, 650,400);
+
+    // Cell totalSalesCell = new Cell(4, 4)
+    //                    .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
+    // table.addFooterCell(totalSalesCell);
+    // doc.add(table); 
+
+    Cell thisMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("This Months Sales: " + "$" + currentMonthSales.calcCurrentMonthSales())); 
+    table.addFooterCell(thisMonthSalesCell);
+    doc.add(table);
+
+    Cell twoMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("May Sales: " + "$" + currentMonthSales.calcTwoMonthSales())); 
+    table.addFooterCell(twoMonthSalesCell);
+    doc.add(table);
+
+    Cell threeMonthSalesCell = new Cell(4, 4)
+                       .add(new Paragraph("April Sales: " + "$" + currentMonthSales.calcThreeMonthSales())); 
+    table.addFooterCell(threeMonthSalesCell);
+    doc.add(table);
+
+   // Cell bestCustomerCell = new Cell(4, 4)
+   //                    .add(new Paragraph("Best Customer by revenue: ")); 
+   // table.addFooterCell(bestCustomerCell);
+   // doc.add(table);
+
+   String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
+   ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
+   Image salesChartImage = new Image(salesChartData);
+  // salesChartImage.scaleAbsolute(400, 400);
+   salesChartImage.setFixedPosition(25,50);
+   doc.add(salesChartImage);
+
+
+    doc.close();
+    Desktop.getDesktop().open(tempSales);
+    tempSales.deleteOnExit();
+}
+
+
+
+@FXML
+public void highlightClick(MouseEvent event) {
+    
+    if(orderScreenDisplayed == true){
+    UI.observablePO selectedItem = (UI.observablePO) total_Table.getSelectionModel().getSelectedItem();
+    
+    textId.setText(selectedItem.getProductID());
+    textQuantity.setText(selectedItem.getDate());
+    textCost.setText(selectedItem.getQuantity());
+    textPrice.setText(selectedItem.getCustomerLocation());
+    textSid.setText(selectedItem.getEmail());
+    textID.setText(selectedItem.getID());
     }
 
     @FXML
@@ -422,6 +558,7 @@ public class totalViewController {
         tempSales.deleteOnExit();
     }
 
+
     @FXML
     public void highlightClick(MouseEvent event) {
 
@@ -444,6 +581,7 @@ public class totalViewController {
             textSid.setText(selectedItem.getSupplierID());
 
         }
+
 
     }
 

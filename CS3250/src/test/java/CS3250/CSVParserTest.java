@@ -14,18 +14,24 @@ class CSVParserTest {
 	CSVData data = new CSVData();
 	String file = "customer_orders_team5.csv";
 
-	SQLPo po = new SQLPo();
+	SQLPo newPo = new SQLPo();
+	SQLData inventory = new SQLData();	
+
 
 	
-	// @Test
-	// public void ReadCSVWorks() {
-	// 	parse.readCSV(file, data);
-	// 	assertEquals(42585, data.retSize());
-	// }
+// 	// @Test
+// 	// public void ReadCSVWorks() {
+// 	// 	parse.readCSV(file, data);
+// 	// 	assertEquals(42585, data.retSize());
+// 	// }
 	
 	@Test
-	public void ReadCSVWorks() {
-		parse.readOrdersCSV(file, po);
+	public void ReadOrdersCSVWorks() {
+		String connectionString = StringParsers.readConfig(".config");
+		newPo.initializeDatabase(connectionString);
+		inventory.initializeDatabase(connectionString);
+		parse.readOrdersCSV(file, newPo, inventory);
 		assert(true);
 	}
 }
+

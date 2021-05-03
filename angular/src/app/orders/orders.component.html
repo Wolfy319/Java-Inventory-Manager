@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row">
+        <div class="">
+            <table class="table-hover table bg-light">
+                <thead>
+                    <td>Email</td>
+                    <td>Product ID</td>
+                    <td>Date</td>
+                    <td>quantity</td>
+                    <td>options</td>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of orders">
+                        <td>{{item.email}}</td>
+                        <td>{{item.productID}}</td>
+                        <td>{{item.date}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td><a class="btn btn-primary" href="/orders/{{item.id}}">View</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

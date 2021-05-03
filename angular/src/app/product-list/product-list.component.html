@@ -16,6 +16,7 @@
                 <td>{{item.supplierID}}</td>
                 <td>{{item.stockQuantity}}</td>
                 <td>{{item.wholesaleCost}}</td>
+                <td><a class="btn btn-primary" href="/buy/{{item.productID}}" [disabled]="!form.valid">Submit</a></td>
             </tr>
         </tbody>
     </table>
