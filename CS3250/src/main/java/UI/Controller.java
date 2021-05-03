@@ -21,7 +21,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import javafx.scene.control.Alert;
 import CS3250.StringParsers;
+import CS3250.DataMan;
+import CS3250.User;
 import CS3250.UserAuthenticator;
+import CS3250.UserDB;
 import CS3250.UserData;
 
 /**
@@ -79,11 +82,9 @@ public class Controller {
      * @throws InvalidKeySpecException - Throws if invalid key specification
      */
     public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    	UserData data = new UserData();
-    	
+        DataMan<User> data = new UserDB();    	
         String dbConnection = StringParsers.readConfig(".config");
         data.initializeDatabase(dbConnection);
-    	
     	
     	return UserAuthenticator.authenticate(attemptedUser, attemptedPass, data);
     }

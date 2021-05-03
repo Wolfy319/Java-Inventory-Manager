@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.itextpdf.io.IOException;
 import com.itextpdf.io.image.ImageData;
@@ -24,6 +25,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.mysql.jdbc.Statement;
 
+import CS3250.DataMan;
+import CS3250.Database;
+import CS3250.Entry;
+import CS3250.PODB;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -132,7 +137,13 @@ public class totalViewController {
 
     
     @FXML
-    public void showInventory() throws SQLException, java.io.IOException{
+
+    public void initialize() throws SQLException, java.io.IOException {
+        showOrders();
+    }
+
+    @FXML
+    public void showInventory() throws SQLException{
        
         orderScreenDisplayed = false;
 
@@ -145,17 +156,15 @@ public class totalViewController {
         textField6.setText(" ");
         textID.setText("");
         try {
-            Connection con = UIDBConnector.getConnection();
+            UIDBConnector udb = new UIDBConnector();
 
-            ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
-            
-            while (rs.next()) {// "should be column names"
+            var items = udb.getItemsConnection();
+            List<Entry> rs = items.getEntries();
 
-                oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
-                        rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
-                
+            for (Entry object : rs) {
+                oblist.add(new dataBaseItems(object.getProductID(), Integer.toString(object.getStockQuantity()),
+               Double.toString(object.getWholesaleCost()), Double.toString(object.getSalePrice()), object.getSupplierID()));
             }
-
 
 
         }finally{}
@@ -199,12 +208,17 @@ public class totalViewController {
     
 
 
-    SQLPo po = new SQLPo();
+ 
     ObservableList poList;
     public Boolean orderScreenDisplayed;
-    
+    DataMan<observablePO> items;
     @FXML
-    public void showOrders() throws java.io.IOException{
+
+    public void showOrders() throws SQLException, java.io.IOException{
+        UIDBConnector udb = new UIDBConnector();
+        items = udb.getPOConnection();
+
+        List<observablePO> rs = items.getEntries();
         orderScreenDisplayed = true; 
 
         textField1.setText("   Product Id");
@@ -223,10 +237,14 @@ public class totalViewController {
 
         
     
+
 		BufferedReader reader = new BufferedReader(new FileReader(".config"));
         po.initializeDatabase(reader.readLine());
         reader.close();
-        poList = FXCollections.observableArrayList(po.GenerateShortPOs());
+        poList = FXCollections.observableArrayList(rs);
+
+
+      
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("Date"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("Email"));
@@ -274,7 +292,8 @@ public class totalViewController {
             @Override public void handle(ActionEvent e) {
                 try {
                     showOrders();
-                } catch (java.io.IOException e1) {
+                } catch (Exception e1) {
+
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 };
@@ -412,7 +431,7 @@ public void addItem() throws SQLException, java.io.IOException{
         p.setEmail(textSid.getText());
         p.setProductID(textId.getText());
         p.quantity(textCost.getText());
-        po.createEntry("0", p);
+        items.createEntry("0", p);
         total_Table.getItems().clear();
         showOrders();
         
