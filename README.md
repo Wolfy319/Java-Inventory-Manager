@@ -4,7 +4,7 @@ Authors: (When joining please add your name)
 Wolfy Fiorini
 James Marshall
 Conner Botte
-
+Hunter DeArment
 
 CS3250 School project
 
