@@ -12,18 +12,10 @@ class UserAuthDBTest {
         Database db;
         @Test
         void ConnectionWorks(){
-            init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+            String connectionString = StringParsers.readConfig(".config");
+
+            init.initializeDatabase(connectionString);
             db = new Database(init);
-        /*
-         	Authorized Users:
-            Username 	Password
-            --------    --------  
-            "pineapple" "onpizza"
-    		"owner"     "password1234"
-    		"employee"  "cs3250"
-    		"admin"     "team3"
-    		"customer"  "password"
-         */
         
                 assertNotEquals(db.listEntries(), null);
         }

@@ -20,6 +20,7 @@ import { AuthService } from 'src/auth.service';
 import { OrdersComponent } from './orders/orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
 import { BuyItemsComponent } from './buy-items/buy-items.component';
+import { BuyComponent } from './buy/buy.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { BuyItemsComponent } from './buy-items/buy-items.component';
     ReccomendedComponent,
     OrdersComponent,
     ViewOrderComponent,
-    BuyItemsComponent
+    BuyItemsComponent,
+    BuyComponent
   ],
   imports: [
     AppRoutingModule,
@@ -62,6 +64,9 @@ import { BuyItemsComponent } from './buy-items/buy-items.component';
                 {path:
                   'orders/:id',
                   component: ViewOrderComponent  },
+                  {path:
+                    'orders/:id',
+                    component: ViewOrderComponent  },
                   {path:
                     'buy/:item',
                     component: BuyItemsComponent  },

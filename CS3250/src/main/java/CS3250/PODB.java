@@ -5,12 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 import UI.observablePO;
 
-public class SQLPo {
+public class PODB implements DataMan<observablePO>{
     SQLData inventory = new SQLData();
     String connectionString = "";
     String username = "";
@@ -18,6 +19,7 @@ public class SQLPo {
     Connection con;
     Statement st;
     ResultSet rs;
+    
 
     public void initializeDatabase(String filename) {
 
@@ -31,7 +33,7 @@ public class SQLPo {
             inventory.con = this.con;
             st = (Statement) con.createStatement();
             inventory.st = this.st;
-            rs = st.executeQuery("SELECT VERSION()");
+             rs = st.executeQuery("SELECT VERSION()");
             inventory.rs = this.rs;
             if (rs.next()) {
                 System.out.println("Connected to..." + rs.getString(1));
@@ -44,12 +46,7 @@ public class SQLPo {
     // need to create table for PO's and swap this string
     public void createEntry(String ID, observablePO p) {
         Entry inventoryItem = inventory.readEntry(p.getProductID());
-<<<<<<< HEAD
-        int quantity = Integer.parseInt(p.getQuantity());
-        if(poExists(p.getProductID(), quantity, p.getDate(), p.getEmail(), p.getCustomerLocation())) {
-=======
         if(poExists(p.getProductID(), Integer.parseInt(p.getQuantity()), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
->>>>>>> dev
             System.out.println("Order already exists");
             return;
         }
@@ -58,21 +55,13 @@ public class SQLPo {
             return;
         }
         else {
-<<<<<<< HEAD
-            if(inventoryItem.getStockQuantity() < quantity) {
-=======
             if(inventoryItem.getStockQuantity() < Integer.parseInt(p.getQuantity())) {
->>>>>>> dev
                 System.out.println("Order quantity exceeds quantity in inventory!");
                 return;
             }
             else {
                 int currentQuantity = inventoryItem.getStockQuantity();
-<<<<<<< HEAD
-                inventoryItem.setStockQuantity(currentQuantity - quantity);
-=======
                 inventoryItem.setStockQuantity(currentQuantity - Integer.parseInt(p.getQuantity()));
->>>>>>> dev
                 inventory.updateEntry(p.getProductID(), inventoryItem);
             }
         }
@@ -90,7 +79,7 @@ public class SQLPo {
     }
 
     
-    public List<UI.observablePO> GenerateShortPOs(){
+    public List<UI.observablePO> getEntries(){
         List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
         String statement2 = "SELECT * FROM PO;";
         UserData u = new UserData();
@@ -115,16 +104,16 @@ public class SQLPo {
         return arr;
     }
 
-    public PO getPo(int ID) {
+    public observablePO readEntry(String ID) {
         String statement2 = "SELECT * FROM PO WHERE id = '" + ID + "';";
-        PO po = new PO();
+        observablePO po = new observablePO();
         try {
             rs = st.executeQuery(statement2);
             rs.next();
             po.setDate(rs.getString("date"));
-            po.setID(rs.getInt("ID"));
+            po.setID(rs.getString("ID"));
             po.setProductID(rs.getString("productID"));
-            po.customerLocation = rs.getString("custLoc");
+            po.setCustomerLocation((rs.getString("custLoc")));
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
@@ -144,12 +133,9 @@ public class SQLPo {
         return false;
     }
 
-    public void updateInventory(String productID, int orderedQuantity) {
-		
-	}
-
-    public void updateEntry(String ID, Entry e) {
+    public void updateEntry(String ID, observablePO e) {
         // TODO Auto-generated method stub
+
     }
 
     public void deleteEntry(String id) {
@@ -159,6 +145,7 @@ public class SQLPo {
 
     public void saveEntry(Entry e) {
         // TODO Auto-generated method stub
+
     }
 
     public int retSize() {
@@ -166,28 +153,6 @@ public class SQLPo {
         return 0;
     }
 
-    public List<UI.observablePO> GenerateWeeklyPO(String statement2){
-        List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
-        UserData u = new UserData();
-        u.initializeDatabase(connectionString + " " + username + " " + password);
-        UI.observablePO po = new UI.observablePO();
-        try{
-            rs = st.executeQuery(statement2);
-            while (rs.next()) {
-                po = new UI.observablePO();
-                po.setProductID(rs.getString("productID"));
-                po.setEmail( rs.getString("email"));
-                po.setDate(rs.getString("date"));
-                po.setID(rs.getString("ID"));
-                po.setCustomerLocation(rs.getString("custLoc"));
-                po.quantity(rs.getString("quantity"));
-                arr.add(po);
-            }             
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
-        return arr;
-    }
-
 }
+
+

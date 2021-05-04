@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 
 public class UserDataTest {
     UserData init = new UserData();
+    String connectionString = StringParsers.readConfig(".config");
+
     @Test
     void ConnectionWorks(){
-        init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+        init.initializeDatabase(connectionString);
         String s = "testin the username today";
         byte[] user = s.getBytes();
 
@@ -16,13 +18,13 @@ public class UserDataTest {
     }
     @Test 
     void returnSizeWorks(){
-        init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
+        init.initializeDatabase(connectionString);
         assertNotEquals(init.retSize(), 0);
     }
 
     @Test
     void deleteAndGetUserWorks(){
-        init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
+        init.initializeDatabase(connectionString);
         User e = new User();
         e.setID(200);
         e.setEmail("James-cool@coolGuys.com");

@@ -4,8 +4,17 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+<<<<<<< HEAD
 import UI.observablePO;
 
+=======
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import UI.observablePO;
+
+>>>>>>> dev
 /*
   This class will eventually hook up to our database,
   so in the future it might change from adding the entries 
@@ -15,22 +24,36 @@ import UI.observablePO;
 public class CSVParser {
 	
 	/**
+<<<<<<< HEAD
 	 * Parses a CSV file full of products and adds each to a database
 	 *  
 	 * @param filename - Path to the csv file to be parsed
 	 * @param database - Inventory Database object
+=======
+	 * Parses a CSV file full of products into Entry objects
+	 *  
+	 * @param filename - Path to the csv file to be parsed
+	 * @param database - Database object
+>>>>>>> dev
 	 * 
 	 */
 	public void readProductsCSV(String filename, DataInterface database){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		
+<<<<<<< HEAD
 		// Try to open the file
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 				// Skip column names
 				reader.readLine();
 				// Read line by line
+=======
+		// Try to open the file and start reading
+		try (InputStream inputStream = getClass().getResourceAsStream(filename);
+			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+				reader.readLine();
+>>>>>>> dev
 			    while((line = reader.readLine()) != null) {
 			    	Entry newEntry = new Entry(); // Create new entry
 			    	fields = line.split(",");     // Split the row into individual fields
@@ -71,7 +94,11 @@ public class CSVParser {
 			    	fields = line.split(",");     // Split the row into individual fields
 			    	
 			    	// Fill in fields
+<<<<<<< HEAD
 			    	populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], PoDB);
+=======
+			    	populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
+>>>>>>> dev
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -105,6 +132,7 @@ public class CSVParser {
 		}
 	}
 
+<<<<<<< HEAD
 	/** Adds an observable PO object to the database
 	 * 
 	 * @param date 
@@ -115,16 +143,24 @@ public class CSVParser {
 	 * @param PoDB - Product Orders database object
 	 */
 	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String productQuantity, SQLPo PoDB) {
+=======
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String fields, SQLPo PoDB) {
+>>>>>>> dev
 		System.out.print(date + " " + customerEmail);
 		observablePO po = new observablePO();
 		po.setDate(date);
 		po.setEmail(customerEmail);
 		po.setCustomerLocation(customerLocation);
 		po.setProductID(productID);
-		po.quantity(productQuantity);
+		po.quantity(fields);
 
 		PoDB.createEntry("1", po);
 		 
 		return;
 	}
+<<<<<<< HEAD
+=======
+
+	
+>>>>>>> dev
 }
