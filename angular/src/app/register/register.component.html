@@ -1,0 +1,25 @@
+<div class="container col-8">
+    <div id="register">
+        <div class="container">
+            <div id="register-row" class="row justify-content-center align-items-center">
+                <div id="register-column" class="col-md-6">
+                    <div id="register-box" class="col-md-12">
+                        <form ngForm #f="ngForm" (ngSubmit) = "regf(f.value)" >
+                            <h3 class="text-center text-info">Login</h3>
+                                <label for="username" class="text-info">Username:</label><br>
+                                <input required ngModel name="username" type="text" name="username" id="username" class="form-control">
+                                <label for="password" class="text-info">Password:</label><br>
+                                <input required ngModel name="password" type="text" name="password" id="password" class="form-control">
+                                <label for="email" class="text-info">email:</label><br>
+                                <input required ngModel name="email" type="text" name="email" id="email" class="form-control">
+                            <button class="btn btn-info btn-md" type="submit" >Submit</button>
+                            <div id="register-link" class="text-right">
+                                <a href="/"  class="text-info">cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

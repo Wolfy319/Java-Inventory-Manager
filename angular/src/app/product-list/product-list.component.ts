@@ -54,6 +54,7 @@ export class ProductListComponent implements OnInit {
       this.entries = res;
       console.log(this.entries);
     })
+    
   }
 
   ngOnInit(): void {

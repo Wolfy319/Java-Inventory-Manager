@@ -21,6 +21,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
 import { BuyItemsComponent } from './buy-items/buy-items.component';
 import { BuyComponent } from './buy/buy.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { BuyComponent } from './buy/buy.component';
     OrdersComponent,
     ViewOrderComponent,
     BuyItemsComponent,
-    BuyComponent
+    BuyComponent,
+    RegisterComponent
   ],
   imports: [
     AppRoutingModule,
@@ -55,6 +57,12 @@ import { BuyComponent } from './buy/buy.component';
             {path:
               'login',
               component: LoginComponent  },
+              {path:
+                'login/new',
+                component: RegisterComponent  },
+                {path:
+                  'login/new/:username/:password/:email',
+                  component: RegisterComponent  },
             {path:
               'reccomended',
               component: ReccomendedComponent  },
