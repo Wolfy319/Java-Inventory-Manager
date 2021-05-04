@@ -1,22 +1,21 @@
 # Hunter DeArment Conner Botte
 
+
 import discord
 import os
 import smtplib
 from replit import db
 import random
-from os import system
 import mysql.connector
 
 mydb = mysql.connector.connect(
-  host = "216.137.177.30",
-  user = "team3",
-  password = "UpdateTrello!1",
+  host = os.getenv('IP'),
+  user = os.getenv('USER'),
+  password = os.getenv('PASSWORD'),
   database = "testDB"
 )
 
 print(mydb)
-
 
 client = discord.Client()
 
@@ -47,6 +46,63 @@ clothes = [items['l'],items['r'],items['t'],items['z'],items['4'],items['5']]
 toys = [items['j'],items['k'],items['p'],items['v'],items['x'],items['y'],items['6'],items['7'],items['9']]
 
 misc = [items['d'],items['e'],items['f'],items['n'],items['q'],items['9']]
+
+
+
+
+
+
+
+
+def confirmOrder(order_number,email):
+  i = 0
+  orderC = False
+  mycursor = mydb.cursor()
+
+  mycursor.execute("SELECT productID FROM testDB.PO WHERE productID =  " + "'" + order_number + "'")
+
+  myresult = mycursor.fetchall()
+  if(len(myresult) != 0):
+    orderC = True 
+  mycursor = mydb.cursor()
+
+  mycursor.execute("SELECT EMAIL FROM testDB.PO WHERE EMAIL =  " + "'" + email + "'")
+  
+  myresult = mycursor.fetchall()
+  for x in myresult:
+    i = i+1
+
+  if(i>0 and orderC == True):
+    print("Order " + order_number + ", " + email + " confirmed")
+    return True
+  else:
+    print('Order number and email do not match')
+    print(orderC)
+    return False
+confirmOrder('QG0XU6LKF9PK','spak@aol.com')
+
+def searchOrder (order_number):
+  mycursor = mydb.cursor()
+  mycursor.execute("SELECT productID FROM testDB.PO WHERE productID =  " + "'" + order_number + "'")
+  myresult = mycursor.fetchall()
+  
+  for x in myresult:  
+    print (x)
+searchOrder('QG0XU6LKF9PK')
+
+def searchEmail(email):
+  i = 0
+  mycursor = mydb.cursor()
+
+  mycursor.execute("SELECT EMAIL FROM testDB.PO WHERE EMAIL =  " + "'" + email + "'")
+  
+  myresult = mycursor.fetchall()
+  
+  for x in myresult:
+    i = i+1
+  print (str(i) + " instances of " + email)
+
+searchEmail('flue@hotmail.com')
 
 # checks if email is a valid email
 def valid_email(em):
@@ -84,18 +140,25 @@ def find_index(email):
     count += 1
 
 # adds class order to list of users
-def add_order(email,id):
+def add_order(email,id,quantity,customerLocation,date):
+  mycursor = mydb.cursor()
+  mycursor.execute("SELECT stockQuantity FROM testDB.PO WHERE productID =  " + "'" + id + "'")
+  myresult = mycursor.fetchall()
+  
+  newQuantity = int(myresult) - quantity
+
+  mycursor.execute("INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES(" + "'" + id + "', '" + newQuantity + "', '" + date + "', '" + email + "', '" + customerLocation + "');")
   a = str(id)
   a = a[0]
   current = user_order(email,id,prices[a])
   users[current.email] = current
 
-# Recs an item based on past orders
-def rec(email):
+# Recs an item based on past orders in accordance with database
+def rec(order_num,email):
 
-  rec = users[str(email)].id1
-
-  index = rec[0]
+  order_index = str(order_num)
+  index = order_index[0]
+  index = index.lower()
   print(index)
   item = ""
 
@@ -183,6 +246,15 @@ def cancel_order(email,order_number):
     else:
       return False    
 
+def searchProduct (product):
+  mycursor = mydb.cursor()
+  mycursor.execute("SELECT productID FROM testDB.PO WHERE productID =  " + "'" + product + "'")
+  myresult = mycursor.fetchall()
+  
+  if(len(myresult) == 0):
+    return False
+  else :
+    return True
       
 def send_confirmation(user, password, recipient, subject, body):
     gmail_user = user
@@ -221,19 +293,6 @@ async def on_message(message):
         await message.channel.send(user[1] + " added!")
       else:
         await message.channel.send(user[1] + " is an invalid email!")
-
-    if message.content.startswith('-confirm_order'):
-      user_input = message.content.split()
-      tempEmail = user_input[1]
-      tempOrder = user_input[2]
-      if (cancel_order(tempEmail,tempOrder)):
-        send_confirmation("testemail19872614@gmail.com" , "Abc123614!" , tempEmail , "Confirmation" , "Hello, " + tempEmail + " " + tempOrder + " Your order has been confirmed." + " Here are some recomended products based on your purchase: \n" + rec(tempEmail) + " , " + rec(tempEmail))
-        await message.channel.send("Confirmation email sent")
-        print ("Email Sent") 
-      else:
-        await message.channel.send(tempEmail + " is not associated with " + tempOrder)
-
-
     
     if message.content.startswith('-cancel_order'):
       user_input = message.content.split()
@@ -254,7 +313,7 @@ async def on_message(message):
     if message.content.startswith('-confirm_email'):
       user_input = message.content.split()
       tempEmail = user_input[1]
-      send_confirmation("testemail19872614@gmail.com" , "Abc123614!" , tempEmail , "Confirmation" , "Hello, " + tempEmail + "email confirmed.")
+      send_confirmation("testemail19872614@gmail.com" , "Abc123614!" , tempEmail , "Confirmation" , "Hello, " + tempEmail + " email confirmed.")
       print ("Email Sent") 
 
     if message.content.startswith('-add_order'):
@@ -264,8 +323,9 @@ async def on_message(message):
       else:
         email = user[1]
         pid = user[2]
-        
-        if valid_email(email) and len(pid) == 12:
+        location = user[3]
+        custDate = user[4]
+        if valid_email(email) and len(pid) == 12 and searchOrder(pid):
           add_order(email, pid)
           await message.channel.send("Order Added")
         else:
@@ -273,11 +333,13 @@ async def on_message(message):
     
     if message.content.startswith('-rec'):
       user = message.content.split()
-      if user[1] in db['email']:
-        recm = rec(str(user[1]))
-        await message.channel.send("We reccommend to buy a(n) " + str(recm) + "!")
+      oid = str(user[1])
+      email = str(user[2])
+      if (confirmOrder(oid,email) == True):
+        recm = rec(oid,email)
+        await message.channel.send("We recommend to buy a(n) " + str(recm) + "!")
       else:
-        await message.channel.send("Email does not exist!")
+        await message.channel.send("Email or order does not exist!")
 
     if message.content.startswith('-under'):
       user = message.content.split()
@@ -285,7 +347,19 @@ async def on_message(message):
       if len(msg) < 1:
         await message.channel.send("No items under " + str(user[1]))
       else:
-        await message.channel.send("Items under " + str(user[1]) + "!")
+        await message.channel.send("Items under $" + str(user[1]) + ".00" + "!")
         await message.channel.send(msg)
+    
+    if message.content.startswith('-confirm_order1'):
+      user_input = message.content.split()
+      order = user_input[1]
+      email = user_input[2]
+      if (confirmOrder(order,email) == True):
+        await message.channel.send("Order and Email Confirmed")
+      else:
+        await message.channel.send("Order or email do not exist")
+        
+
+      
 
 client.run(os.getenv('TOKEN'))
