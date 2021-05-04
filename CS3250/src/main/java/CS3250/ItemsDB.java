@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 /**
  * Class to connect to and edit a MySQL database containing various product entries
  */
-public class SQLData implements DataInterface {
+public class ItemsDB implements DataMan<Entry> {
 
     String connectionString = "";
     String username = "";
@@ -167,37 +167,5 @@ public class SQLData implements DataInterface {
             e.printStackTrace();
         }
     }
-
-    
-    /**
-     * Saves an entry into the database
-     * @param e - Entry to be saved
-     */
-    @Override
-    public void saveEntry(Entry e) {
-        createEntry(e.getProductID(), e);
-
-    }
-
-    
-    /** 
-     * Returns the total number of entries inside of the database
-     * @return int - Number of entries in database
-     */
-    @Override
-    public int retSize() {
-        int rsCount = 0;
-        try{
-        while(rs.next())
-        {
-            rsCount = rsCount + 1;
-        }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-        return rsCount;
-    }
-
-
 
 }

@@ -27,4 +27,12 @@ class UserTest {
     	e.setSalt(testArray);
     	assertEquals(Arrays.equals(testArray, e.getSalt()), true);
     }
+
+    @Test
+    public void newUserDBWorks(){
+        UserDB db = new UserDB();
+        db.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false& team3 UpdateTrello!1");
+        var user = db.readEntry("pineapple");
+    	assertNotEquals(user, null);
+    }
 }
