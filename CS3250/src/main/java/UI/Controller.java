@@ -83,7 +83,7 @@ public class Controller {
      */
     public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
         DataMan<User> data = new UserDB();    	
-        String dbConnection = StringParsers.readConfig(".config");
+        String dbConnection = StringParsers.readConfig("config");
         data.initializeDatabase(dbConnection);
     	
     	return UserAuthenticator.authenticate(attemptedUser, attemptedPass, data);
