@@ -4,17 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-<<<<<<< HEAD
-import UI.observablePO;
-
-=======
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import UI.observablePO;
 
->>>>>>> dev
 /*
   This class will eventually hook up to our database,
   so in the future it might change from adding the entries 
@@ -24,36 +19,20 @@ import UI.observablePO;
 public class CSVParser {
 	
 	/**
-<<<<<<< HEAD
-	 * Parses a CSV file full of products and adds each to a database
-	 *  
-	 * @param filename - Path to the csv file to be parsed
-	 * @param database - Inventory Database object
-=======
 	 * Parses a CSV file full of products into Entry objects
 	 *  
 	 * @param filename - Path to the csv file to be parsed
 	 * @param database - Database object
->>>>>>> dev
 	 * 
 	 */
 	public void readProductsCSV(String filename, DataInterface database){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		
-<<<<<<< HEAD
-		// Try to open the file
-		try (InputStream inputStream = getClass().getResourceAsStream(filename);
-			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-				// Skip column names
-				reader.readLine();
-				// Read line by line
-=======
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 				reader.readLine();
->>>>>>> dev
 			    while((line = reader.readLine()) != null) {
 			    	Entry newEntry = new Entry(); // Create new entry
 			    	fields = line.split(",");     // Split the row into individual fields
@@ -75,30 +54,30 @@ public class CSVParser {
 	}
 
 /**
-	 * Parses a CSV file full of customer orders and adds each to a database
+	 * Parses a CSV file full of products into Entry objects
 	 *  
 	 * @param filename - Path to the csv file to be parsed
-	 * @param PoDB - Product Order Database object
-	 * @param inventory - Inventory Database object
+	 * @param database - Database object
+	 * 
 	 */
-	public void readOrdersCSV(String filename, SQLPo PoDB, SQLData inventory){
+	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory, boolean isReversed){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		
-		// Try to open the file 
+		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 				reader.readLine();
-				// Read line by line
 			    while((line = reader.readLine()) != null) {
 			    	fields = line.split(",");     // Split the row into individual fields
-			    	
+
 			    	// Fill in fields
-<<<<<<< HEAD
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], PoDB);
-=======
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
->>>>>>> dev
+					if(isReversed) {
+						undoInventoryUpdate(fields[3], Integer.parseInt(fields[4]), inventory, newEntry);
+					}
+					else {
+						populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
+					}
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -106,61 +85,34 @@ public class CSVParser {
 		return;
 	}
 
-	/** Subtracts stock from inventory based on ordered quantity
-	 * 
-	 * @param productID - Product to be updated
-	 * @param orderedQuantity - # of items ordered
-	 * @param inventory - Inventory Database object
-	 */
-	public void updateInventory(String productID, int orderedQuantity, SQLData inventory) {
-		// Pull entry from database
+	
+
+	public void undoInventoryUpdate(String productID, int orderedQuantity, SQLData inventory, SQLPo PoDB) {
 		Entry inventoryItem = inventory.readEntry(productID);
 		if(inventoryItem == null) {
 			System.out.println("Ordered item " + productID + " doesn't exist!");
 		}
 		else {
-			// Check if # ordered is less than is currently in stock
-			if(inventoryItem.getStockQuantity() < orderedQuantity) {
-				System.out.println("Order quantity exceeds quantity in inventory!");
-			}
-			else {
-				// Subtract ordered quantity from current inventory and update database
-				int currentQuantity = inventoryItem.getStockQuantity();
-				inventoryItem.setStockQuantity(currentQuantity - orderedQuantity);
-				inventory.updateEntry(productID, inventoryItem);
-			}
+			int currentQuantity = inventoryItem.getStockQuantity();
+			inventoryItem.setStockQuantity(currentQuantity + orderedQuantity);
+			inventory.updateEntry(productID, inventoryItem);
 		}
 	}
 
-<<<<<<< HEAD
-	/** Adds an observable PO object to the database
-	 * 
-	 * @param date 
-	 * @param customerEmail
-	 * @param customerLocation
-	 * @param productID
-	 * @param productQuantity
-	 * @param PoDB - Product Orders database object
-	 */
-	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String productQuantity, SQLPo PoDB) {
-=======
-	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String fields, SQLPo PoDB) {
->>>>>>> dev
-		System.out.print(date + " " + customerEmail);
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, 
+							String quantity, SQLPo PoDB) {
+
 		observablePO po = new observablePO();
 		po.setDate(date);
 		po.setEmail(customerEmail);
 		po.setCustomerLocation(customerLocation);
 		po.setProductID(productID);
-		po.quantity(fields);
+		po.quantity(quantity);
 
 		PoDB.createEntry("1", po);
 		 
 		return;
 	}
-<<<<<<< HEAD
-=======
 
 	
->>>>>>> dev
 }

@@ -44,12 +44,8 @@ public class SQLPo {
     // need to create table for PO's and swap this string
     public void createEntry(String ID, observablePO p) {
         Entry inventoryItem = inventory.readEntry(p.getProductID());
-<<<<<<< HEAD
         int quantity = Integer.parseInt(p.getQuantity());
         if(poExists(p.getProductID(), quantity, p.getDate(), p.getEmail(), p.getCustomerLocation())) {
-=======
-        if(poExists(p.getProductID(), Integer.parseInt(p.getQuantity()), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
->>>>>>> dev
             System.out.println("Order already exists");
             return;
         }
@@ -58,21 +54,13 @@ public class SQLPo {
             return;
         }
         else {
-<<<<<<< HEAD
             if(inventoryItem.getStockQuantity() < quantity) {
-=======
-            if(inventoryItem.getStockQuantity() < Integer.parseInt(p.getQuantity())) {
->>>>>>> dev
                 System.out.println("Order quantity exceeds quantity in inventory!");
                 return;
             }
             else {
                 int currentQuantity = inventoryItem.getStockQuantity();
-<<<<<<< HEAD
                 inventoryItem.setStockQuantity(currentQuantity - quantity);
-=======
-                inventoryItem.setStockQuantity(currentQuantity - Integer.parseInt(p.getQuantity()));
->>>>>>> dev
                 inventory.updateEntry(p.getProductID(), inventoryItem);
             }
         }
