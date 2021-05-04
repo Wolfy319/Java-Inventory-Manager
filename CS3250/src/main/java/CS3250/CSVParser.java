@@ -60,7 +60,7 @@ public class CSVParser {
 	 * @param database - Database object
 	 * 
 	 */
-	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory){
+	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory, boolean isReversed){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		
@@ -71,9 +71,13 @@ public class CSVParser {
 			    while((line = reader.readLine()) != null) {
 			    	fields = line.split(",");     // Split the row into individual fields
 
-			    	
 			    	// Fill in fields
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
+					if(isReversed) {
+						undoInventoryUpdate(fields[3], Integer.parseInt(fields[4]), inventory);
+					}
+					else {
+						populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
+					}
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -81,33 +85,29 @@ public class CSVParser {
 		return;
 	}
 
-	public void updateInventory(String productID, int orderedQuantity, SQLData inventory) {
-		
-		
+	
+
+	public void undoInventoryUpdate(String productID, int orderedQuantity, SQLData inventory) {
 		Entry inventoryItem = inventory.readEntry(productID);
 		if(inventoryItem == null) {
 			System.out.println("Ordered item " + productID + " doesn't exist!");
 		}
 		else {
-			if(inventoryItem.getStockQuantity() < orderedQuantity) {
-				System.out.println("Order quantity exceeds quantity in inventory!");
-			}
-			else {
-				int currentQuantity = inventoryItem.getStockQuantity();
-				inventoryItem.setStockQuantity(currentQuantity - orderedQuantity);
-				inventory.updateEntry(productID, inventoryItem);
-			}
+			int currentQuantity = inventoryItem.getStockQuantity();
+			inventoryItem.setStockQuantity(currentQuantity + orderedQuantity);
+			inventory.updateEntry(productID, inventoryItem);
 		}
 	}
 
-	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String fields, SQLPo PoDB) {
-		System.out.print(date + " " + customerEmail);
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, 
+							String quantity, SQLPo PoDB) {
+
 		observablePO po = new observablePO();
 		po.setDate(date);
 		po.setEmail(customerEmail);
 		po.setCustomerLocation(customerLocation);
 		po.setProductID(productID);
-		po.quantity(fields);
+		po.quantity(quantity);
 
 		PoDB.createEntry("1", po);
 		 
