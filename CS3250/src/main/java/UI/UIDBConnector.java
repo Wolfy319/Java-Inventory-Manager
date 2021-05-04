@@ -31,7 +31,7 @@ public class UIDBConnector {
      * @throws IOException
      */
     public static Connection getConnection() throws SQLException, IOException{
-        String connectionString = StringParsers.readConfig(".config");
+        String connectionString = StringParsers.readConfig("config");
         StringParsers p = new StringParsers();
         String[] dbConnection = p.parseConnectionString(connectionString);
         Connection connection = DriverManager.getConnection(dbConnection[0], dbConnection[1], dbConnection[2]);
