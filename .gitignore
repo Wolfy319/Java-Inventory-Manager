@@ -59,3 +59,20 @@ angular/Thumbs.db
 *.yml
 *.jar
 
+CS3250/target/maven-archiver/pom.properties
+CS3250/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+CS3250/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+CS3250/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+CS3250/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+CS3250/target/surefire-reports/CS3250.EntryTest.txt
+CS3250/target/surefire-reports/CS3250.InventoryUpdateTest.txt
+CS3250/target/surefire-reports/CS3250.MainTest.txt
+CS3250/target/surefire-reports/CS3250.POTest.txt
+CS3250/target/surefire-reports/CS3250.SQLDataTest.txt
+CS3250/target/surefire-reports/CS3250.UserDataTest.txt
+CS3250/target/surefire-reports/TEST-CS3250.EntryTest.xml
+CS3250/target/surefire-reports/TEST-CS3250.InventoryUpdateTest.xml
+CS3250/target/surefire-reports/TEST-CS3250.MainTest.xml
+CS3250/target/surefire-reports/TEST-CS3250.POTest.xml
+CS3250/target/surefire-reports/TEST-CS3250.SQLDataTest.xml
+CS3250/target/surefire-reports/TEST-CS3250.UserDataTest.xml

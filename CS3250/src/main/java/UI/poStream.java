@@ -87,7 +87,12 @@ public class poStream {
 
     public String[] salesCalc() throws SQLException {
         numMonth();
-        productCostMap();
+        try {
+            productCostMap();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         Double totalSales = 0.0;
         Double currentMonthTotal = 0.0;
@@ -162,7 +167,7 @@ public class poStream {
                 , String.valueOf(totalOrders) };
     }
 
-    public String[] bestCustomer() throws SQLException {
+    public String[] bestCustomer() throws SQLException, IOException {
         String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
         SQLPo SQLPO = new SQLPo();
         SQLPO.initializeDatabase(filename);
@@ -203,7 +208,12 @@ public class poStream {
     }
 
     public String[] thisWeeksSales() throws SQLException {
-        productCostMap();
+        try {
+            productCostMap();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         Double currentWeeklyTotal = 0.0;
         Double twoWeekTotal = 0.0;
@@ -349,7 +359,12 @@ public class poStream {
     }
 
     public String[] dailySales() throws SQLException {
-        productCostMap();
+        try {
+            productCostMap();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         Double dayTotal = 0.0;
 
@@ -375,7 +390,12 @@ public class poStream {
     }
 
     public String[] popularItems() throws SQLException {
-        productCostMap();
+        try {
+            productCostMap();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
         SQLPo SQLPO = new SQLPo();
