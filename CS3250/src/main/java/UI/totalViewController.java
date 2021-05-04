@@ -165,24 +165,24 @@ public class totalViewController {
         try {
             UIDBConnector udb = new UIDBConnector();
 
-            ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
+            var items = udb.getItemsConnection();
+            List<Entry> rs = items.getEntries();
 
-            while (rs.next()) {
-
-                oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
-                        rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
-
+            for (Entry object : rs) {
+                oblist.add(new dataBaseItems(object.getProductID(), Integer.toString(object.getStockQuantity()),
+               Double.toString(object.getWholesaleCost()), Double.toString(object.getSalePrice()), object.getSupplierID()));
             }
 
-        } finally {
-        }
 
+        }finally{}
         
         cellOne.setText("Product_ID");
         CellTwo.setText("Stock_Quantity");
         cellThree.setText("WholeSale_Cost");
         cellFour.setText("Sale_Price");
         cellFive.setText("Supplier_ID");
+
+
 
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
@@ -192,23 +192,24 @@ public class totalViewController {
 
         total_Table.setItems(oblist);
 
-        FilteredList<dataBaseItems> filteredData = new FilteredList<>(oblist, p -> true);
+
+        FilteredList<dataBaseItems> filteredData = new FilteredList<>(oblist, p -> true); 
         searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
-            filteredData.setPredicate(dataBaseItems -> {
-                if (newVal == null || newVal.isEmpty()) {
-                    return true;
+            filteredData.setPredicate(dataBaseItems -> { 
+                if(newVal == null || newVal.isEmpty()){
+                    return true; 
                 }
-                String lowerFilter = newVal.toLowerCase();
-                if (dataBaseItems.getProductID().toLowerCase().contains(lowerFilter)) {
+                String lowerFilter = newVal.toLowerCase(); 
+                if(dataBaseItems.getProductID().toLowerCase().contains(lowerFilter)){
                     return true;
-                }
-                return false;
+                }return false;
             });
         });
-        // SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData);
-        // sortedData.comparatorProperty().bind(total_Table.comparatorProperty());
-        // total_Table.setItems((ObservableList<dataBaseItems>) sortedData);
-
+        //SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
+        //sortedData.comparatorProperty().bind(total_Table.comparatorProperty());
+        //total_Table.setItems((ObservableList<dataBaseItems>) sortedData);
+        
+        
     }
 
  
@@ -239,57 +240,47 @@ public class totalViewController {
         cellFive.setText(" ");
         total_Table.getItems().clear();
 
-
         
     
 
-		BufferedReader reader = new BufferedReader(new FileReader(".config"));
-        po.initializeDatabase(reader.readLine());
-        reader.close();
-        poList = FXCollections.observableArrayList(rs);
-
-
       
-
+        poList = FXCollections.observableArrayList(rs);
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("Date"));
         cellThree.setCellValueFactory(new PropertyValueFactory<>("Email"));
         cellFour.setCellValueFactory(new PropertyValueFactory<>("ID"));
         total_Table.setItems(poList);
-
-        FilteredList<observablePO> filteredList = new FilteredList<>(poList);
-        searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
-            filteredList.setPredicate(poFact -> {
-                if (newVal == null || newVal.isEmpty()) {
-                    return true;
-                }
-                String lowerFilter = newVal.toLowerCase();
-                if (poFact.getProductID().toLowerCase().contains(lowerFilter)) {
-                    return true;
-                }
-                return false;
-            });
+    
+    FilteredList<observablePO> filteredList = new FilteredList<>(poList);
+    searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
+        filteredList.setPredicate(poFact -> { 
+            if(newVal == null || newVal.isEmpty()){
+                return true; 
+            }
+            String lowerFilter = newVal.toLowerCase(); 
+            if(poFact.getProductID().toLowerCase().contains(lowerFilter)){
+                return true;
+            }return false;
         });
-        // SortedList<observablePO> sortedData = new SortedList<>(filteredList);
-        // total_Table.setItems(sortedData);
+    });
+    //SortedList<observablePO> sortedData = new SortedList<>(filteredList); 
+    //total_Table.setItems(sortedData);
     }
 
     @FXML
-    public void inventoryBtn(ActionEvent event) {
+    public void inventoryBtn(ActionEvent event){
         inv_Btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+            @Override public void handle(ActionEvent e) {
                 try {
-                    showInventory();
-
-                } catch (SQLException | java.io.IOException e1) {
+                    showInventory();;
+                } catch (SQLException e1) {
                     // TODO Auto-generated catch block
-
                     e1.printStackTrace();
                 }
             }
         });
     }
+
 
     @FXML
     public void ordersBtn(ActionEvent event) {
@@ -314,103 +305,10 @@ public class totalViewController {
 
 }
 
-@FXML
-public void showReport(ActionEvent event) throws IOException, java.io.IOException, SQLException{
- 
-
-    poStream totalSaleStream = new poStream();
-    poStream currentMonthSales = new poStream();
-    
-   jChart test = new jChart();
-   test.lineChartTest();
-   
 
 
 
-    //Creates temporary sales pdf
-    File tempSales = File.createTempFile("SalesReport", ".pdf"); 
-    PdfWriter writer = new PdfWriter(tempSales);
-    PdfDocument salesDoc = new PdfDocument(writer);
-    PdfPage pageOne = salesDoc.addNewPage();
-    Document doc = new Document(salesDoc);
 
-    //Adds Rt3 Logo
-    String rt3Loc = "CS3250\\src\\main\\java\\UI\\Images\\RT3.png";
-    ImageData rt3Data = ImageDataFactory.create(rt3Loc);
-    Image rt3Image = new Image(rt3Data);
-    rt3Image.scaleAbsolute(100, 100);
-    rt3Image.setFixedPosition(250,675);
-    doc.add(rt3Image);
-
-    
-    //Sales Report heading
-    String headingText = "Sales Report Generated by IMS";
-    Paragraph headingBreak = new Paragraph(headingText);
-    headingBreak.setTextAlignment(TextAlignment.CENTER);
-    doc.add(headingBreak);
-    
-    //Add Table
-    float[] columnWidths = {1.5f, 2f, 5f, 2f};
-    Table table = new Table(UnitValue.createPercentArray(columnWidths));
-    Cell cells = new Cell(4,4)
-                .add(new Paragraph("Sales Snap-Shot"))
-                .setTextAlignment(TextAlignment.CENTER);
-    table.addHeaderCell(cells);            
-    table.setFixedPosition(100, 650,400);
-
-    // Cell totalSalesCell = new Cell(4, 4)
-    //                    .add(new Paragraph("Total Sales: " + "$" + totalSaleStream.calcTotalSales())); 
-    // table.addFooterCell(totalSalesCell);
-    // doc.add(table); 
-
-    Cell thisMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("This Months Sales: " + "$" + currentMonthSales.calcCurrentMonthSales())); 
-    table.addFooterCell(thisMonthSalesCell);
-    doc.add(table);
-
-    Cell twoMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("May Sales: " + "$" + currentMonthSales.calcTwoMonthSales())); 
-    table.addFooterCell(twoMonthSalesCell);
-    doc.add(table);
-
-    Cell threeMonthSalesCell = new Cell(4, 4)
-                       .add(new Paragraph("April Sales: " + "$" + currentMonthSales.calcThreeMonthSales())); 
-    table.addFooterCell(threeMonthSalesCell);
-    doc.add(table);
-
-   // Cell bestCustomerCell = new Cell(4, 4)
-   //                    .add(new Paragraph("Best Customer by revenue: ")); 
-   // table.addFooterCell(bestCustomerCell);
-   // doc.add(table);
-
-   String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
-   ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
-   Image salesChartImage = new Image(salesChartData);
-  // salesChartImage.scaleAbsolute(400, 400);
-   salesChartImage.setFixedPosition(25,50);
-   doc.add(salesChartImage);
-
-
-    doc.close();
-    Desktop.getDesktop().open(tempSales);
-    tempSales.deleteOnExit();
-}
-
-
-
-@FXML
-public void highlightClick(MouseEvent event) {
-    
-    if(orderScreenDisplayed == true){
-    UI.observablePO selectedItem = (UI.observablePO) total_Table.getSelectionModel().getSelectedItem();
-    
-    textId.setText(selectedItem.getProductID());
-    textQuantity.setText(selectedItem.getDate());
-    textCost.setText(selectedItem.getQuantity());
-    textPrice.setText(selectedItem.getCustomerLocation());
-    textSid.setText(selectedItem.getEmail());
-    textID.setText(selectedItem.getID());
-    }
 
     @FXML
     public void showReport(ActionEvent event) throws IOException, java.io.IOException, SQLException {
@@ -596,16 +494,25 @@ public void highlightClick(MouseEvent event) {
             p.setEmail(textSid.getText());
             p.setProductID(textId.getText());
             p.quantity(textCost.getText());
-            po.createEntry("0", p);
+            items.createEntry("0", p);
             total_Table.getItems().clear();
-            showOrders();
+            try {
+                showOrders();
+            } catch (java.io.IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-        } else if (orderScreenDisplayed == false) {
-            Connection con = UIDBConnector.getConnection();
-            st = (Statement) con.createStatement();
-            String statement = "UPDATE DataEntries SET supplierID = '" + textSid.getText() + "', stockQuantity = "
-                    + textQuantity.getText() + ", wholesaleCost = " + textCost.getText() + ", salePrice = "
-                    + textPrice.getText() + "WHERE productID = '" + textId.getText() + "'";
+        } else if (orderScreenDisplayed == false){
+            Connection con = null;
+            try {
+                con = UIDBConnector.getConnection();
+            } catch (java.io.IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            st =  (Statement) con.createStatement();
+            String statement = "UPDATE DataEntries SET supplierID = '" + textSid.getText() + "', stockQuantity = " + textQuantity.getText() + ", wholesaleCost = " + textCost.getText() + ", salePrice = " + textPrice.getText() + "WHERE productID = '" + textId.getText() + "'";
             st.execute(statement);
             total_Table.getItems().clear();
             showInventory();
@@ -616,21 +523,20 @@ public void highlightClick(MouseEvent event) {
     @FXML
     public void delItem() throws SQLException {
         if (orderScreenDisplayed == true) {
-            String id = textID.getText();
-            Connection con = UIDBConnector.getConnection();
-            st = (Statement) con.createStatement();
-            String statement = "DELETE FROM PO WHERE ID ='" + id + "';";
-            st.execute(statement);
-
-        } else if (orderScreenDisplayed == false) {
-            Connection con = UIDBConnector.getConnection();
-            st = (Statement) con.createStatement();
-            String toBeDeleted = textId.getText();
-            String statement = "DELETE FROM DataEntries WHERE productID ='" + toBeDeleted + "';";
-            st.execute(statement);
-            total_Table.getItems().clear();
-            showInventory();
-        }
+                    String id = textID.getText();
+                    Connection con = null;
+                    try {
+                        con = UIDBConnector.getConnection();
+                    } catch (java.io.IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    st =  (Statement) con.createStatement();
+                    String statement = "DELETE FROM PO WHERE ID ='"+ id+ "';";
+                    st.execute(statement);
+            
+            
+                }
     }
 
 
