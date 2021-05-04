@@ -13,6 +13,11 @@ public class MockPODB  implements DataMan<observablePO>{
         return li;
     }
 
+    /**
+     * Initialize arraylist of observable PO's
+     * 
+     * @param connection - unused
+     */
     @Override
     public void initializeDatabase(String connection) {
         // TODO Auto-generated method stub
@@ -29,12 +34,23 @@ public class MockPODB  implements DataMan<observablePO>{
 
     }
 
+    /**
+     * Adds an observablePO object to arraylist
+     * 
+     * @param ID - Id of object to be added, unused
+     * @param e - Entry object to be added
+     */
     @Override
     public void createEntry(String ID, observablePO e) {
-        // TODO Auto-generated method stub
         li.add(e);
     }
 
+    /**
+     * Retrieves an observablePO from arraylist
+     * 
+     * @param ID - Product ID of object to be retrieved
+     * @return observablePO - Target po
+     */
     @Override
     public observablePO readEntry(String ID) {
         for (observablePO entry : li) {
@@ -50,6 +66,11 @@ public class MockPODB  implements DataMan<observablePO>{
         
     }
 
+    /**
+     * Deletes an entry from arraylist
+     * 
+     * @param id - Product id of object to be removed
+     */
     @Override
     public void deleteEntry(String id) {
         for (int i = 0; i < li.size(); i++) {

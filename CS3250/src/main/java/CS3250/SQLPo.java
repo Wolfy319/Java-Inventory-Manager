@@ -66,12 +66,8 @@ public class SQLPo {
         }
         String statement = "INSERT INTO PO(productID,quantity,date,email,custLoc) VALUES('" + p.getProductID() + "', '" + p.getQuantity()
             + "' , '" + p.getDate() + "' , '" + p.getEmail() + "' , '" + p.getCustomerLocation()  +"');";
-        String statement2 = "GET * FROM PO WHERE productID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);
-            rs = st.executeQuery(statement2);
-            p.setID(rs.getString("ID"));
-
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
@@ -133,16 +129,20 @@ public class SQLPo {
     }
 
     public void updateInventory(String productID, int orderedQuantity) {
-		
+		// TODO
 	}
 
     public void updateEntry(String ID, Entry e) {
         // TODO Auto-generated method stub
     }
 
-    public void deleteEntry(String id) {
-        // TODO Auto-generated method stub
-
+    public void deleteEntry(String id, String email, String quantity) {
+        String statement = "DELETE FROM POItems WHERE productID ='"+ id + "' AND email = '" + email + "' AND quantity = '" + quantity + "';";
+        try {
+            st.execute(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveEntry(Entry e) {

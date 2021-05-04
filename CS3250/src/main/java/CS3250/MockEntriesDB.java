@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class providing 
+ * Class to mock inventory database
  */
 public class MockEntriesDB implements DataMan<Entry>{
     List<Entry> li;
@@ -13,6 +13,11 @@ public class MockEntriesDB implements DataMan<Entry>{
        return li;
     }
 
+    /**
+     * Initialize arraylist
+     * 
+     * @param connection - unused
+     */
     @Override
     public void initializeDatabase(String connection) {
         var e1 = new Entry();
@@ -28,11 +33,22 @@ public class MockEntriesDB implements DataMan<Entry>{
 
     }
 
+    /**
+     * Adds an entry object to arraylist
+     * 
+     * @param ID - Id of object to be added, unused
+     * @param e - Entry object to be added
+     */
     @Override
     public void createEntry(String ID, Entry e) {
         li.add(e);
     }
 
+    /**
+     * Retrieves an entry from arraylist
+     * 
+     * @param ID - Product ID of object to be retrieved
+     */
     @Override
     public Entry readEntry(String ID) {
         for (Entry entry : li) {
@@ -47,13 +63,16 @@ public class MockEntriesDB implements DataMan<Entry>{
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Deletes an entry from arraylist
+     * 
+     * @param id - Product id of object to be removed
+     */
     @Override
     public void deleteEntry(String id) {
         for (int i = 0; i < li.size(); i++) {
             if (li.get(i).getProductID() == id)
                 li.remove(i);
-        }
-        
-    }
-    
+        }      
+    } 
 }

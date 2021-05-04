@@ -30,7 +30,7 @@ class CSVParserTest {
 		String connectionString = StringParsers.readConfig(".config");
 		newPo.initializeDatabase(connectionString);
 		inventory.initializeDatabase(connectionString);
-		parse.readOrdersCSV(file, newPo, inventory);
+		parse.readOrdersCSV(file, newPo, inventory,false);
 		assert(true);
 	}
 }

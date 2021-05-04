@@ -54,29 +54,32 @@ public class CSVParser {
 	}
 
 /**
-	 * Parses a CSV file full of products into Entry objects
+	 * Parses a CSV file full of products into Entry objects and updates inventory
 	 *  
 	 * @param filename - Path to the csv file to be parsed
-	 * @param database - Database object
-	 * 
+	 * @param PoDB - Product Order Database object
+	 * @param inventory - Inventory Database object
+	 * @param isReversed - Denotes whether to undo reading
 	 */
-	public void readOrdersCSV(String filename, SQLPo newEntry, SQLData inventory, boolean isReversed){
+	public void readOrdersCSV(String filename, SQLPo PoDB, SQLData inventory, boolean isReversed){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
 		
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
-			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+			    BufferedReader reader = new BufferedReader(new FileReader("E:\\git workspace/MavenCS3250Team3/customer_orders_team5_NEW.csv"))) {
 				reader.readLine();
 			    while((line = reader.readLine()) != null) {
 			    	fields = line.split(",");     // Split the row into individual fields
 
-			    	// Fill in fields
+			    	// If reversing previous parse, undo inventory update and delete order
 					if(isReversed) {
-						undoInventoryUpdate(fields[3], Integer.parseInt(fields[4]), inventory, newEntry);
+						undoInventoryUpdate(fields[3], Integer.parseInt(fields[4]), inventory, PoDB);
+						PoDB.deleteEntry(fields[3], fields[1], fields[4]);
 					}
+					// Fill in fields
 					else {
-						populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
+						populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], PoDB);
 					}
 			    }
 		} catch (IOException e) {
@@ -86,12 +89,20 @@ public class CSVParser {
 	}
 
 	
-
+	/**Reverses inventory updates
+	 * 
+	 * @param productID
+	 * @param orderedQuantity
+	 * @param inventory - Inventory Database object
+	 * @param PoDB - Purchase Order database object
+	 */
 	public void undoInventoryUpdate(String productID, int orderedQuantity, SQLData inventory, SQLPo PoDB) {
 		Entry inventoryItem = inventory.readEntry(productID);
+		// Check if product exists
 		if(inventoryItem == null) {
 			System.out.println("Ordered item " + productID + " doesn't exist!");
 		}
+		// Reverse inventory update
 		else {
 			int currentQuantity = inventoryItem.getStockQuantity();
 			inventoryItem.setStockQuantity(currentQuantity + orderedQuantity);
@@ -99,6 +110,15 @@ public class CSVParser {
 		}
 	}
 
+	/**Adds an observablePO object to the database
+	 * 
+	 * @param date
+	 * @param customerEmail
+	 * @param customerLocation
+	 * @param productID
+	 * @param quantity
+	 * @param PoDB - Purchase Order database object
+	 */
 	private void populateDB(String date, String customerEmail, String customerLocation, String productID, 
 							String quantity, SQLPo PoDB) {
 

@@ -45,27 +45,25 @@ public class CSVData implements DataInterface {
     public void createEntry(String ID, Entry e) {
         // Put into hashmap and creates a new entry
         initialData.put(ID, e);
-
     }
 
     
     /** 
      * Returns an entry to be read from psuedodatabase
-     * @param ID
+     * @param ID - Product ID
      * @return Entry
      */
     @Override
     public Entry readEntry(String ID) {
         // What entry is to be read from the hashmap
         return initialData.get(ID);
-
     }
 
     
     /** 
      * Updates an entry in the psuedodatabase
-     * @param ID
-     * @param e
+     * @param ID - Product ID
+     * @param e - Entry
      */
     @Override
     public void updateEntry(String ID, Entry e) {
@@ -79,7 +77,7 @@ public class CSVData implements DataInterface {
     
     /** 
      * Deletes a product from the psuedodatabase
-     * @param id
+     * @param id - Product ID
      */
     @Override
     public void deleteEntry(String id) {
@@ -90,7 +88,7 @@ public class CSVData implements DataInterface {
     
     /** 
      * Saves an entry into the psuedodatabase
-     * @param e
+     * @param e - Product ID
      */
     @Override
     public void saveEntry(Entry e) {
