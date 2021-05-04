@@ -20,7 +20,6 @@ public class MockPODB  implements DataMan<observablePO>{
      */
     @Override
     public void initializeDatabase(String connection) {
-        // TODO Auto-generated method stub
         var e1 = new observablePO();
         
         e1.setProductID("productID");
@@ -29,7 +28,7 @@ public class MockPODB  implements DataMan<observablePO>{
         e1.setEmail("email");
         e1.setID("iD");
 
-        li = new ArrayList();
+        li = new ArrayList<observablePO>();
         li.add(e1);
 
     }

@@ -6,34 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
 import CS3250.SQLPo;
+import CS3250.StringParsers;
 
+/**
+ * Class to calculate various fields for report generation
+ */
 public class poStream {
 
     Multimap<String, Integer> prodAndQuant = ArrayListMultimap.create();
-
     Multimap<String, Integer> currentMonthMap = ArrayListMultimap.create();
-
     Multimap<String, Integer> twoMonthMap = ArrayListMultimap.create();
-
     Multimap<String, Integer> threeMonthMap = ArrayListMultimap.create();
-
     Multimap<String, Integer> currentWeekMap = ArrayListMultimap.create();
-
     HashMap<String, Double> bestCustomerMap = new HashMap<String, Double>();
-
     HashMap<String, Double> productPrice = new HashMap<String, Double>();
-
     HashMap<String, Integer> daysAndMonths = new HashMap<String, Integer>();
-
     HashMap<String, String> numMonth = new HashMap<String, String>();
-
     HashMap<String, Double> productSales = new HashMap<String, Double>();
 
+    /**
+     * Initializes month day values
+     */
     public void daysAndMonths() {
         daysAndMonths.put("01", 21);
         daysAndMonths.put("02", 28);
@@ -49,6 +45,9 @@ public class poStream {
         daysAndMonths.put("12", 31);
     }
 
+    /**
+     * Initializes month values
+     */
     public void numMonth() {
         numMonth.put("01", "January");
         numMonth.put("02", "Febuary");
@@ -66,9 +65,18 @@ public class poStream {
 
 
     
+    
+    /** 
+     * Creates a hashmap of products and prices
+     * 
+     * @throws SQLException
+     * @throws IOException
+     */
     public void productCostMap() throws SQLException, IOException{
+        // Retrive all inventory items
         Connection poCon = UIDBConnector.getConnection();
         ResultSet rs = poCon.createStatement().executeQuery("SELECT * FROM DataEntries");
+        // Populate hashmap
         while (rs.next()) {
             productPrice.put(rs.getString("productID"), rs.getDouble("salePrice"));
         }
@@ -76,21 +84,34 @@ public class poStream {
     }
 
 
+    
+    /** 
+     * Creates a hashmap of orders and quantities
+     * 
+     * @throws SQLException
+     * @throws IOException
+     */
     public void salesOrderMap() throws SQLException, IOException{
+        // Retrieve all customer orders
         Connection poCon = UIDBConnector.getConnection();
         ResultSet rs = poCon.createStatement().executeQuery("SELECT * FROM PO");
+        // Populate hashmap
         while (rs.next()) {
             prodAndQuant.put(rs.getString("productID"), rs.getInt("quantity"));
         }
 
     }
 
+    
+    /** 
+     * @return String[]
+     * @throws SQLException
+     */
     public String[] salesCalc() throws SQLException {
         numMonth();
         try {
             productCostMap();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -99,9 +120,9 @@ public class poStream {
         Double twoMonthTotal = 0.0;
         Double threeMonthTotal = 0.0;
 
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        String connectionString = StringParsers.readConfig(".config");
         SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        SQLPO.initializeDatabase(connectionString);
 
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
         String totalSalesSQL = "SELECT * FROM testDB.PO";
@@ -167,6 +188,12 @@ public class poStream {
                 , String.valueOf(totalOrders) };
     }
 
+    
+    /** 
+     * @return String[]
+     * @throws SQLException
+     * @throws IOException
+     */
     public String[] bestCustomer() throws SQLException, IOException {
         String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
         SQLPo SQLPO = new SQLPo();
@@ -207,6 +234,11 @@ public class poStream {
         return new String[] { bestCustomer, String.valueOf(highestTotal) };
     }
 
+    
+    /** 
+     * @return String[]
+     * @throws SQLException
+     */
     public String[] thisWeeksSales() throws SQLException {
         try {
             productCostMap();
@@ -358,6 +390,11 @@ public class poStream {
                 numTwoWeekOrders, numThreeWeekOrders };
     }
 
+    
+    /** 
+     * @return String[]
+     * @throws SQLException
+     */
     public String[] dailySales() throws SQLException {
         try {
             productCostMap();
@@ -389,6 +426,11 @@ public class poStream {
 
     }
 
+    
+    /** 
+     * @return String[]
+     * @throws SQLException
+     */
     public String[] popularItems() throws SQLException {
         try {
             productCostMap();

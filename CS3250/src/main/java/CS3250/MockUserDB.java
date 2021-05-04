@@ -18,7 +18,6 @@ public class MockUserDB implements DataMan<User>{
      */
     @Override
     public void initializeDatabase(String connection) {
-        // TODO Auto-generated method stub
         var e1 = new User();
         
         e1.setPassword("password".getBytes());
@@ -26,7 +25,7 @@ public class MockUserDB implements DataMan<User>{
         e1.setUsername("username".getBytes());
         e1.setEmail("email");
         e1.setSalt("salt".getBytes()); 
-        li = new ArrayList();
+        li = new ArrayList<User>();
         li.add(e1);
 
     }

@@ -98,16 +98,18 @@ public class PODB implements DataMan<observablePO>{
     
     
     /** 
-     * @return List<observablePO>
+     * Retrieves all customer orders from database
+     * 
+     * @return List<observablePO> - List of all orders in database
      */
     public List<UI.observablePO> getEntries(){
         List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
         String statement2 = "SELECT * FROM PO;";
-        UserData u = new UserData();
-        u.initializeDatabase(connectionString + " " + username + " " + password);
         UI.observablePO po = new UI.observablePO();
         try{
+            // Retrieve all orders
             rs = st.executeQuery(statement2);
+            // Format as observablePO's and add to arraylist
             while (rs.next()) {
                 po = new UI.observablePO();
                 po.setProductID(rs.getString("productID"));
@@ -126,7 +128,9 @@ public class PODB implements DataMan<observablePO>{
     }
 
     
-    /** 
+    /**
+     * Retrieves an observablePO object from database
+     * 
      * @param ID
      * @return observablePO
      */
@@ -149,12 +153,14 @@ public class PODB implements DataMan<observablePO>{
 
     
     /** 
-     * @param PID
+     * Checks to see if customer order is already in database
+     * 
+     * @param PID - Product ID
      * @param quantity
      * @param date
      * @param email
      * @param location
-     * @return boolean
+     * @return boolean - True if order already exists in database, false otherwise
      */
     public boolean poExists(String PID, int quantity, String date, String email, String location) {
         String statement2 = "SELECT * FROM PO WHERE productID = '" + PID + "' AND quantity = '" + quantity + "' AND date = '" + date + "' AND email = '" + email + "' AND custLoc = '" + location + "';";       
@@ -170,6 +176,7 @@ public class PODB implements DataMan<observablePO>{
 
     
     /** 
+     * Unused
      * @param ID
      * @param e
      */
@@ -180,6 +187,8 @@ public class PODB implements DataMan<observablePO>{
 
     
     /** 
+     * Deletes a customer order from database
+     * 
      * @param id
      * @param email
      * @param quantity
