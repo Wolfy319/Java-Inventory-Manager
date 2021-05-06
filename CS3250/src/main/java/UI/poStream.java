@@ -104,6 +104,8 @@ public class poStream {
 
     
     /** 
+     * Calculates sales for last 3 months
+     * 
      * @return String[]
      * @throws SQLException
      */
@@ -120,6 +122,7 @@ public class poStream {
         Double twoMonthTotal = 0.0;
         Double threeMonthTotal = 0.0;
 
+        // Initialize database
         String connectionString = StringParsers.readConfig(".config");
         SQLPo SQLPO = new SQLPo();
         SQLPO.initializeDatabase(connectionString);
@@ -127,11 +130,14 @@ public class poStream {
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
         String totalSalesSQL = "SELECT * FROM testDB.PO";
 
+        // Retrieve all customer orders
         List<observablePO> allPos = SQLPO.GenerateWeeklyPO(totalSalesSQL);
+        // Retrieve only latest orders
         List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
 
         int totalOrders = allPos.size();
 
+        // Find which months to calculate
         String currentMonthPO = latestPO.get(0).getDate();
         String currentMonthNum = currentMonthPO.substring(5, 7);
         String currentMonth = numMonth.get(currentMonthNum);
@@ -144,10 +150,12 @@ public class poStream {
         String twoMonthSQL = "SELECT * FROM PO WHERE monthname (date) = " + "'" + twoMonth + "'";
         String threeMonthSQL = "SELECT * FROM PO WHERE monthname (date) = " + "'" + threeMonth + "'";
 
+        // Retrieve customer orders by last 3 months
         List<observablePO> currentPos = SQLPO.GenerateWeeklyPO(currentMonthSQL);
         List<observablePO> twoPos = SQLPO.GenerateWeeklyPO(twoMonthSQL);
         List<observablePO> threePos = SQLPO.GenerateWeeklyPO(threeMonthSQL);
 
+        // Iterate through orders and find total $ sales for current month
         for (int i = 0; i < currentPos.size();) {
             String tmpProductID = currentPos.get(i).getProductID();
             int tmpQuant = Integer.valueOf(currentPos.get(i).getQuantity());
@@ -155,6 +163,7 @@ public class poStream {
             i++;
         }
 
+        // Iterate through orders and find total $ sales for last month
         for (int i = 0; i < twoPos.size();) {
             String tmpProductID = twoPos.get(i).getProductID();
             int tmpQuant = Integer.valueOf(twoPos.get(i).getQuantity());
@@ -162,6 +171,7 @@ public class poStream {
             i++;
         }
 
+        // Iterate through orders and find total $ sales for month before last month
         for (int i = 0; i < threePos.size();) {
             String tmpProductID = threePos.get(i).getProductID();
             int tmpQuant = Integer.valueOf(threePos.get(i).getQuantity());
@@ -169,6 +179,7 @@ public class poStream {
             i++;
         }
 
+        // Iterate through orders and find total $ sales for all months
         for (int i = 0; i < allPos.size();) {
             String tmpProductID = allPos.get(i).getProductID();
 
@@ -181,6 +192,7 @@ public class poStream {
             i++;
         }
 
+        // Return array full of all totals and dates
         // 0 1 2 3 4 5 6
         return new String[] { String.valueOf(totalSales), currentMonth, String.valueOf(currentMonthTotal), twoMonth,
                 String.valueOf(twoMonthTotal), threeMonth, String.valueOf(threeMonthTotal)
@@ -190,17 +202,20 @@ public class poStream {
 
     
     /** 
+     * Calculates best customer based on total $ spent
+     * 
      * @return String[]
      * @throws SQLException
      * @throws IOException
      */
     public String[] bestCustomer() throws SQLException, IOException {
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        String connectionString = StringParsers.readConfig(".config");
         SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        SQLPO.initializeDatabase(connectionString);
         List<observablePO> Pos = SQLPO.GenerateShortPOs();
         productCostMap();
 
+        // Store highest total spent and customer who spent it
         Double intialTotal = 0.0;
         String bestCustomer = "";
         Double highestTotal = 0.0;
@@ -211,6 +226,7 @@ public class poStream {
         }
 
         for (int i = 0; i < Pos.size();) {
+            // Get current customer, product ordered, quantity ordered, and price of product
             String customerEmail = Pos.get(i).getEmail();
             String productId = Pos.get(i).getProductID();
             String quanitity = Pos.get(i).getQuantity();
@@ -219,10 +235,13 @@ public class poStream {
                 i++;
                 continue;
             }
+            // Calculate price of current order and add to current customer's total
             Double tempTotal = (tempPrice * Integer.valueOf(quanitity) + bestCustomerMap.get(customerEmail));
 
+            // Update hashmap
             bestCustomerMap.put(customerEmail, tempTotal);
 
+            // Update maximum order value and best customer
             if (tempTotal > highestTotal) {
                 bestCustomer = customerEmail;
                 highestTotal = tempTotal;
@@ -230,12 +249,13 @@ public class poStream {
             }
             i++;
         }
-
         return new String[] { bestCustomer, String.valueOf(highestTotal) };
     }
 
     
     /** 
+     * Calculate sales for the last 3 weeks
+     * 
      * @return String[]
      * @throws SQLException
      */
@@ -243,21 +263,22 @@ public class poStream {
         try {
             productCostMap();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         Double currentWeeklyTotal = 0.0;
         Double twoWeekTotal = 0.0;
         Double threeWeekTotal = 0.0;
-
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        
+        // Connect to orders database
+        String connectionString = StringParsers.readConfig(".config");
         SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        SQLPO.initializeDatabase(connectionString);
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
 
         List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
 
+        // Find end dates of current week
         String endDate = latestPO.get(0).getDate();
         String endDateDay = endDate.substring(endDate.length() - 2);
         String endWeekMonth = endDate.substring(5, 7);
@@ -265,6 +286,7 @@ public class poStream {
 
         String beginWeekDate = "";
 
+        // Find first date of current week
         if (Integer.valueOf(endDateDay) < 7) {
             int tempdayval = Math.abs(Integer.valueOf(endDateDay) - 7);
             int prevMonthDays = daysAndMonths.get(Integer.valueOf(endWeekMonth));
@@ -285,11 +307,13 @@ public class poStream {
 
         }
 
+        // Retrieve current weeks orders from database
         String currentWeekSQL = "SELECT * FROM testDB.PO WHERE date >= " + "'" + beginWeekDate + "'" + " AND date <= "
                 + "'" + endDate + "'";
 
         List<observablePO> weeklyPos = SQLPO.GenerateWeeklyPO(currentWeekSQL);
 
+        // Calculate current week totals
         for (int i = 0; i < weeklyPos.size();) {
             String tempProductID = weeklyPos.get(i).getProductID();
             int tempQuant = Integer.valueOf(weeklyPos.get(i).getQuantity());
@@ -297,6 +321,7 @@ public class poStream {
             i++;
         }
 
+        // Find end dates of previous week
         String weekTwoEndDay = beginWeekDate.substring(beginWeekDate.length() - 2);
         Integer tempWeekTwoEndDay = Integer.valueOf(weekTwoEndDay) - 1;
         weekTwoEndDay = String.valueOf(tempWeekTwoEndDay);
@@ -306,6 +331,7 @@ public class poStream {
 
         String weekTwoEndDate = weekTwoEndYear + "-" + weekTwoEndMonth + "-" + weekTwoEndDay;
 
+        // Find start date of previous week
         if (Integer.valueOf(weekTwoEndDay) < 7) {
             int tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
             int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekTwoEndMonth));
@@ -327,11 +353,13 @@ public class poStream {
 
         }
 
+        // Retrieve last weeks orders from database
         String twoWeekSQL = "SELECT * FROM testDB.PO WHERE date >= " + "'" + weekTwoStartDate + "'" + " AND date <= "
                 + "'" + weekTwoEndDate + "'";
 
         List<observablePO> twoWeekPos = SQLPO.GenerateWeeklyPO(twoWeekSQL);
 
+        // Calculate total sales for previous week
         for (int i = 0; i < twoWeekPos.size();) {
             String tempProductID = twoWeekPos.get(i).getProductID();
             int tempQuant = Integer.valueOf(twoWeekPos.get(i).getQuantity());
@@ -339,8 +367,8 @@ public class poStream {
             i++;
         }
 
+        // Find end dates of week before last
         String weekThreeEndDay = weekTwoStartDate.substring(weekTwoStartDate.length() - 2);
-        Integer tempWeekThreeEndDay = Integer.valueOf(weekThreeEndDay) - 1;
         weekTwoEndDay = String.valueOf(tempWeekTwoEndDay);
         String weekThreeEndMonth = weekTwoStartDate.substring(5, 7);
         String weekThreeEndYear = weekTwoStartDate.substring(0, 4);
@@ -348,6 +376,7 @@ public class poStream {
 
         String weekThreeEndDate = weekThreeEndYear + "-" + weekThreeEndMonth + "-" + weekThreeEndDay;
 
+        // Find start date of week before last
         if (Integer.valueOf(weekThreeEndDay) < 7) {
             int tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
             int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekThreeEndMonth));
@@ -369,11 +398,13 @@ public class poStream {
 
         }
 
+        // Retrieve all orders from week before last from database
         String threeWeekSQL = "SELECT * FROM testDB.PO WHERE date >= " + "'" + weekThreeStartDate + "'"
                 + " AND date <= " + "'" + weekThreeEndDate + "'";
 
         List<observablePO> threeWeekPos = SQLPO.GenerateWeeklyPO(threeWeekSQL);
 
+        // Calculate sales total for week before last
         for (int i = 0; i < threeWeekPos.size();) {
             String tempProductID = threeWeekPos.get(i).getProductID();
             int tempQuant = Integer.valueOf(threeWeekPos.get(i).getQuantity());
@@ -381,6 +412,7 @@ public class poStream {
             i++;
         }
 
+        // Find # of orders per week
         String numWeekOrders = String.valueOf(weeklyPos.size());
         String numTwoWeekOrders = String.valueOf(twoWeekPos.size());
         String numThreeWeekOrders = String.valueOf(threeWeekPos.size());
@@ -392,6 +424,8 @@ public class poStream {
 
     
     /** 
+     * Find sales for current day
+     * 
      * @return String[]
      * @throws SQLException
      */
@@ -399,21 +433,22 @@ public class poStream {
         try {
             productCostMap();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         Double dayTotal = 0.0;
-
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        
+        String connectionString = StringParsers.readConfig(".config");
         SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        SQLPO.initializeDatabase(connectionString);
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
 
+        // Retrieve all orders from current day
         List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
         List<observablePO> dailyPos = SQLPO
                 .GenerateWeeklyPO("Select * From testDB.PO where date = " + "'" + latestPO.get(0).getDate() + "'");
 
+        // Calculate daily sales total
         for (int i = 0; i < dailyPos.size(); i++) {
             String tmpID = dailyPos.get(i).getProductID();
             Double tmpPrice = productPrice.get(tmpID);
@@ -428,6 +463,8 @@ public class poStream {
 
     
     /** 
+     * Finds the top 3 earning items
+     * 
      * @return String[]
      * @throws SQLException
      */
@@ -435,13 +472,12 @@ public class poStream {
         try {
             productCostMap();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        String connectionString = StringParsers.readConfig(".config");
         SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        SQLPO.initializeDatabase(connectionString);
         String bestProductSQL = "SELECT * FROM testDB.PO";
         List<observablePO> allPos = SQLPO.GenerateWeeklyPO(bestProductSQL);
 
@@ -453,7 +489,9 @@ public class poStream {
         Double secTotal = 0.0;
         Double thirdTotal = 0.0;
 
+        // Look through all orders
         for (int i = 0; i < allPos.size(); i++) {
+            // Check if this item already has an order
             if (productSales.get(allPos.get(i).getProductID()) == null) {
                 int tmpQuant = Integer.valueOf(allPos.get(i).getQuantity());
                 Double tmpPrice = productPrice.get(allPos.get(i).getProductID());
@@ -462,10 +500,12 @@ public class poStream {
                     continue;
                 }
 
+                // Total price of current order
                 Double tmpTotal = tmpQuant * tmpPrice;
 
                 productSales.put(allPos.get(i).getProductID(), tmpTotal);
 
+                // Check if the current item is now in the top three purchased
                 if (tmpTotal > bestTotal) {
                     bestTotal = tmpTotal;
                     bestProdId = allPos.get(i).getProductID();
@@ -490,12 +530,15 @@ public class poStream {
                     continue;
                 }
 
+                // Calculate current order and add to the item's current total
                 Double tmpTotal = tmpQuant * tmpPrice;
                 Double currentTotal = productSales.get(tmpProdId);
                 currentTotal += tmpTotal;
 
+                // Update hashmap
                 productSales.put(tmpProdId, currentTotal);
 
+                // Check if current item is now in top 3 most purchased
                 if (currentTotal > bestTotal) {
                     bestTotal = currentTotal;
                     bestProdId = allPos.get(i).getProductID();

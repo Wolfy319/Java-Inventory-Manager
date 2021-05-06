@@ -6,12 +6,12 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
-import CS3250.CSVData;
+// import CS3250.CSVData;
 import CS3250.CSVParser;
 
 class CSVParserTest {
 	CSVParser parse = new CSVParser();
-	CSVData data = new CSVData();
+	// CSVData data = new CSVData();
 	String file = "customer_orders_team5.csv";
 
 	SQLPo newPo = new SQLPo();
