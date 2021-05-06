@@ -283,20 +283,22 @@ public class poStream {
         String endDateDay = endDate.substring(endDate.length() - 2);
         String endWeekMonth = endDate.substring(5, 7);
         String endWeekYear = endDate.substring(0, 4);
-
+        int tempdayval;
         String beginWeekDate = "";
+        daysAndMonths();
 
         // Find first date of current week
-        if (Integer.valueOf(endDateDay) < 7) {
-            int tempdayval = Math.abs(Integer.valueOf(endDateDay) - 7);
-            int prevMonthDays = daysAndMonths.get(Integer.valueOf(endWeekMonth));
-            beginWeekDate = endWeekYear + "-" + endWeekMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
-        } else if (Integer.valueOf(endDateDay) < 7 && Integer.valueOf(endWeekMonth) == 12) {
-            int tempdayval = Math.abs(Integer.valueOf(endDate) - 7);
+        if (Integer.valueOf(endDateDay) < 7 && Integer.valueOf(endWeekMonth) == 12) {
+            tempdayval = Math.abs(Integer.valueOf(endDate) - 7);
             int prevMonthDays = daysAndMonths.get(Integer.valueOf(endWeekMonth));
             int prevYear = Integer.valueOf(endWeekYear) - 1;
             beginWeekDate = prevYear + "-" + endWeekMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
-        } else {
+        }
+         else if (Integer.valueOf(endDateDay) < 7) {
+            tempdayval = Math.abs(Integer.valueOf(endDateDay) - 7);
+            int prevMonthDays = daysAndMonths.get(endWeekMonth);
+            beginWeekDate = endWeekYear + "-" + endWeekMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
+        }else {
             int beginWeekDayInt = Integer.valueOf(endDateDay) - 7;
             String beginWeekDayString = String.valueOf(beginWeekDayInt);
 
@@ -333,13 +335,13 @@ public class poStream {
 
         // Find start date of previous week
         if (Integer.valueOf(weekTwoEndDay) < 7) {
-            int tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
-            int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekTwoEndMonth));
+            tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
+            int prevMonthDays = daysAndMonths.get(weekTwoEndMonth);
             weekTwoStartDate = weekTwoEndYear + "-" + weekTwoEndMonth + "-"
                     + String.valueOf(prevMonthDays - tempdayval);
-        } else if (Integer.valueOf(weekTwoEndDay) < 7 && Integer.valueOf(weekTwoEndMonth) == 12) {
-            int tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
-            int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekTwoEndMonth));
+        } else if (Integer.valueOf(weekTwoEndMonth) == 1) {
+            tempdayval = Math.abs(Integer.valueOf(weekTwoEndDay) - 7);
+            int prevMonthDays = daysAndMonths.get(weekTwoEndMonth);
             int prevYear = Integer.valueOf(weekTwoEndYear) - 1;
             weekTwoStartDate = prevYear + "-" + weekTwoEndMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
         } else {
@@ -378,13 +380,13 @@ public class poStream {
 
         // Find start date of week before last
         if (Integer.valueOf(weekThreeEndDay) < 7) {
-            int tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
-            int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekThreeEndMonth));
+            tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
+            int prevMonthDays = daysAndMonths.get(weekThreeEndMonth);
             weekThreeStartDate = weekThreeEndYear + "-" + weekThreeEndMonth + "-"
                     + String.valueOf(prevMonthDays - tempdayval);
         } else if (Integer.valueOf(weekThreeEndDay) < 7 && Integer.valueOf(weekThreeEndMonth) == 12) {
-            int tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
-            int prevMonthDays = daysAndMonths.get(Integer.valueOf(weekThreeEndMonth));
+            tempdayval = Math.abs(Integer.valueOf(weekThreeEndDay) - 7);
+            int prevMonthDays = daysAndMonths.get(weekThreeEndMonth);
             int prevYear = Integer.valueOf(weekThreeEndYear) - 1;
             weekThreeStartDate = prevYear + "-" + weekThreeEndMonth + "-" + String.valueOf(prevMonthDays - tempdayval);
         } else {
