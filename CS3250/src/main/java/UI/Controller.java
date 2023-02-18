@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
@@ -74,10 +73,9 @@ public class Controller {
      * @throws NoSuchAlgorithmException - Throws if cryptograpic algorithm is requested but not available
      * @throws InvalidKeySpecException - Throws if invalid key specification
      */
-    public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    	UserData data = new UserData();
+    public boolean authenticated(String attemptedUser, String attemptedPass, UserData data) throws NoSuchAlgorithmException, InvalidKeySpecException {
     	try{
-    		data.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    		data.initializeDatabase("jdbc:mysql://localhost/testdb root testconnection123!");
     	} catch(Exception e) {
     		System.out.print("Unable to connect to database");  	
     	}
@@ -106,16 +104,21 @@ public class Controller {
     public void signIn_button(ActionEvent event) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
     	String username = get_User();
     	String password = get_Pass();
-    	if(authenticated(username,password)) {
+        UserData data = new UserData();
+    	if(authenticated(username,password,data)) {
     		// TODO - FXMLLoader can't find DBScreen for some reason
-    		Parent DbsScreen = FXMLLoader.load(getClass().getResource("totalView.fxml"));
-            Scene DbsScene = new Scene(DbsScreen);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("totalView.fxml"));
+            Parent dbScreen = loader.load();
+            Scene dbScene = new Scene(dbScreen);
             Stage dbsStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            dbsStage.setScene(DbsScene);
+            dbsStage.setScene(dbScene);
+
+            totalViewController controller = loader.getController();
+            controller.initData(data.getConnection());
+
             dbsStage.show();
     	}
     	else {
-    		Stage stage = (Stage) signBtn.getScene().getWindow();
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Login ERROR");
             alert.setHeaderText("INCORRECT Username or Password");
