@@ -19,11 +19,11 @@ class CSVParserTest {
 
 
 	
-// 	// @Test
-// 	// public void ReadCSVWorks() {
-// 	// 	parse.readCSV(file, data);
-// 	// 	assertEquals(42585, data.retSize());
-// 	// }
+	@Test
+	public void ReadCSVWorks() {
+		parse.readCSV(file, data);
+		assertEquals(42585, data.retSize());
+	}
 	
 	@Test
 	public void ReadOrdersCSVWorks() {

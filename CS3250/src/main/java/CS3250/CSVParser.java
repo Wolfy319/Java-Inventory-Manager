@@ -25,10 +25,10 @@ public class CSVParser {
 	 * @param database - Database object
 	 * 
 	 */
-	public void readProductsCSV(String filename, DataInterface database){
+	public void readProductsCSV(String filename, SQLData database){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
-		
+		database.initializeDatabase("jdbc:mysql://localhost/testdb root testconnection123!");
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -73,7 +73,7 @@ public class CSVParser {
 
 			    	
 			    	// Fill in fields
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], fields[4], newEntry);
+			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -107,12 +107,11 @@ public class CSVParser {
 		po.setEmail(customerEmail);
 		po.setCustomerLocation(customerLocation);
 		po.setProductID(productID);
-		po.quantity(fields);
-
 		PoDB.createEntry("1", po);
 		 
 		return;
 	}
 
 	
+}
 }

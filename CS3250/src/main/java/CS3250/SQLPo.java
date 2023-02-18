@@ -1,14 +1,13 @@
 package CS3250;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
 
 import UI.observablePO;
 import javafx.collections.FXCollections;
@@ -19,21 +18,21 @@ public class SQLPo {
     String connectionString = "";
     String username = "";
     String password = "";
-    Connection con;
+    Connection con = null;
     Statement st;
     ResultSet rs;
 
     public void initializeDatabase(String filename) {
-
         StringParsers s = new StringParsers();
         var a = s.parseConnectionString(filename);
         connectionString = a[0];
         username = a[1];
         password = a[2];
+
         try {
             con = (Connection) DriverManager.getConnection(connectionString, username, password);
             inventory.con = this.con;
-            st = (Statement) con.createStatement();
+            st = con.createStatement();
             inventory.st = this.st;
             rs = st.executeQuery("SELECT VERSION()");
             inventory.rs = this.rs;
@@ -45,10 +44,25 @@ public class SQLPo {
         }
     }
 
+    public void setConnection(Connection loaded) {
+        try {
+            con = inventory.con = loaded;
+            st = inventory.st = con.createStatement();
+            rs = inventory.rs = st.executeQuery("SELECT VERSION()");
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public SQLData getData(){
+        return inventory;
+    }
+
     // need to create table for PO's and swap this string
     public void createEntry(String ID, observablePO p) {
         Entry inventoryItem = inventory.readEntry(p.getProductID());
-        if(poExists(p.getProductID(), Integer.parseInt(p.getQuantity()), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
+        if(poExists(Integer.valueOf(p.getProductID()), Integer.valueOf(p.getQuantity()), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
             System.out.println("Order already exists");
             return;
         }
@@ -57,13 +71,13 @@ public class SQLPo {
             return;
         }
         else {
-            if(inventoryItem.getStockQuantity() < Integer.parseInt(p.getQuantity())) {
+            if(inventoryItem.getStockQuantity() < Integer.valueOf(p.getQuantity())) {
                 System.out.println("Order quantity exceeds quantity in inventory!");
                 return;
             }
             else {
                 int currentQuantity = inventoryItem.getStockQuantity();
-                inventoryItem.setStockQuantity(currentQuantity - Integer.parseInt(p.getQuantity()));
+                inventoryItem.setStockQuantity(currentQuantity - Integer.valueOf(p.getQuantity()));
                 inventory.updateEntry(p.getProductID(), inventoryItem);
             }
         }
@@ -84,8 +98,6 @@ public class SQLPo {
     public List<UI.observablePO> GenerateShortPOs(){
         List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
         String statement2 = "SELECT * FROM PO;";
-        UserData u = new UserData();
-        u.initializeDatabase(connectionString + " " + username + " " + password);
         UI.observablePO po = new UI.observablePO();
         try{
             rs = st.executeQuery(statement2);
@@ -123,7 +135,7 @@ public class SQLPo {
         return po;
     }
 
-    public boolean poExists(String PID, int quantity, String date, String email, String location) {
+    public boolean poExists(int PID, int quantity, String date, String email, String location) {
         String statement2 = "SELECT * FROM PO WHERE productID = '" + PID + "' AND quantity = '" + quantity + "' AND date = '" + date + "' AND email = '" + email + "' AND custLoc = '" + location + "';";       
         try {
             rs = st.executeQuery(statement2);
@@ -181,6 +193,10 @@ public class SQLPo {
             System.out.println(e);
         }
         return arr;
+    }
+
+    public Connection getConnection() {
+        return con;
     }
 
 }
