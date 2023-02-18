@@ -20,12 +20,13 @@ import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.mysql.jdbc.Statement;
+import java.sql.Statement;
 
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -146,15 +147,15 @@ public class totalViewController {
             Connection con = UIDBConnector.getConnection();
 
             ResultSet rs = con.createStatement().executeQuery("SELECT * FROM DataEntries");
-            
+            ObservableList tempList = FXCollections.observableArrayList();
             while (rs.next()) {// "should be column names"
 
-                oblist.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
+                tempList.add(new dataBaseItems(rs.getString("productID"), rs.getString("stockQuantity"),
                         rs.getString("wholesaleCost"), rs.getString("salePrice"), rs.getString("supplierID")));
                 
             }
 
-
+            oblist = tempList;
 
         }finally{}
         
@@ -187,18 +188,16 @@ public class totalViewController {
                 }return false;
             });
         });
-        //SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
-        //sortedData.comparatorProperty().bind(total_Table.comparatorProperty());
-        //total_Table.setItems((ObservableList<dataBaseItems>) sortedData);
-        
-        
+        SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
+        oblist = (ObservableList<dataBaseItems>) sortedData;
+        total_Table.setItems(oblist);
     }
 
     
 
 
     SQLPo po = new SQLPo();
-    ObservableList poList;
+    ObservableList<observablePO> poList;
     public Boolean orderScreenDisplayed;
     
     @FXML
@@ -214,20 +213,21 @@ public class totalViewController {
 
         cellOne.setText("productID");
         CellTwo.setText("Date");
-        cellThree.setText("Email");
-        cellFour.setText("ID");
-        cellFive.setText(" ");
+        cellThree.setText("Quantity");
+        cellFour.setText("Location");
+        cellFive.setText("Email");
         total_Table.getItems().clear();
 
         
     
 
-        po.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
-        poList = FXCollections.observableArrayList(po.GenerateShortPOs());
+        po.initializeDatabase("jdbc:mysql://localhost/testdb root testconnection123!");
+        ObservableList<observablePO> poList = FXCollections.observableArrayList(po.GenerateShortPOs());
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
         CellTwo.setCellValueFactory(new PropertyValueFactory<>("Date"));
-        cellThree.setCellValueFactory(new PropertyValueFactory<>("Email"));
-        cellFour.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        cellThree.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        cellFour.setCellValueFactory(new PropertyValueFactory<>("customerLocation"));
+        cellFive.setCellValueFactory(new PropertyValueFactory<>("email"));
         total_Table.setItems(poList);
     
     FilteredList<observablePO> filteredList = new FilteredList<>(poList);
@@ -242,8 +242,9 @@ public class totalViewController {
             }return false;
         });
     });
-    //SortedList<observablePO> sortedData = new SortedList<>(filteredList); 
-    //total_Table.setItems(sortedData);
+    SortedList<observablePO> sortedData = new SortedList<>(filteredList); 
+    poList = (ObservableList<observablePO>) sortedData;
+    total_Table.setItems(poList);
     }
 
 

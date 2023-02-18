@@ -77,7 +77,7 @@ public class Controller {
     public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
     	UserData data = new UserData();
     	try{
-    		data.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    		data.initializeDatabase("jdbc:mysql://localhost/testDB root testconnection123!");
     	} catch(Exception e) {
     		System.out.print("Unable to connect to database");  	
     	}

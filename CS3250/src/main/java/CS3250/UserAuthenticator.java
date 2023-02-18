@@ -67,7 +67,6 @@ public class UserAuthenticator {
 	public static boolean authenticate(String username, String password, UserData data)
 	   throws NoSuchAlgorithmException, InvalidKeySpecException {
 		byte[] encryptedUser = getEncryptedUsername(username);
-		String encryptedUserString = Base64.getEncoder().encodeToString(encryptedUser);
 		ArrayList<User> users = data.getUser(encryptedUser);
 		User currentUser;
 		
@@ -80,7 +79,7 @@ public class UserAuthenticator {
 		}
 		
 		return false;
-	 }
+	}
  
 	
 	/** 

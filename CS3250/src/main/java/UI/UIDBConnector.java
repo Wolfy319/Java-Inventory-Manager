@@ -14,7 +14,7 @@ public class UIDBConnector {
      * @throws SQLException - throws if mySql error
      */
     public static Connection getConnection() throws SQLException{
-        Connection connection = DriverManager.getConnection("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false", "team3", "UpdateTrello!1");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testDB", "root", "testconnection123!");
 
         return connection;
     }
