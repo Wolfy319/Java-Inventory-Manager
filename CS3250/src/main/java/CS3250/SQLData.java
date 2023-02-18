@@ -1,14 +1,14 @@
 package CS3250;
 
+import java.sql.Statement;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
-
+import UI.dataBaseItems;
 import javafx.collections.ObservableList;
 
 /**
@@ -19,7 +19,7 @@ public class SQLData implements DataInterface {
     String connectionString = "";
     String username = "";
     String password = "";
-    Connection con;
+    Connection con = null;
     Statement st;
     ResultSet rs;
 
@@ -37,7 +37,7 @@ public class SQLData implements DataInterface {
         password = a[2];
         try {
             con = (Connection) DriverManager.getConnection(connectionString, username, password);
-            st =  (Statement) con.createStatement();
+            st =  con.createStatement();
             rs = st.executeQuery("SELECT VERSION()");
             if(rs.next()){
                 System.out.println("Connected to..." + rs.getString(1));
@@ -95,6 +95,27 @@ public class SQLData implements DataInterface {
         return result;
     }
     
+    public List<UI.dataBaseItems> GenerateShortData(){
+        List<UI.dataBaseItems> arr = new ArrayList<UI.dataBaseItems>();
+        String statement2 = "SELECT * FROM DataEntries;";
+        dataBaseItems data;
+        try{
+            rs = st.executeQuery(statement2);
+            while (rs.next()) {
+                data = new dataBaseItems(rs.getString("productID"),
+                             rs.getString("supplierID"), 
+                             (Integer.toString(rs.getInt("stockQuantity"))),
+                             Double.toString(rs.getDouble("WholesaleCost")), 
+                             Double.toString(rs.getDouble("salePrice")));
+                arr.add(data);
+            }             
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        return arr;
+    }
+
     /** 
      * Pulls all entries from DB's product table and returns them as a list
      * @return ArrayList<Entry> - List containing all entries from database
@@ -198,6 +219,8 @@ public class SQLData implements DataInterface {
         return rsCount;
     }
 
-
+    public Connection getConnection() {
+        return con;
+    }
 
 }

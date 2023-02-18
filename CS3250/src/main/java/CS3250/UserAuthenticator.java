@@ -31,7 +31,7 @@ public class UserAuthenticator {
 		newUser.setSalt(generateSalt());
 		newUser.setPassword(getEncryptedPassword(password, newUser.getSalt()));
 		
-		data.createEntry("CREATE_USER", newUser);
+		data.createEntry("create", newUser);
 		return;
 	}
 	
