@@ -1,9 +1,5 @@
 Authors: 
-Wolfy Fiorini
-James Marshall
-Conner Botte
-Hunter DeArment
-Kyle Brown
+James Marshall, Wolfy Fiorini, Kyle Brown, Hunter DeArment, and Conner Botte
 
 Team project for the CS3250 Software Development Methods course at MSU Denver. 
 This program creates and manages a database containing data about a hypothetical company's products. 

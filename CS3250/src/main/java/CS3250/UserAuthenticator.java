@@ -7,6 +7,7 @@ import java.security.spec.KeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -24,14 +25,14 @@ public class UserAuthenticator {
 	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
 	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
 	 */
-	public static void createUser(String username, String password, UserData data) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public static void createUser(String username, String password, DataMan<User> data) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		User newUser = new User();
 		
 		newUser.setUsername(getEncryptedUsername(username));
 		newUser.setSalt(generateSalt());
 		newUser.setPassword(getEncryptedPassword(password, newUser.getSalt()));
 		
-		data.createEntry("CREATE_USER", newUser);
+		data.createEntry("create", newUser);
 		return;
 	}
 	
@@ -64,17 +65,17 @@ public class UserAuthenticator {
 	 * @throws NoSuchAlgorithmException - Throws if the algorithm to be used for hashing does not exist
 	 * @throws InvalidKeySpecException - Throws if the key specification fed to the secret key factory is invalid
 	 */
-	public static boolean authenticate(String username, String password, UserData data)
+	public static boolean authenticate(String username, String password, DataMan<User> data)
 	   throws NoSuchAlgorithmException, InvalidKeySpecException {
 		byte[] encryptedUser = getEncryptedUsername(username);
 		String encryptedUserString = Base64.getEncoder().encodeToString(encryptedUser);
-		ArrayList<User> users = data.getUser(encryptedUser);
+		List<User> users = data.getEntries();
 		User currentUser;
 		
 		for(int i = 0; i < users.size(); i++) {
 			currentUser = users.get(i);
 			byte[] encryptedAttemptedPassword = getEncryptedPassword(password, currentUser.getSalt());
-			if(Arrays.equals(encryptedAttemptedPassword, currentUser.getPassword())) {
+			if(Arrays.equals(encryptedAttemptedPassword, currentUser.getPassword()) && Arrays.equals(encryptedUser, currentUser.getUsername())) {
 				return true;
 			}
 		}

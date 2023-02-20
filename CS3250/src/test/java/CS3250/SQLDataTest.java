@@ -14,7 +14,9 @@ public class SQLDataTest {
     Database db;
     @Test
     void ConnectionWorks(){
-        init.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+        String connectionString = StringParsers.readConfig(".config");
+
+        init.initializeDatabase(connectionString);
         db = new Database(init);
         
         assertNotEquals(db.listEntries(), null);

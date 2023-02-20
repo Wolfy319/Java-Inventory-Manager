@@ -1,15 +1,14 @@
 package CS3250;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
-
+import java.sql.Connection;
+import java.sql.Statement;
 /**
  * Class to connect to and alter a database containing a list of users
  */
@@ -251,6 +250,10 @@ public class UserData {
         }
         
 
+    }
+
+    public Connection getConnection(){
+        return con;
     }
     
 }
