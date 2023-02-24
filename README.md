@@ -13,7 +13,9 @@ Features of the program:
   - Users can use CRUD operations on customer orders, which is updated in the database and dynamically updates products as well
   - App will generate visual reports on inventory, revenue, orders and customers 
 - Angular web application
-  - 
+  - Mirrors desktop application functionality
+  - Bootstrap template for CSS
+  - Sends queries to backend, and updates with angular hooks
 - Discord bot
   - Allows for orders to be submitted through a discord server's chat
   - Bot will email customers a receipt and summary when an order is submitted 
