@@ -28,21 +28,24 @@ public class CSVParser {
 	public void readProductsCSV(String filename, SQLData database){
 		String line;  	// Current row contents
 		String[] fields;// Array to store individual product fields
-		database.initializeDatabase("jdbc:mysql://localhost/testdb root testconnection123!");
+		database.initializeDatabase("jdbc:mysql://localhost/testdb root root");
 		// Try to open the file and start reading
 		try (InputStream inputStream = getClass().getResourceAsStream(filename);
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 				reader.readLine();
 			    while((line = reader.readLine()) != null) {
 			    	Entry newEntry = new Entry(); // Create new entry
-			    	fields = line.split(",");     // Split the row into individual fields
+					if(line.length() <= 1) {
+						continue;
+					}
+					fields = line.split(",");     // Split the row into individual fields
 			    	
 			    	// Fill in newEntry's fields
 			    	newEntry.setProductID(fields[0]);
-			    	newEntry.setStockQuantity(Integer.parseInt(fields[1]));
-			    	newEntry.setWholesaleCost(Double.parseDouble(fields[2]));
-			    	newEntry.setSalePrice(Double.parseDouble(fields[3]));
-			    	newEntry.setSupplierID(fields[4]);
+					newEntry.setSupplierID(fields[1]);
+			    	newEntry.setStockQuantity(Integer.parseInt(fields[2]));
+			    	newEntry.setWholesaleCost(Double.parseDouble(fields[3]));
+			    	newEntry.setSalePrice(Double.parseDouble(fields[4]));
 			    	
 			    	// Add the entry to the result map
 			    	database.createEntry(newEntry.getProductID(), newEntry);
@@ -69,11 +72,14 @@ public class CSVParser {
 			    BufferedReader reader = new BufferedReader(new FileReader(filename))) {
 				reader.readLine();
 			    while((line = reader.readLine()) != null) {
+					if(line.length() <= 1) {
+						continue;
+					}
 			    	fields = line.split(",");     // Split the row into individual fields
 
-			    	
+			    	// String date, String customerEmail, String customerLocation, String productID
 			    	// Fill in fields
-			    	populateDB(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]), newEntry);
+			    	populateDB(fields[0], fields[1], fields[2], fields[3],fields[4], newEntry);
 			    }
 		} catch (IOException e) {
 				e.printStackTrace();
@@ -100,13 +106,14 @@ public class CSVParser {
 		}
 	}
 
-	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String fields, SQLPo PoDB) {
+	private void populateDB(String date, String customerEmail, String customerLocation, String productID, String quantity, SQLPo PoDB) {
 		System.out.print(date + " " + customerEmail);
 		observablePO po = new observablePO();
 		po.setDate(date);
 		po.setEmail(customerEmail);
 		po.setCustomerLocation(customerLocation);
 		po.setProductID(productID);
+		po.quantity(quantity);
 		PoDB.createEntry("1", po);
 		 
 		return;
@@ -114,4 +121,4 @@ public class CSVParser {
 
 	
 }
-}
+

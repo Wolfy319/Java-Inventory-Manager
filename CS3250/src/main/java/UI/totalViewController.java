@@ -27,6 +27,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.sql.Statement;
 
+import CS3250.PODB;
 import CS3250.SQLData;
 import CS3250.SQLPo;
 import javafx.collections.FXCollections;
@@ -140,16 +141,18 @@ public class totalViewController {
 
     ObservableList oblist = FXCollections.observableArrayList();
     SQLData inv = new SQLData();
+    UIDBConnector udb = new UIDBConnector();
+    PODB items = new PODB();
+    SQLPo po = new SQLPo();
 
     @FXML
     public void initialize() throws SQLException, java.io.IOException {
+        items = udb.getPOConnection();
+        po.setConnection(items.getConnection());
+        inv = po.getData();
         showOrders();
     }
-    
-    public void initData(Connection con) {
-        po.setConnection(con);
-        inv = po.getData();
-    }
+
     @FXML
     public void showInventory() throws SQLException{
        
@@ -177,7 +180,7 @@ public class totalViewController {
         cellFive.setCellValueFactory(new PropertyValueFactory<>("supplierID"));
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
 
-        total_Table.setItems(oblist);
+        total_Table.getItems().addAll(oblist);
 
 
         FilteredList<dataBaseItems> filteredData = new FilteredList<>(oblist, p -> true); 
@@ -195,21 +198,19 @@ public class totalViewController {
 
         SortedList<dataBaseItems> sortedData = new SortedList<>(filteredData); 
         oblist = (ObservableList<dataBaseItems>) sortedData;
-        total_Table.setItems(oblist);
+        total_Table.getItems().addAll(oblist);
     }
 
     
 
 
-    SQLPo po = new SQLPo();
     ObservableList poList;
     public Boolean orderScreenDisplayed = false;
     
     @FXML
 
     public void showOrders() throws SQLException, java.io.IOException{
-        UIDBConnector udb = new UIDBConnector();
-        items = udb.getPOConnection();
+
 
         List<observablePO> rs = items.getEntries();
         orderScreenDisplayed = true; 
@@ -237,7 +238,7 @@ public class totalViewController {
         cellThree.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         cellFour.setCellValueFactory(new PropertyValueFactory<>("customerLocation"));
         cellFive.setCellValueFactory(new PropertyValueFactory<>("Email"));
-        total_Table.setItems(poList);
+        total_Table.getItems().addAll(poList);
     
     FilteredList<observablePO> filteredList = new FilteredList<>(poList);
     searchBox.textProperty().addListener((Observable, oldVal, newVal) -> {
@@ -253,7 +254,7 @@ public class totalViewController {
     });
     SortedList<observablePO> sortedData = new SortedList<>(filteredList); 
     poList = (ObservableList<observablePO>) sortedData;
-    total_Table.setItems(poList);
+    total_Table.getItems().addAll(poList);
     }
 
     @FXML
@@ -261,7 +262,7 @@ public class totalViewController {
         inv_Btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 try {
-                    showInventory();;
+                    showInventory();
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -450,25 +451,28 @@ public class totalViewController {
 public void highlightClick(MouseEvent event) {
     
     if(orderScreenDisplayed == true){
-    UI.observablePO selectedItem = (UI.observablePO) total_Table.getSelectionModel().getSelectedItem();
-    
-    textId.setText(selectedItem.getProductID());
-    textQuantity.setText(selectedItem.getDate());
-    textCost.setText(selectedItem.getQuantity().toString());    
-    textPrice.setText(selectedItem.getCustomerLocation());
-    textSid.setText(selectedItem.getEmail());
-    textID.setText(selectedItem.getID());
+        UI.observablePO selectedItem = (UI.observablePO) total_Table.getSelectionModel().getSelectedItem();
+        if(selectedItem != null) {
+            textId.setText(selectedItem.getProductID());
+            textQuantity.setText(selectedItem.getDate());
+            textCost.setText(selectedItem.getQuantity().toString());    
+            textPrice.setText(selectedItem.getCustomerLocation());
+            textSid.setText(selectedItem.getEmail());
+            textID.setText(selectedItem.getID());
+        }         
     }
     else if (orderScreenDisplayed == false){
-    UI.dataBaseItems selectedItem = (UI.dataBaseItems) total_Table.getSelectionModel().getSelectedItem();
-    
-    textId.setText(selectedItem.getProductID());
-    textQuantity.setText(selectedItem.getStockQuantity());
-    textCost.setText(selectedItem.getWholesaleCost());
-    textPrice.setText(selectedItem.getSalePrice());
-    textSid.setText(selectedItem.getSupplierID());
-
+        UI.dataBaseItems selectedItem = (UI.dataBaseItems) total_Table.getSelectionModel().getSelectedItem();
+        if(selectedItem != null) {
+            textId.setText(selectedItem.getProductID());
+            textQuantity.setText(selectedItem.getStockQuantity());
+            textCost.setText(selectedItem.getWholesaleCost());
+            textPrice.setText(selectedItem.getSalePrice());
+            textSid.setText(selectedItem.getSupplierID());
         }
+        
+
+    }
 
 
     }

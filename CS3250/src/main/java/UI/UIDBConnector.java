@@ -31,18 +31,18 @@ public class UIDBConnector {
      * @throws IOException
      */
     public static Connection getConnection() throws SQLException, IOException{
-        String connectionString = StringParsers.readConfig("config");
+        String connectionString = "jdbc:mysql://localhost/testdb root root";
         StringParsers p = new StringParsers();
         String[] dbConnection = p.parseConnectionString(connectionString);
         Connection connection = DriverManager.getConnection(dbConnection[0], dbConnection[1], dbConnection[2]);
         return connection;
     }
-    public DataMan<Entry> getItemsConnection() throws SQLException{
-        itemsDB.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    public ItemsDB getItemsConnection() throws SQLException{
+        itemsDB.initializeDatabase("jdbc:mysql://localhost/testdb root root");
         return itemsDB;
     }
-    public DataMan<observablePO> getPOConnection() throws SQLException{
-        podb.initializeDatabase("jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1");
+    public PODB getPOConnection() throws SQLException{
+        podb.initializeDatabase("jdbc:mysql://localhost/testdb root root");
         return podb;
     }
 

@@ -82,9 +82,8 @@ public class Controller {
      * @throws InvalidKeySpecException - Throws if invalid key specification
      */
     public boolean authenticated(String attemptedUser, String attemptedPass) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        DataMan<User> data = new UserDB();    	
-        String dbConnection = StringParsers.readConfig("config");
-        data.initializeDatabase(dbConnection);
+       UserData data = new UserData();    	
+        data.initializeDatabase("jdbc:mysql://localhost/testdb root root");
     	
     	return UserAuthenticator.authenticate(attemptedUser, attemptedPass, data);
     }

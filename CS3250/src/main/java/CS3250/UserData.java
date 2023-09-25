@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Base64;
 import java.sql.Connection;
 import java.sql.Statement;
 /**
@@ -28,24 +28,21 @@ public class UserData {
      * @return ArrayList<User> - List containing all users
      */
     public ArrayList<User> getUsers() {
-        String statement = "SELECT * FROM Users;";
+        String statement = "SELECT * FROM users;";
         String s = "";
         ArrayList<User> arr = new ArrayList<User>();
         try {
 
-            User currUser = new User();
             rs = st.executeQuery(statement);
             while(rs.next()){
+                User currUser = new User();
                 byte[] c = rs.getBytes("Username");
                     currUser.setUsername(c);
-                    currUser.setPassword(rs.getBytes(2));
-                    currUser.setSalt(rs.getBytes(3));
+                    currUser.setPassword(rs.getBytes("Password"));
+                    currUser.setSalt(rs.getBytes("salt"));
                     currUser.setID(rs.getInt("ID"));
                     currUser.setEmail(rs.getString("email"));
-
-
                     currUser.setRole(rs.getString("role"));
-
 
                     arr.add(currUser);
                 }
@@ -114,16 +111,14 @@ public class UserData {
         byte[] pbytes = e.getPassword();
         byte[] sbytes = e.getSalt();
         String email = e.getEmail();
-
-        String sql = "INSERT INTO Users(Username,Password,salt,email,role) VALUES(?,?,?,?,?)";
+        
+        String sql = "INSERT INTO users(Username,Password,salt,email,role) VALUES(?,?,?,?,?)";
 
         try (PreparedStatement pst = (PreparedStatement) con.prepareStatement(sql)) {
                 pst.setBytes(1, ubytes);
                 pst.setBytes(2, pbytes);
                 pst.setBytes(3, sbytes);
                 pst.setString(4, email);
-
-
                 pst.setString(5, e.getRole());
 
                 pst.executeUpdate();

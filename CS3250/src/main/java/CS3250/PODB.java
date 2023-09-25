@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
+import java.sql.Connection;
+import java.sql.Statement;
 
 import UI.observablePO;
 
@@ -22,7 +22,6 @@ public class PODB implements DataMan<observablePO>{
     
 
     public void initializeDatabase(String filename) {
-
         StringParsers s = new StringParsers();
         var a = s.parseConnectionString(filename);
         connectionString = a[0];
@@ -30,9 +29,9 @@ public class PODB implements DataMan<observablePO>{
         password = a[2];
         try {
             con = (Connection) DriverManager.getConnection(connectionString, username, password);
-            inventory.con = this.con;
+            inventory.con = con;
             st = (Statement) con.createStatement();
-            inventory.st = this.st;
+            inventory.st = st;
              rs = st.executeQuery("SELECT VERSION()");
             inventory.rs = this.rs;
             if (rs.next()) {
@@ -82,8 +81,6 @@ public class PODB implements DataMan<observablePO>{
     public List<UI.observablePO> getEntries(){
         List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
         String statement2 = "SELECT * FROM PO;";
-        UserData u = new UserData();
-        u.initializeDatabase(connectionString + " " + username + " " + password);
         UI.observablePO po = new UI.observablePO();
         try{
             rs = st.executeQuery(statement2);
@@ -151,6 +148,10 @@ public class PODB implements DataMan<observablePO>{
     public int retSize() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    public Connection getConnection() {
+        return con;
     }
 
 }

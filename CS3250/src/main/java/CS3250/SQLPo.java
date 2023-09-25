@@ -62,7 +62,7 @@ public class SQLPo {
     // need to create table for PO's and swap this string
     public void createEntry(String ID, observablePO p) {
         Entry inventoryItem = inventory.readEntry(p.getProductID());
-        if(poExists(Integer.valueOf(p.getProductID()), Integer.valueOf(p.getQuantity()), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
+        if(poExists(p.getProductID(), Integer.valueOf(p.getQuantity()), p.getDate(), p.getEmail(), p.getCustomerLocation())) {
             System.out.println("Order already exists");
             return;
         }
@@ -86,8 +86,6 @@ public class SQLPo {
         String statement2 = "GET * FROM PO WHERE productID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);
-            rs = st.executeQuery(statement2);
-            p.setID(rs.getString("ID"));
 
         } catch (SQLException e1) {
             e1.printStackTrace();
@@ -135,7 +133,7 @@ public class SQLPo {
         return po;
     }
 
-    public boolean poExists(int PID, int quantity, String date, String email, String location) {
+    public boolean poExists(String PID, int quantity, String date, String email, String location) {
         String statement2 = "SELECT * FROM PO WHERE productID = '" + PID + "' AND quantity = '" + quantity + "' AND date = '" + date + "' AND email = '" + email + "' AND custLoc = '" + location + "';";       
         try {
             rs = st.executeQuery(statement2);

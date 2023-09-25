@@ -82,13 +82,7 @@ public class SQLData implements DataInterface {
             if(!rs.next()) {
                 return null;
             }
-            System.out.println(rs.getString("productID"));
-            s += rs.getString(1);
-            s += "_" +  rs.getString(2);
-            s += "_" +  rs.getString(3);
-            s += "_" +  rs.getString(4);
-            s +=  "_" + rs.getString(5);
-            result = parseEntry(s);
+            result = parseEntry(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,13 +122,8 @@ public class SQLData implements DataInterface {
             rs = st.executeQuery(statement);
             
             while(rs.next()){
-            s += rs.getString(1);
-            s += "_" +  rs.getString(2);
-            s += "_" +  rs.getString(3);
-            s += "_" +  rs.getString(4);
-            s +=  "_" + rs.getString(5);
-            al.add(parseEntry(s));
-            s = "";
+            Entry e = parseEntry(rs);
+            al.add(e);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,14 +138,16 @@ public class SQLData implements DataInterface {
      * @param s - String containing product ID, supplier ID, stock quantity, wholesale cost and sale price of a product
      * @return Entry - Entry object filled with fields from string
      */
-    private Entry parseEntry(String s){
+    private Entry parseEntry(ResultSet rs){
         Entry e = new Entry();
-        var ar = s.split("_");
-        e.setProductID(ar[0]);
-        e.setSupplierID(ar[1]);
-        e.setStockQuantity(Integer.parseInt(ar[2]));
-        e.setWholesaleCost(Double.parseDouble(ar[3]));
-        e.setSalePrice(Double.parseDouble(ar[4]));
+        try{
+            e.setProductID(rs.getString("productID"));
+            e.setSupplierID(rs.getString("supplierID"));
+            e.setStockQuantity(Integer.parseInt(rs.getString("stockQuantity")));
+            e.setWholesaleCost(Double.parseDouble(rs.getString("WholesaleCost")));
+            e.setSalePrice(Double.parseDouble(rs.getString("salePrice")));
+        }catch(Exception exc) {
+        }
         return e;
     }
 
