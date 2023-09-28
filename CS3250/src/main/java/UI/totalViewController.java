@@ -169,16 +169,16 @@ public class totalViewController {
         
         oblist = FXCollections.observableArrayList(inv.GenerateShortData());
         cellOne.setText("Product_ID");
-        CellTwo.setText("Stock_Quantity");
-        cellThree.setText("WholeSale_Cost");
-        cellFour.setText("Sale_Price");
-        cellFive.setText("Supplier_ID");
+        CellTwo.setText("Supplier_ID");
+        cellThree.setText("Stock_Quantity");
+        cellFour.setText("WholeSale_Cost");
+        cellFive.setText("Sale_Price");
 
-        CellTwo.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
-        cellThree.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
-        cellFour.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
-        cellFive.setCellValueFactory(new PropertyValueFactory<>("supplierID"));
         cellOne.setCellValueFactory(new PropertyValueFactory<>("productID"));
+        CellTwo.setCellValueFactory(new PropertyValueFactory<>("supplierID"));
+        cellThree.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
+        cellFour.setCellValueFactory(new PropertyValueFactory<>("wholesaleCost"));
+        cellFive.setCellValueFactory(new PropertyValueFactory<>("salePrice"));
 
         total_Table.getItems().addAll(oblist);
 
@@ -303,7 +303,7 @@ public class totalViewController {
     @FXML
     public void showReport(ActionEvent event) throws IOException, java.io.IOException, SQLException {
 
-        poStream totalSaleStream = new poStream();
+        poStream totalSaleStream = new poStream(po, po.getConnection());
 
         String[] bestCustomer = totalSaleStream.bestCustomer();
         Double bestCustomerRevenue = Double.valueOf(bestCustomer[1]);
@@ -328,7 +328,7 @@ public class totalViewController {
         String[] dailySales = totalSaleStream.dailySales();
         Double dSales = Double.valueOf(dailySales[0]);
 
-        jChart salesCharts = new jChart();
+        jChart salesCharts = new jChart(totalSaleStream);
         salesCharts.lineChart();
         salesCharts.weeklyOrdersSales();
 
@@ -339,7 +339,7 @@ public class totalViewController {
         Document doc = new Document(salesDoc);
 
         // Adds Rt3 Logo
-        String rt3Loc = "CS3250\\src\\main\\java\\UI\\Images\\RT3.png";
+        String rt3Loc = "archive\\Java-Inventory-Manager\\CS3250\\src\\main\\java\\UI\\Images\\RT3.png";
         ImageData rt3Data = ImageDataFactory.create(rt3Loc);
         Image rt3Image = new Image(rt3Data);
         rt3Image.scaleAbsolute(100, 100);
@@ -428,7 +428,7 @@ public class totalViewController {
         doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         salesDoc.addNewPage();
 
-        String salesChartLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
+        String salesChartLoc = "archive\\Java-Inventory-Manager\\CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG";
         ImageData salesChartData = ImageDataFactory.create(salesChartLoc);
         Image salesChartImage = new Image(salesChartData);
         doc.add(salesChartImage);
@@ -436,7 +436,7 @@ public class totalViewController {
         doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         salesDoc.addNewPage();
 
-        String salesChangeLoc = "CS3250\\src\\main\\java\\UI\\Images\\salesChangeChart.PNG";
+        String salesChangeLoc = "archive\\Java-Inventory-Manager\\CS3250\\src\\main\\java\\UI\\Images\\salesChangeChart.PNG";
         ImageData salesChangeData = ImageDataFactory.create(salesChangeLoc);
         Image salesChangeImage = new Image(salesChangeData);
         doc.add(salesChangeImage);
@@ -516,21 +516,24 @@ public void highlightClick(MouseEvent event) {
 
     @FXML
     public void delItem() throws SQLException {
+        System.out.println("IN HERE");
         if (orderScreenDisplayed == true) {
                     String id = textID.getText();
                     Connection con = null;
-                    try {
-                        con = UIDBConnector.getConnection();
-                    } catch (java.io.IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    con = po.getConnection();
                     st =  (Statement) con.createStatement();
                     String statement = "DELETE FROM PO WHERE ID ='"+ id+ "';";
                     st.execute(statement);
-            
-            
+                    try {
+                        showOrders();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+        else {
+            inv.deleteEntry(textId.getText());
+            showInventory();
+        }
     }
 
 

@@ -12,10 +12,15 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class jChart {
 
+    poStream orderStream;
+
+    public jChart(poStream orderStream) {
+        this.orderStream = orderStream;
+    }
+    
     public void lineChart() throws IOException, NumberFormatException, SQLException {
-        poStream threeMonths = new poStream();
         DefaultCategoryDataset salesData = new DefaultCategoryDataset();
-        String[] monthSales = threeMonths.salesCalc();
+        String[] monthSales = orderStream.salesCalc();
 
         Double threeMDouble = Double.parseDouble(monthSales[6]);
         Double twoMDouble = Double.parseDouble(monthSales[4]);
@@ -31,7 +36,7 @@ public class jChart {
         int width = 487;
         int height = 480;
 
-        File salesLineChart = new File("CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG");
+        File salesLineChart = new File("archive\\Java-Inventory-Manager\\CS3250\\src\\main\\java\\UI\\Images\\salesLineChart.PNG");
         ChartUtilities.saveChartAsPNG(salesLineChart, salesDataChartObj, width, height);
 
     }
@@ -42,10 +47,9 @@ public class jChart {
     }
 
     public void weeklyOrdersSales() throws SQLException, IOException {
-        poStream weeks = new poStream();
         DefaultCategoryDataset changeInSales = new DefaultCategoryDataset();
 
-        String[] weeklySales = weeks.thisWeeksSales();
+        String[] weeklySales = orderStream.thisWeeksSales();
 
         Double currentWeekSales = Double.parseDouble(weeklySales[1]);
         Double twoWeekSales = Double.parseDouble(weeklySales[3]);
@@ -69,7 +73,7 @@ public class jChart {
         int width = 487;
         int height = 480;
 
-        File salesChangeChart = new File("CS3250\\src\\main\\java\\UI\\Images\\salesChangeChart.PNG");
+        File salesChangeChart = new File("archive\\Java-Inventory-Manager\\CS3250\\src\\main\\java\\UI\\Images\\salesChangeChart.PNG");
         ChartUtilities.saveChartAsPNG(salesChangeChart, salesDataChartObj, width, height);
 
     }

@@ -34,6 +34,14 @@ public class poStream {
 
     HashMap<String, Double> productSales = new HashMap<String, Double>();
 
+    SQLPo SQLPO;
+    Connection poCon;
+
+    public poStream(SQLPo po, Connection poCon) {
+        this.SQLPO = po;
+        this.poCon = poCon;
+    }
+
     public void daysAndMonths() {
         daysAndMonths.put("01", 21);
         daysAndMonths.put("02", 28);
@@ -67,7 +75,6 @@ public class poStream {
 
     
     public void productCostMap() throws SQLException, IOException{
-        Connection poCon = UIDBConnector.getConnection();
         ResultSet rs = poCon.createStatement().executeQuery("SELECT * FROM DataEntries");
         while (rs.next()) {
             productPrice.put(rs.getString("productID"), rs.getDouble("salePrice"));
@@ -77,7 +84,7 @@ public class poStream {
 
 
     public void salesOrderMap() throws SQLException, IOException{
-        Connection poCon = UIDBConnector.getConnection();
+        // Connection poCon = UIDBConnector.getConnection();
         ResultSet rs = poCon.createStatement().executeQuery("SELECT * FROM PO");
         while (rs.next()) {
             prodAndQuant.put(rs.getString("productID"), rs.getInt("quantity"));
@@ -99,9 +106,9 @@ public class poStream {
         Double twoMonthTotal = 0.0;
         Double threeMonthTotal = 0.0;
 
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
-        SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        // String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        // SQLPo SQLPO = new SQLPo();
+        // SQLPO.initializeDatabase(filename);
 
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
         String totalSalesSQL = "SELECT * FROM testDB.PO";
@@ -168,9 +175,6 @@ public class poStream {
     }
 
     public String[] bestCustomer() throws SQLException, IOException {
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
-        SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
         List<observablePO> Pos = SQLPO.GenerateShortPOs();
         productCostMap();
 
@@ -219,10 +223,10 @@ public class poStream {
         Double twoWeekTotal = 0.0;
         Double threeWeekTotal = 0.0;
 
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
-        SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
-        String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
+        // String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        // SQLPo SQLPO = new SQLPo();
+        // SQLPO.initializeDatabase(filename);
+        String latestDateSQL = "SELECT * FROM po ORDER BY date DESC Limit 1";
 
         List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
 
@@ -301,7 +305,7 @@ public class poStream {
                 + "'" + weekTwoEndDate + "'";
 
         List<observablePO> twoWeekPos = SQLPO.GenerateWeeklyPO(twoWeekSQL);
-
+        
         for (int i = 0; i < twoWeekPos.size();) {
             String tempProductID = twoWeekPos.get(i).getProductID();
             int tempQuant = Integer.valueOf(twoWeekPos.get(i).getQuantity());
@@ -343,7 +347,6 @@ public class poStream {
                 + " AND date <= " + "'" + weekThreeEndDate + "'";
 
         List<observablePO> threeWeekPos = SQLPO.GenerateWeeklyPO(threeWeekSQL);
-
         for (int i = 0; i < threeWeekPos.size();) {
             String tempProductID = threeWeekPos.get(i).getProductID();
             int tempQuant = Integer.valueOf(threeWeekPos.get(i).getQuantity());
@@ -370,9 +373,9 @@ public class poStream {
 
         Double dayTotal = 0.0;
 
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
-        SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        // String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        // SQLPo SQLPO = new SQLPo();
+        // SQLPO.initializeDatabase(filename);
         String latestDateSQL = "SELECT * FROM testDB.PO ORDER BY date DESC Limit 1";
 
         List<observablePO> latestPO = SQLPO.GenerateWeeklyPO(latestDateSQL);
@@ -399,9 +402,9 @@ public class poStream {
             e.printStackTrace();
         }
 
-        String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
-        SQLPo SQLPO = new SQLPo();
-        SQLPO.initializeDatabase(filename);
+        // String filename = "jdbc:mysql://216.137.177.30:3306/testDB?allowPublicKeyRetrieval=true&useSSL=false team3 UpdateTrello!1";
+        // SQLPo SQLPO = new SQLPo();
+        // SQLPO.initializeDatabase(filename);
         String bestProductSQL = "SELECT * FROM testDB.PO";
         List<observablePO> allPos = SQLPO.GenerateWeeklyPO(bestProductSQL);
 

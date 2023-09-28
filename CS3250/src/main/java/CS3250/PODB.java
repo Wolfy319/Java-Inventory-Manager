@@ -69,8 +69,8 @@ public class PODB implements DataMan<observablePO>{
         String statement2 = "GET * FROM PO WHERE productID = '" + p.getProductID() + "' AND date = '" + p.getDate() + "';";
         try {
             st.execute(statement);
-            rs = st.executeQuery(statement2);
-            p.setID(rs.getString("ID"));
+            // rs = st.executeQuery(statement2);
+            // p.setID(rs.getString("ID"));
 
         } catch (SQLException e1) {
             e1.printStackTrace();

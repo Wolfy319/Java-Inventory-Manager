@@ -171,8 +171,6 @@ public class SQLPo {
 
     public List<UI.observablePO> GenerateWeeklyPO(String statement2){
         List<UI.observablePO> arr = new ArrayList<UI.observablePO>();
-        UserData u = new UserData();
-        u.initializeDatabase(connectionString + " " + username + " " + password);
         UI.observablePO po = new UI.observablePO();
         try{
             rs = st.executeQuery(statement2);

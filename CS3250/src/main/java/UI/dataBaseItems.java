@@ -30,7 +30,7 @@ public class dataBaseItems {
      * @param salePrice - holds sale price column information
      * @param supplierID - holds the supplier id column information
      */
-    public dataBaseItems(String productID, String stockQuantity, String wholesaleCost, String salePrice, String supplierID) {
+    public dataBaseItems(String productID, String supplierID, String stockQuantity, String wholesaleCost, String salePrice) {
         this.productID.set(productID);
         this.stockQuantity.set(stockQuantity);
         this.wholesaleCost.set(wholesaleCost);
