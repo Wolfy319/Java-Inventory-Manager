@@ -5,17 +5,19 @@ Team project for the CS3250 Software Development Methods course at MSU Denver.
 This program creates and manages a database containing data about a hypothetical company's products. 
 
 Desktop application:
-![ims2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c32b628d-4946-4d48-9ec6-ffeddc176905)
+
 Sign in page
+![ims2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c32b628d-4946-4d48-9ec6-ffeddc176905)
 
-![ims](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c0a6a582-e770-4e42-91cf-367a010b92fb)
 Inventory page
+![ims](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c0a6a582-e770-4e42-91cf-367a010b92fb)
+- Individual items can be selected, added, altered, and deleted from the database from this view
 
+Sales overviews
 ![sales](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/3fea0989-e19f-41ac-bb4d-3ff08b6748ed)
 ![sales2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/b1a55cb9-98f7-47e6-afac-0d9bc2527149)
 ![sales3](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/13ba5291-ab6b-4214-a6aa-34d5f66bc079)
-Sales overviews
-
+- Automatically generated sales report based on purchase orders logged in the database
 
 Features of the program:
 - Java desktop GUI application 
