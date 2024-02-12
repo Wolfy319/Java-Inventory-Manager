@@ -7,10 +7,10 @@ This program creates and manages a database containing data about a hypothetical
 <h1>Desktop application</h1>:
 
 <h2>Sign in page</h2>
-![ims2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c32b628d-4946-4d48-9ec6-ffeddc176905)
+![ims2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/20226182-dd03-46ad-a9fe-894b479a2973)
 
 <h2>Inventory page</h2>
-![ims](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c0a6a582-e770-4e42-91cf-367a010b92fb)
+![ims](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c02d4e2b-23c3-4001-a355-1cf2eda78676)
 - Individual items can be selected, added, altered, and deleted from the database from this view
 
 <h2>Sales overviews</h2>
