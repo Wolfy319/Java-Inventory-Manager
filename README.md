@@ -14,6 +14,7 @@ Inventory page
 - Individual items can be selected, added, altered, and deleted from the database from this view
 
 Sales overviews
+
 ![sales](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/3fea0989-e19f-41ac-bb4d-3ff08b6748ed)
 ![sales2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/b1a55cb9-98f7-47e6-afac-0d9bc2527149)
 ![sales3](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/13ba5291-ab6b-4214-a6aa-34d5f66bc079)
