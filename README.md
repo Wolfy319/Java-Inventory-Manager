@@ -11,17 +11,18 @@ James Marshall, Wolfy Fiorini, Kyle Brown, Hunter DeArment, and Conner Botte
 
 ## Inventory page
 ![ims](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c02d4e2b-23c3-4001-a355-1cf2eda78676)
-- Individual items can be selected, added, altered, and deleted from the database from this view
+###Individual items can be selected, added, altered, and deleted from the database from this view
 
 ## Sales overviews
 
 ![sales](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/3fea0989-e19f-41ac-bb4d-3ff08b6748ed)
 ![sales2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/b1a55cb9-98f7-47e6-afac-0d9bc2527149)
 ![sales3](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/13ba5291-ab6b-4214-a6aa-34d5f66bc079)
-- Automatically generated sales report based on purchase orders logged in the database
+### Automatically generated sales report based on purchase orders logged in the database
 
-Features of the program:
-- Java desktop GUI application 
+
+# Features:
+- ## Java desktop GUI application 
   - Linked to mySQL database
   - JavaFX GUI with MVC architecture
   - Secure user authentication/authorization and management
@@ -29,11 +30,11 @@ Features of the program:
   - Users can use CRUD operations on products which is updated in the database
   - Users can use CRUD operations on customer orders, which is updated in the database and dynamically updates products as well
   - App will generate visual reports on inventory, revenue, orders and customers 
-- Angular web application
+- ## Angular web application
   - Mirrors desktop application functionality
   - Bootstrap template for CSS
   - Sends queries to backend, and updates with angular hooks
-- Discord bot
+- ## Discord bot
   - Allows for orders to be submitted through a discord server's chat
   - Bot will email customers a receipt and summary when an order is submitted 
   - Customers will receive regular emails with recommendations for other products to buy
