@@ -4,16 +4,16 @@ James Marshall, Wolfy Fiorini, Kyle Brown, Hunter DeArment, and Conner Botte
 Team project for the CS3250 Software Development Methods course at MSU Denver. 
 This program creates and manages a database containing data about a hypothetical company's products. 
 
-Desktop application:
+<h1>Desktop application</h1>:
 
-Sign in page
+<h2>Sign in page</h2>
 ![ims2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c32b628d-4946-4d48-9ec6-ffeddc176905)
 
-Inventory page
+<h2>Inventory page</h2>
 ![ims](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/c0a6a582-e770-4e42-91cf-367a010b92fb)
 - Individual items can be selected, added, altered, and deleted from the database from this view
 
-Sales overviews
+<h2>Sales overviews</h2>
 
 ![sales](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/3fea0989-e19f-41ac-bb4d-3ff08b6748ed)
 ![sales2](https://github.com/Wolfy319/Java-Inventory-Manager/assets/60371754/b1a55cb9-98f7-47e6-afac-0d9bc2527149)
